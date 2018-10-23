@@ -1,9 +1,12 @@
 set nocompatible
- 
+set guioptions+=M                           " hide it all. m = menu bar, T = toolbar, r = right-hand scroll bar, L left-hand scroll bar
+                                             " M = don't load menu. has to be run before other options which is why it's done here. See help
+
 " <c-k> over keyword to goto help for it
+" :h keyword <c-d> brings up list of matching entries
 " zc close a fold under cursor
 " zM close all
-" zR open all
+" zR open all   :w
  
 "{{{ setup and windows config
     let windows = has('win32') || has('win64')
@@ -75,7 +78,6 @@ set nocompatible
         call minpac#add('junegunn/fzf')                         " installed the binary using chocolatey on windows
         call minpac#add('junegunn/fzf.vim')                     " fuzzy finder for loads of differnt things
         call minpac#add('Znuff/consolas-powerline')             " a power line font...
-        call minpac#add('Znuff/consolas-powerline')             " a power line font...
         call minpac#add('vimwiki/vimwiki')
         
         " vhdl stuff...
@@ -121,10 +123,19 @@ set nocompatible
     set nowrap                                  " turn off line wrap
     set textwidth=0                             " stop line breaks when writing.
     set mouse=                                  " going to play with gvim. Turn off mouse. It's too tempting.
-    set guioptions=eg                           " hide it all. m = menu bar, T = toolbar, r = right-hand scroll bar, L left-hand scroll bar
     set clipboard+=unnamed                      " share windows clip board
-    set formatoptions-=cro                      " turn off auto comment. there's an example of how to set this per filetype
+    set formatoptions-=c                        " turn off auto comment. there's an example of how to set this per filetype
+    set formatoptions-=r                        " turn off auto comment. there's an example of how to set this per filetype
+    set formatoptions-=o                        " turn off auto comment. there's an example of how to set this per filetype
     set formatoptions+=j                        " remove comment tag when joining lines
+    set guioptions+=c                           " 'c'	Use console dialogs instead of popup dialogs for simple choices.
+    set guioptions-=m                           " 'm'	Menu bar is present.
+    set guioptions-=T                           " 'T'	Include Toolbar.  Currently only in Win32, GTK+, Motif, Photon and Athena GUIs.
+    set guioptions-=r                           " 'r'	Right-hand scrollbar is always present.
+    set guioptions-=L                           " 'L'	Left-hand scrollbar is present when there is a vertically split window.
+    if windows
+        set guioptions-=a                       " 'a'	Autoselect:...  (auto copy when you select - see help)
+    endif
     set cursorline                              " highlight current line
     set cursorcolumn                            " highlight current col
     set tabstop=8                               " The width of a hard tabstop measured in spaces
@@ -213,6 +224,65 @@ set nocompatible
     " so that you can undo CTRL-U after inserting a line break.
     " Revert with ":iunmap <C-U>".
     inoremap <C-U> <C-G>u<C-U>
+
+" }}}
+
+" {{{ Windows stuff   
+
+    " taken from mswim.vim
+    " Set options and add mapping such that Vim behaves a lot like MS-Windows
+    "
+    " Maintainer:	Bram Moolenaar <Bram@vim.org>
+    " Last change:	2012 Jul 25
+
+    " set the 'cpoptions' to its Vim default
+    if 1	" only do this when compiled with expression evaluation
+        let s:save_cpo = &cpoptions
+    endif
+    set cpo&vim
+
+    " set 'selection', 'selectmode', 'mousemodel' and 'keymodel' for MS-Windows
+    behave mswin
+
+    " CTRL-X and SHIFT-Del are Cut
+    vnoremap <C-X> "+x
+
+    " CTRL-C and CTRL-Insert are Copy
+    vnoremap <C-C> "+y
+
+    " CTRL-V and SHIFT-Insert are Paste
+    map <C-V>		"+gP
+    cmap <C-V>		<C-R>+
+
+    " Pasting blockwise and linewise selections is not possible in Insert and
+    " Visual mode without the +virtualedit feature.  They are pasted as if they
+    " were characterwise instead.
+    " Uses the paste.vim autoload script.
+    " Use CTRL-G u to have CTRL-Z only undo the paste.
+
+    exe 'inoremap <script> <C-V> <C-G>u' . paste#paste_cmd['i']
+    exe 'vnoremap <script> <C-V> ' . paste#paste_cmd['v']
+
+    " Use CTRL-Q to do what CTRL-V used to do
+    noremap <C-Q>		<C-V>
+
+    " For CTRL-V to work autoselect must be off.
+    " On Unix we have two selections, autoselect can be used.
+
+    " CTRL-A is Select all
+    " noremap <C-A> gggH<C-O>G
+    " inoremap <C-A> <C-O>gg<C-O>gH<C-O>G
+    " cnoremap <C-A> <C-C>gggH<C-O>G
+    " onoremap <C-A> <C-C>gggH<C-O>G
+    " snoremap <C-A> <C-C>gggH<C-O>G
+    " xnoremap <C-A> <C-C>ggVG
+
+    " restore 'cpoptions'
+    set cpo&
+    if 1
+        let &cpoptions = s:save_cpo
+        unlet s:save_cpo
+    endif
 
 " }}}
 
