@@ -1,0 +1,78 @@
+ 
+# The context can be defined using a special header: >
+# 
+#     context "python_expression"
+#     snippet trigger_word "description" options
+# 
+# The 'expression' can be any python expression. If 'expression' evaluates to
+# 'True', then this snippet will be eligible for expansion. The 'expression'
+# must be wrapped with double-quotes.
+        
+snippet printf
+printf("${1:%s}\n"${1/([^%]|%%)*(%.)?.*/(?2:, :\);)/}$2${1/([^%]|%%)*(%.)?.*/(?2:\);)/}
+endsnippet
+
+snippet bl "block..."
+${1} : block
+begin
+    $0
+end block $1;
+endsnippet
+                
+snippet gfor "generate if"
+${1} : for ${2:i} in 0 to ${3} generate
+begin
+    ${0}
+end generate $1;
+endsnippet
+
+snippet gif "generate if"
+${1} : if ${2} generate
+begin
+    ${0}
+end generate $1;
+endsnippet
+
+snippet "(\s*signal\s*.*:\s*(\w+)(\(.*\))?\s*:=\s*)" "auto complete default signal value" r
+`!p 
+if (match.group(2).lower() == "std_logic_vector") :
+    snip.rv = match.group(1) + " (others => '0')"
+elif (match.group(2).lower() == "unsigned") :
+    snip.rv = match.group(1) + " (others => '0')"
+elif (match.group(2).lower() == "signed") :
+    snip.rv = match.group(1) + " (others => '0')"
+elif (match.group(2).lower() == "integer") :
+    snip.rv = match.group(1) + " 0"
+elif (match.group(2).lower() == "std_logic") :
+    snip.rv = match.group(1) + " 0"
+else :
+    snip.rv = match.group(1) + ""
+`${0}
+endsnippet
+# 
+# snippet ee "test" "re.match('std_logic', snip.buffer[snip.line-1])" be
+# := (others => '0');
+# endsnippet
+# 
+snippet tya "type array" 
+type $1 is array ${2:(integer range <>)} of ${3:std_logic_vector(${4})};
+$0
+endsnippet
+# 
+snippet tyr "type record" 
+type $1 is record
+    ${0}
+end record;
+
+endsnippet
+# 
+# 
+# snippet ty 
+# type $1 is $2 `!p 
+# if re.match('record', t[2]) :
+#     snip.rv = "${0}\nend record;"
+# else :                      
+#     snip.rv = ""
+# `
+# $0
+# endsnippet

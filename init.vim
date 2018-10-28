@@ -1,6 +1,5 @@
-set nocompatible
-set guioptions+=M                           " hide it all. m = menu bar, T = toolbar, r = right-hand scroll bar, L left-hand scroll bar
-                                             " M = don't load menu. has to be run before other options which is why it's done here. See help
+
+set guioptions+=M                          " M = don't load menu. has to be run before other options which is why it's done here. See help
 
 " <c-k> over keyword to goto help for it
 " :h keyword <c-d> brings up list of matching entries
@@ -70,6 +69,7 @@ set guioptions+=M                           " hide it all. m = menu bar, T = too
         call minpac#add('tpope/vim-vinegar')                    " basic directory tree navigation plug in
         call minpac#add('tpope/vim-surround')                   " for swapping around braces: change - cs([, delete - ds(, added - ysiw(
         call minpac#add('tpope/vim-fugitive')
+        "call minpac#add('tpope/vim-unimpaired')
         call minpac#add('SirVer/ultisnips')                     " expand code snippet
         call minpac#add('honza/vim-snippets')                   " library of snippets
         call minpac#add('vim-airline/vim-airline')              " fancy status line
@@ -79,19 +79,21 @@ set guioptions+=M                           " hide it all. m = menu bar, T = too
         call minpac#add('junegunn/fzf.vim')                     " fuzzy finder for loads of differnt things
         call minpac#add('Znuff/consolas-powerline')             " a power line font...
         call minpac#add('vimwiki/vimwiki')
-        
-        " vhdl stuff...
-        call minpac#add('neomake/neomake')
+        call minpac#add('adelarsq/vim-matchit')                 " may need support for 2008   see the ftplugins dir in the install dir
+        call minpac#add('neomake/neomake')                      "
+        call minpac#add('michaeljsmith/vim-indent-object')      "  ai = an indent object and line above, ii an indent object, aI an indent object and lines above/below
     endfunction
 
-    command! PackUpdate call PackInit() | call minpac#update()
+    command! PackUpdate call PackInit() | call minpac#update('', {'do': 'call minpac#status()'})
     command! PackClean  call PackInit() | call minpac#clean()
     command! PackStatus call PackInit() | call minpac#status()
 
 "}}}
 
 " {{{ SETTINGS
-    set encoding=utf-8
+    if &encoding ==# 'latin1' && has('gui_running')
+        set encoding=utf-8
+    endif
 
     filetype plugin indent on                   " this is also needed for UltiSnip
     syntax enable                               " turn on syntax highlighting -- using on instead of enable overrides settings with defaults
@@ -106,10 +108,13 @@ set guioptions+=M                           " hide it all. m = menu bar, T = too
     "    set guifont=Noto_Mono_for_Powerline:h10:cANSI:qDRAFT
     endif
 
+    let &viminfofile=g:my_cache_vim.'/viminfo'
+    " set viminfo^=%                              " %  - When included, save and restore the buffer list.
+
     set backspace=indent,eol,start              " let the backspace key work normally
     set hidden                                  " hide unsaved buffers
     set autoread                                " auto read file when changed outside of buffer
-    set list                                    " show hidden characters -^I is tab
+    set ruler                                   " show the ruler 
     set laststatus=2                            " always show the statusline in the last (bottom) window
     set confirm                                 " Confirm instead of fail a command
     set cmdheight=2                             " set command window height to 2.
@@ -127,25 +132,29 @@ set guioptions+=M                           " hide it all. m = menu bar, T = too
     set formatoptions-=c                        " turn off auto comment. there's an example of how to set this per filetype
     set formatoptions-=r                        " turn off auto comment. there's an example of how to set this per filetype
     set formatoptions-=o                        " turn off auto comment. there's an example of how to set this per filetype
-    set formatoptions+=j                        " remove comment tag when joining lines
+    if v:version > 703 || v:version == 703 && has("patch541")
+        set formatoptions+=j                    " Delete comment character when joining commented lines
+    endif
     set guioptions+=c                           " 'c'	Use console dialogs instead of popup dialogs for simple choices.
     set guioptions-=m                           " 'm'	Menu bar is present.
     set guioptions-=T                           " 'T'	Include Toolbar.  Currently only in Win32, GTK+, Motif, Photon and Athena GUIs.
     set guioptions-=r                           " 'r'	Right-hand scrollbar is always present.
     set guioptions-=L                           " 'L'	Left-hand scrollbar is present when there is a vertically split window.
     if windows
-        set guioptions-=a                       " 'a'	Autoselect:...  (auto copy when you select - see help)
+        set guioptions-=a                       " 'a'	Autoselect:...  (auto copy when you select - see help) needed to make <c-v> work
     endif
     set cursorline                              " highlight current line
     set cursorcolumn                            " highlight current col
-    set tabstop=8                               " The width of a hard tabstop measured in spaces
+
+    set tabstop=4                               " The width of a hard tabstop measured in spaces
     set softtabstop=4                           " when hitting tab or backspace, how many spaces should a tab be (see expandtab)
     set expandtab                               " uses spaces instead of tab
     set shiftwidth=4                            " size of indent
     set smarttab                                " 
+
     "set noexpandtab                             " uses spaces instead of tab
     set virtualedit=all                         " move the cursor anywhere on the screen
-    set history=100                             " increase the history buffer
+    set history=1000                            " increase the history buffer
     set scrolloff=3                             " leave 3 lines when scolling
     set sidescrolloff=5                         " leave 5 columns when scrolling/
     set sidescroll=5                            " only scroll by 5 char, not a half page
@@ -154,8 +163,8 @@ set guioptions+=M                           " hide it all. m = menu bar, T = too
     set ignorecase                              " ignore case when searching.
     set smartcase                               " ignore case unless you use capitals in the search
     set showcmd                                 " Show partial commands in the last line of the screen
-    set display=truncate                        " Show @@@ in the last line if it is truncated.
-    set nrformats-=octal
+    set display=lastline                        " show as much as possible for the last command. @@@ indicates truncate
+    set nrformats-=octal                        " remove octal from increment command
     set noinfercase                             " infer case in completionl
     set noshowmode                              " don't show the mode in the command line as it's in airline
     " set omnifunc                                " enable completion <c-x><c-o> 
@@ -173,13 +182,22 @@ set guioptions+=M                           " hide it all. m = menu bar, T = too
     "set t_vb=
     "set tm=500
     set incsearch                             " incremental search rules
-    set listchars=tab:▸·,trail:·,eol:¬
+    set list
+    if &listchars ==# 'eol:$'
+        set listchars=tab:>\ ,trail:·,extends:>,precedes:<,nbsp:+
+        "set listchars=tab:▸·,trail:·,eol:¬
+    endif
     set nonumber                                " show line numbers
     set relativenumber                        " line nubers are relative to the current one
     set numberwidth=5                           " We are good up to 99999 lines
     " colorscheme tempus_warp                         " modified darkblue color scheme, with edges match the dark color scheme in airline
     "  http://bytefluent.com/vivify/index.php       " a site for editing colorscheme
+    if windows
+        " set shell=c:\cygwin64\bin\bash.exe
+        " set shell=C:\cygwin\bin\bash.exe
+    endif
     colorscheme darkblue_modified                         " modified darkblue color scheme, with edges match the dark color scheme in airline
+
 " }}}
 
 " {{{ STATUSLINE
@@ -206,8 +224,11 @@ set guioptions+=M                           " hide it all. m = menu bar, T = too
     nnoremap <Leader>c :set cursorline! cursorcolumn!<CR>
     " Start interactive EasyAlign in visual mode (e.g. vipga)
 
-    " remove last search highlighting
-    nnoremap <C-L> :nohl<CR><C-L>
+    " remove last search highlighting -- taken from tpopes vim-sensible
+    " nnoremap <C-L> :nohl<CR><C-L>         " ==# is equal with match case
+    if maparg('<C-L>', 'n') ==# ''
+        nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
+    endif
     nnoremap  :simalt ~x
 
     " keep things visually selected when you indent them
@@ -332,8 +353,9 @@ set guioptions+=M                           " hide it all. m = menu bar, T = too
             " :wautocmd BufNewFile *.vhd silent! execute '0r $my_OneDrive/Vim/templates/skeleton.vhd'
 
             " source vimrc after you save it
-            autocmd BufWritePost vimrc.vim source $MYVIMRC
-            autocmd BufWritePost *.vhd call neomake#configure#automake('w')
+            autocmd BufWritePost init.vim source $MYVIMRC
+
+            autocmd BufWritePost *.vhd :Neomake
 
             " start the gui maximized
             if windows
@@ -364,7 +386,7 @@ set guioptions+=M                           " hide it all. m = menu bar, T = too
 
 " {{{ Ultisnips
  
-    let g:my_config_ultisnips = g:my_config_home.'/UltiSnips'
+    let g:my_config_ultisnips = g:my_config_vim.'/UltiSnips'
 
     if !isdirectory(g:my_config_ultisnips)
         call mkdir(g:my_config_ultisnips, "p")
@@ -372,7 +394,8 @@ set guioptions+=M                           " hide it all. m = menu bar, T = too
  
     let g:UltiSnipsExpandTrigger="<tab>"                    " this is the default - tab expands snippet (<c-j> goes to next field
     let g:UltiSnipsSnippetsDir=g:my_config_ultisnips
-    "let g:UltiSnipsSnippetsDir= join([g:my_home, "UltiSnips"], '/')     " ultisnips didn't like using string concatonation in this global 
+    "let g:UltiSnipsSnippetDirectories=["UltiSnips", "mycoolsnippets"]
+    "let g:UltiSnipsSnippetsDir= join([g:my_config_home, "UltiSnips"], '/')     " ultisnips didn't like using string concatonation in this global 
     let g:UltiSnipsEditSplit="horizontal"                   " show this snippet file in a horizontal split
 " }}}
 
@@ -385,19 +408,33 @@ set guioptions+=M                           " hide it all. m = menu bar, T = too
     " let g:airline_theme='darkblue'
 " }}}
 
-" {{{ Easy Align -- Taken from VHDL tool. Needs figured out
-    """""" align vhdl signals !! '<,'>EasyAlign */:=*/
-    """""" which is EasyAlign *{all occurencse}/{regex}:=*{colon, which may has equal}/{end regex}
-    "let g:easy_align_delimiters = {  ':': { 'pattern': ':', 'left_margin': 1, 'right_margin': 1, 'stick_to_left': 0 },  }
-    "let g:easy_align_delimiters = {  '"': { 'pattern': ':', 'left_margin': 1, 'right_margin': 1, 'stick_to_left': 0 },  }
-" }}}
-
 " {{{ Neomake
     " When writing a buffer (no delay).
-    " call neomake#configure#automake('w')
+    " call neomake#configure#automake('n')
     let g:neomake_open_list = 2
     let g:neomake_ghdl_args = ['-s', '--ieee=synopsys', '--work=vhdltool_lib']
     let g:neomake_logfile = g:my_cache_vim.'/neomake.log'
+    " ** Error: src/sync_fifo_v2.vhd(76): near "begin": (vcom-1576) expecting == or '+' or '-' or '&'.
+    let &errorformat =
+                \ '** %tRROR: %f(%l): %m,'.
+                \ '** %tRROR: %m,' .
+                \ '** %tARNING: %f(%l): %m,' .
+                \ '** %tARNING: %m,' .
+                \ '** %tOTE: %m,' .
+                \ '%tRROR: %f(%l): %m,' .
+                \ '%tARNING[%*[0-9]]: %f(%l): %m,' .
+                \ '%tRROR: %m,' .
+                \ '%tARNING[%*[0-9]]: %m'
+
+    let g:neomake_vhdl_vcom_maker = {
+                \ 'args': ['-2002', '-lint'],
+                \ 'errorformat': &errorformat,
+                \ }
+    let g:neomake_vhdl_enabled_makers = ['vcom']
+    "let g:quickfixsigns_protect_sign_rx = '^neomake_'
+
+
+
 " }}}
 
 " {{{ vimwiki
