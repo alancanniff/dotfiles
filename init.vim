@@ -5,7 +5,7 @@ set guioptions+=M                          " M = don't load menu. has to be run 
 " :h keyword <c-d> brings up list of matching entries
 " zc close a fold under cursor
 " zM close all
-" zR open all   :w
+" zR open all
  
 "{{{ setup and windows config
     let windows = has('win32') || has('win64')
@@ -64,7 +64,6 @@ set guioptions+=M                          " M = don't load menu. has to be run 
         packadd minpac
         call minpac#init()
         call minpac#add('k-takata/minpac', {'type':'opt'})      " let minpac manage itself
-        "call minpac#add('scrooloose/nerdtree', {'type': 'opt'}) " direcoty tree vim style
         "call minpac#add('vim-syntastic/syntastic')
         call minpac#add('tpope/vim-vinegar')                    " basic directory tree navigation plug in
         call minpac#add('tpope/vim-surround')                   " for swapping around braces: change - cs([, delete - ds(, added - ysiw(
@@ -82,6 +81,7 @@ set guioptions+=M                          " M = don't load menu. has to be run 
         call minpac#add('adelarsq/vim-matchit')                 " may need support for 2008   see the ftplugins dir in the install dir
         call minpac#add('neomake/neomake')                      "
         call minpac#add('michaeljsmith/vim-indent-object')      "  ai = an indent object and line above, ii an indent object, aI an indent object and lines above/below
+        call minpac#add('seletskiy/vim-pythonx')                " python lib used by ultisnips for autojumping
     endfunction
 
     command! PackUpdate call PackInit() | call minpac#update('', {'do': 'call minpac#status()'})
@@ -150,7 +150,7 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     set softtabstop=4                           " when hitting tab or backspace, how many spaces should a tab be (see expandtab)
     set expandtab                               " uses spaces instead of tab
     set shiftwidth=4                            " size of indent
-    set smarttab                                " 
+    "set smarttab                                " 
 
     "set noexpandtab                             " uses spaces instead of tab
     set virtualedit=all                         " move the cursor anywhere on the screen
@@ -168,12 +168,14 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     set noinfercase                             " infer case in completionl
     set noshowmode                              " don't show the mode in the command line as it's in airline
     " set omnifunc                                " enable completion <c-x><c-o> 
+
     set foldenable                              " enable folding
     set foldmethod=marker                       " enable folding at option - markers
     set foldmarker={{{,}}} 
     set foldnestmax=1
     "set foldlevel=100                               " Don't autofold anything (but I can still fold manually)
     set foldopen=block,hor,jump,mark,quickfix,search,tag " what movements open folds - hor is horizontal
+
     set splitbelow                              " default split behavior
     set splitright                              " default split behavior
     set lazyredraw                              " Don't redraw while executing macros (good performance config) 
@@ -184,7 +186,7 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     set incsearch                             " incremental search rules
     set list
     if &listchars ==# 'eol:$'
-        set listchars=tab:>\ ,trail:·,extends:>,precedes:<,nbsp:+
+        set listchars=tab:▸\ ,trail:·,extends:>,precedes:<,nbsp:+
         "set listchars=tab:▸·,trail:·,eol:¬
     endif
     set nonumber                                " show line numbers
@@ -219,9 +221,19 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     nnoremap <silent> <Leader>/ :let tmp=@/<Bar>s:\\:/:ge<Bar>let @/=tmp<Bar>noh<CR>
     nnoremap <silent> <Leader><Bslash> :let tmp=@/<Bar>s:/:\\:ge<Bar>let @/=tmp<Bar>noh<CR>
     " full screen in windows
-    nnoremap  <Leader>f :simalt ~x<CR>
+    " nnoremap  <Leader>f :simalt ~x<CR>
+
+    " mapping for FZF, Files, lines in buffer, lines in all buffers, History, cmd hist, search hist
+    nnoremap  <Leader>ff :Files<CR>
+    nnoremap  <Leader>fl :Blines<CR>
+    nnoremap  <Leader>fL :Lines<CR>
+    nnoremap  <Leader>ft :BTags<CR>
+    nnoremap  <Leader>fh :History<CR>
+    nnoremap  <Leader>f: :History:<CR>
+    nnoremap  <Leader>f/ :History/<CR>
+
     " toggle the column highlighting 
-    nnoremap <Leader>c :set cursorline! cursorcolumn!<CR>
+    " nnoremap <Leader>c :set cursorline! cursorcolumn!<CR>
     " Start interactive EasyAlign in visual mode (e.g. vipga)
 
     " remove last search highlighting -- taken from tpopes vim-sensible
@@ -252,15 +264,11 @@ set guioptions+=M                          " M = don't load menu. has to be run 
 
     " taken from mswim.vim
     " Set options and add mapping such that Vim behaves a lot like MS-Windows
-    "
-    " Maintainer:	Bram Moolenaar <Bram@vim.org>
-    " Last change:	2012 Jul 25
-
     " set the 'cpoptions' to its Vim default
     if 1	" only do this when compiled with expression evaluation
         let s:save_cpo = &cpoptions
     endif
-    set cpo&vim
+    set cpo&vim           " return cpo options to vim defaults
 
     " set 'selection', 'selectmode', 'mousemodel' and 'keymodel' for MS-Windows
     behave mswin
@@ -272,7 +280,7 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     vnoremap <C-C> "+y
 
     " CTRL-V and SHIFT-Insert are Paste
-    map <C-V>		"+gP
+    "map <C-V>		"+gP
     cmap <C-V>		<C-R>+
 
     " Pasting blockwise and linewise selections is not possible in Insert and
@@ -328,6 +336,7 @@ set guioptions+=M                          " M = don't load menu. has to be run 
             "autocmd FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab
             autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o      " turn off autocomment
             autocmd FileType make set noexpandtab shiftwidth=8 softtabstop=0
+            autocmd FileType vhdl set commentstring=--%s
 
             " AUTOCOMMAND
             autocmd BufRead,BufNewFile *.do set filetype=tcl                                    " open do files as tcl
@@ -355,7 +364,7 @@ set guioptions+=M                          " M = don't load menu. has to be run 
             " source vimrc after you save it
             autocmd BufWritePost init.vim source $MYVIMRC
 
-            autocmd BufWritePost *.vhd :Neomake
+            autocmd BufWritePost *.vhd,*.py :Neomake
 
             " start the gui maximized
             if windows
@@ -405,7 +414,7 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     let g:airline_section_c = '%t'                          " only display the filename
     let g:airline_powerline_fonts = 1                       " powerline fonts for facny airline look
     " let g:airline_section_z = '%l/%L-%c'              " line and column
-    " let g:airline_theme='darkblue'
+    let g:airline_theme='darkblue'
 " }}}
 
 " {{{ Neomake
@@ -414,6 +423,7 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     let g:neomake_open_list = 2
     let g:neomake_ghdl_args = ['-s', '--ieee=synopsys', '--work=vhdltool_lib']
     let g:neomake_logfile = g:my_cache_vim.'/neomake.log'
+
     " ** Error: src/sync_fifo_v2.vhd(76): near "begin": (vcom-1576) expecting == or '+' or '-' or '&'.
     let &errorformat =
                 \ '** %tRROR: %f(%l): %m,'.
@@ -431,9 +441,9 @@ set guioptions+=M                          " M = don't load menu. has to be run 
                 \ 'errorformat': &errorformat,
                 \ }
     let g:neomake_vhdl_enabled_makers = ['vcom']
-    "let g:quickfixsigns_protect_sign_rx = '^neomake_'
-
-
+    " pip install flake8
+    let g:neomake_flake8_args = ['--max-line-length=240']
+    let g:neomake_python_enable_makers = ['flake8']
 
 " }}}
 
