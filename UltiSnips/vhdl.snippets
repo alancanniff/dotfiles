@@ -22,6 +22,7 @@
 # gfor - generate for
 
 # for - for loop
+# while - while loop
 
 # ta - type array
 # tr - type record
@@ -61,9 +62,6 @@ def clean_first_placeholder(snip):
             snip.cursor[1] - 3,
         )
 
-def test_jump_1_2_2(snip, tabstop):
-    return px.snippets
-
 
 def goto_eol(snip):
     cur_line_length = len(snip.buffer[snip.line])
@@ -72,10 +70,6 @@ def goto_eol(snip):
         cur_line_length+1,
     )
 
-def insert_method_call(name):
-	vim.command('normal G')
-	snip.expand_anon(name + '($4)\n')
- 
 #def skip(snip):
 #    if px.snippets.get_jumper_position(snip) == 2:
 #        if not px.snippets.get_jumper_text(snip):
@@ -87,11 +81,17 @@ def insert_method_call(name):
 # 
 #     snip.context.update({'jumper': {'enabled': True, 'snip': snip}})
 
-# theres a dummy context 
+# theres a dummy context - this stores the snippet as part of the context so it can be accessed to do the autojump
 # so you can create a jumper and access the snip object
-
 def jump(snip, tabstop):
+    # make jumper - takes the snip and the tabstop to create the jumper at
+    # this stores the snip in the jumper - which is part of the context, which is why the dummy context is created
     px.snippets.make_jumper(snip, 2)
+    
+    # at the tabstop you want to jump - 
+    # check if the current tab stop is the one your want. 
+    # then if the text of the jumper snip is empty
+    # then jump.
     if snip.tabstop == tabstop and not px.snippets.get_jumper_text(snip):
         px.snippets.advance_jumper(snip)
 
@@ -119,10 +119,12 @@ snippet x "Description" b
 }
 endsnippet
 
-#trying to make autojump if string is empty
+#context always evaluates to true. make it so you can store the jumper
+#post jump - make a jumper to store the snip at tabstop 2
+#auto jump - if the jumper text is empty (the text at tabstop 2) auto jump
 context "px.snippets.make_context(snip)"
 post_jump "px.snippets.make_jumper(snip, 2)"
-snippet ll
+snippet dbg_jump
 this is a test
 `!p autojump(snip)`
 ts 1 = ${1:test1}
@@ -131,78 +133,52 @@ ts 3 = ${3:test3}
 ts 4 = ${4:test4}
 endsnippet
 
-post_jump "if snip.tabstop == 0: insert_method_call(snip.tabstops[1].current_text)"
-snippet dbg_d "method declaration" b
-def $1():
-	2 = ${2}
-	3 = ${3}
-endsnippet
-                                 
-
 snippet dbg_f
 entity ${1:`!p snip.rv=snip.basename`} is
-	generic
-	(
-		${3}
-	); `!p
+    generic
+    (
+        ${3}
+    ); `!p
 if t[1] == "tb":
-	snip += "end entity %s;" % t[1];
+    snip += "end entity %s;" % t[1];
 else:
-	snip >> 1
-	snip += "port"
-	snip += "("
-	snip += ")"
-	snip << 1
-	snip += "end entity %s;" % t[1];
+    snip >> 1
+    snip += "port"
+    snip += "("
+    snip += ")"
+    snip << 1
+    snip += "end entity %s;" % t[1];
 `
 
 architecture `!p snip.rv = "sim" if t[1] in "tb" else "rtl" ` of $1 is
-	${4}
+    ${4}
 begin
-	${5}
+    ${5}
 end architecture $1;
 endsnippet
 
 snippet dbg_e
 entity ${1:`!p snip.rv=snip.basename`} is
-	generic
-	(
-		${3}
-	);`!p 
+    generic
+    (
+        ${3}
+    );`!p 
 if t[1] == "tb":
-	snip += "end entity %s;" % t[1];
+    snip += "end entity %s;" % t[1];
 else:
-	snip >> 1
-	snip += "port"
-	snip += "("
-	snip += ")"
-	snip << 1
-	snip += "end entity %s;" % t[1];
+    snip >> 1
+    snip += "port"
+    snip += "("
+    snip += ")"
+    snip << 1
+    snip += "end entity %s;" % t[1];
 `
 
 architecture `!p snip.rv = "sim" if t[1] in "tb" else "rtl" ` of $1 is
-	${0}
+    ${0}
 begin
 end architecture $1;
 endsnippet
-
-snippet dbg_slv "Description" 
-std_logic_vector(${1} downto 0)${2: := (others => '0')};${3}
-endsnippet       
- 
-# this context always evaluates to true
-context "px.snippets.make_context(snip)"
-post_jump "jump_to_end_of_line(snip)"
-snippet dbg_a "Description" 
-`!p jump_to_second_when_first_is_empty(snip)
-`std_logic_vector( downto 0)${1: := (others => '0')};$2
-endsnippet       
-
-post_jump "goto_eol(snip)"
-snippet dbg_b
-:= (others => '0')
-endsnippet
-             
 
 ########################
 #  end of dev section  #
@@ -210,37 +186,37 @@ endsnippet
  
 snippet lib
 library ${1};
-	use $1.${2}.${3:all};${0}
+    use $1.${2}.${3:all};${0}
 endsnippet
 
 snippet libs
 library ieee;
-	use ieee.std_logic_1164.ALL;
-	use ieee.numeric_std.ALL;
+    use ieee.std_logic_1164.ALL;
+    use ieee.numeric_std.ALL;
 endsnippet
  
 snippet unisim
 library unisim;
-	use unisim.vcomponents.ALL;
+    use unisim.vcomponents.ALL;
 endsnippet
         
 snippet pr
 process(${1})
 begin`!p
 if re.search('clk', t[1],re.IGNORECASE):
-	snip >> 1
-	snip += "if rising_edge(%s) then" % t[1]
-	snip >> 1
-	snip+=""
+    snip >> 1
+    snip += "if rising_edge(%s) then" % t[1]
+    snip >> 1
+    snip+=""
 else:
-	snip >> 1
-	snip+=""
+    snip >> 1
+    snip+=""
 `${0}`!p
 if re.search('clk', t[1],re.IGNORECASE):
-	snip >> 1
-	snip += "end if;"
+    snip >> 1
+    snip += "end if;"
 else:
-	snip.rv="" 
+    snip.rv="" 
 `
 end process;
 endsnippet
@@ -363,13 +339,31 @@ endsnippet
 
 snippet while "while"
 while ${1} loop
-	${2}
+    ${2}
 end while;
 endsnippet
 
 snippet for
 for ${1:i} in ${2:0 to ${3} - 1} loop
-	${4}
+    ${4}
 end for;
+endsnippet
+
+snippet slv "std_logic_vector" 
+std_logic_vector(${1} downto 0)${2: := (others => '0')};${3}
+endsnippet       
+ 
+snippet proc "procedure"
+${1:impure} function ${2} (${3}) return ${4:return_type} is
+begin
+    ${5}
+end function;
+endsnippet
+
+snippet func "function"
+${1:impure }function ${2} (${3}) return ${4:return_type} ${5:is
+begin
+    ${0}
+end function};
 endsnippet
 

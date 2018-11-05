@@ -57,7 +57,6 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     "endif
 
 " }}}
-
 " {{{ packages -- minpac
 
     function! PackInit() abort
@@ -82,6 +81,8 @@ set guioptions+=M                          " M = don't load menu. has to be run 
         call minpac#add('neomake/neomake')                      "
         call minpac#add('michaeljsmith/vim-indent-object')      "  ai = an indent object and line above, ii an indent object, aI an indent object and lines above/below
         call minpac#add('seletskiy/vim-pythonx')                " python lib used by ultisnips for autojumping
+        call minpac#add('unblevable/quick-scope')               " highlights letters for easier spotting of f/t actios; :QuickScopeToggle to turn it off
+
     endfunction
 
     command! PackUpdate call PackInit() | call minpac#update('', {'do': 'call minpac#status()'})
@@ -89,7 +90,6 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     command! PackStatus call PackInit() | call minpac#status()
 
 "}}}
-
 " {{{ SETTINGS
     if &encoding ==# 'latin1' && has('gui_running')
         set encoding=utf-8
@@ -201,7 +201,6 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     colorscheme darkblue_modified                         " modified darkblue color scheme, with edges match the dark color scheme in airline
 
 " }}}
-
 " {{{ STATUSLINE
     set statusline=                             " clear the statusline for when vimrc is reloaded
     set statusline+=%-3.3n\                     " buffer number
@@ -213,7 +212,6 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     set statusline+=%10((%l/%L,%c)%)\           " line and column
     set statusline+=%P\                         " percentage of file
 " }}}
-
 " {{{ KEY MAPPINGS
     " :map {key sequence} returns the current assignment for the sequence
 
@@ -259,7 +257,6 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     inoremap <C-U> <C-G>u<C-U>
 
 " }}}
-
 " {{{ Windows stuff   
 
     " taken from mswim.vim
@@ -314,7 +311,6 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     endif
 
 " }}}
-
 " {{{ autocmd
     " only enable autocmds when they're supported
     if has("autocmd")
@@ -374,7 +370,6 @@ set guioptions+=M                          " M = don't load menu. has to be run 
         augroup END " }
     endif " has("autocmd")
 " }}}
-
 " {{{ Taglist
     " ok so ctags needs to be installed - chocolatey has it if windows.
     " ctags needs to be runs in the directory you want to index - ctags -R .
@@ -392,7 +387,6 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     " <C-w>g] open tag list - then open selected in horizontal window
     " let g:tlist_vhdl_settings   = 'vhdl;d:package declarations;b:package bodies;e:entities;a:architecture specifications;t:type declarations;p:processes;f:functions;r:procedures'
 " }}}
-
 " {{{ Ultisnips
  
     let g:my_config_ultisnips = g:my_config_vim.'/UltiSnips'
@@ -407,7 +401,6 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     "let g:UltiSnipsSnippetsDir= join([g:my_config_home, "UltiSnips"], '/')     " ultisnips didn't like using string concatonation in this global 
     let g:UltiSnipsEditSplit="horizontal"                   " show this snippet file in a horizontal split
 " }}}
-
 " {{{ Airline
     let g:airline_detect_spell=0                            " I never use spelling in vim, so turn it off
     let g:airline_detect_spelllang=0                        " ^^
@@ -416,7 +409,6 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     " let g:airline_section_z = '%l/%L-%c'              " line and column
     let g:airline_theme='darkblue'
 " }}}
-
 " {{{ Neomake
     " When writing a buffer (no delay).
     " call neomake#configure#automake('n')
@@ -446,11 +438,12 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     let g:neomake_python_enable_makers = ['flake8']
 
 " }}}
-
 " {{{ vimwiki
     let g:vimwiki_list = [ {'path': g:my_config_home.'/vimwiki'} ]
 " }}}
-
+" Quick-Scope {{{ "
+    let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+" }}} Quick-Scope "
 "stop sourcing this file from clearing the rtp / packpath in windows. 
 " stop guifonts from resizing the window
 let g:my_dont_reload = 1
