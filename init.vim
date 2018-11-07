@@ -1,4 +1,3 @@
-
 set guioptions+=M                          " M = don't load menu. has to be run before other options which is why it's done here. See help
 
 " <c-k> over keyword to goto help for it
@@ -7,22 +6,32 @@ set guioptions+=M                          " M = don't load menu. has to be run 
 " zM close all
 " zR open all
  
-"{{{ setup and windows config
+
+" Functions {{{ "
+    function! Make_Directory(path)
+        if !isdirectory(a:path)
+            call mkdir(a:path, "p", 0700)
+        endif
+    endfunction
+
+    function! Trim_Whitespace()
+        let l:save = winsaveview()
+        keeppatterns %s/\s\+$//e
+        call winrestview(l:save)
+    endfunction
+" }}} Functions "
+" Directory and rtp config {{{ "
     let windows = has('win32') || has('win64')
     let unix    = has('unix')
 
-    let g:my_config_home = $HOME.'/.config'
-    let g:my_cache_home = $HOME.'/.cache'
+    " convert all back slashes to forward slashes
+    let g:my_config_home = substitute($HOME.'/.config', '\', '/', 'g')
+    let g:my_cache_home = substitute($HOME.'/.cache', '\', '/', 'g')
 
     let g:my_config_vim = g:my_config_home.'/vim'
-    let g:my_config_vim = substitute(g:my_config_vim, '\', '/', 'g')
 
-    if !isdirectory(g:my_config_vim)
-        call mkdir(g:my_config_vim, "p")
-    endif
-
+    call Make_Directory(g:my_config_vim)
     let g:my_cache_vim = g:my_cache_home.'/vim'
-    let g:my_cache_vim = substitute(g:my_cache_vim, '\', '/', 'g')
 
     if !exists("g:my_dont_reload") 
         " don't reload when this file is saved as it breaks the plugins by clearing them from the rtp
@@ -33,70 +42,56 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     endif
 
     "set default direcotry for swap files
+    set swapfile
     let dir_swap=g:my_cache_vim.'/swp'
-    if !isdirectory(dir_swap)
-        call mkdir(dir_swap, "p")
-    endif
+    call Make_Directory(dir_swap)
     let &dir= dir_swap.'//,.'
- 
+
     "set default direcotry for backup files
     set backup                                "enable backup
     let dir_back=g:my_cache_vim.'/backup'
-    if !isdirectory(dir_back)
-        call mkdir(dir_back, "p")
-    endif
+    call Make_Directory(dir_back)
     let &backupdir=dir_back.'//,.'
 
-    "if has('persistent_undo')
-    "    set undofile                                "enable persistent undo
-    "    let dir_undo=g:my_cache_vim.'/undo'
-    "    if !isdirectory(dir_undo)
-    "        call mkdir(dir_undo, "p")
-    "    endif
-    "    let &undodir=dir_undo.'//,.'
-    "endif
-
-" }}}
-" {{{ packages -- minpac
+" }}} Directory and rtp config "
+" Packages -- minpac {{{ "
 
     function! PackInit() abort
         packadd minpac
         call minpac#init()
         call minpac#add('k-takata/minpac', {'type':'opt'})      " let minpac manage itself
-        "call minpac#add('vim-syntastic/syntastic')
         call minpac#add('tpope/vim-vinegar')                    " basic directory tree navigation plug in
         call minpac#add('tpope/vim-surround')                   " for swapping around braces: change - cs([, delete - ds(, added - ysiw(
         call minpac#add('tpope/vim-fugitive')
         "call minpac#add('tpope/vim-unimpaired')
         call minpac#add('SirVer/ultisnips')                     " expand code snippet
         call minpac#add('honza/vim-snippets')                   " library of snippets
+        call minpac#add('seletskiy/vim-pythonx')                " python lib used by ultisnips for autojumping
         call minpac#add('vim-airline/vim-airline')              " fancy status line
         call minpac#add('vim-airline/vim-airline-themes')       " airline themes
-        call minpac#add('tommcdo/vim-lion')                     " :h lion       glip: --spaces to left of align char, gL adds them to the right
-        call minpac#add('junegunn/fzf')                         " installed the binary using chocolatey on windows
+        call minpac#add('tommcdo/vim-lion')                     " :h lion - glip: --spaces to left of align char, gL adds them to the right
+        call minpac#add('junegunn/fzf')                         " fuzzy finder for loads of differnt things
         call minpac#add('junegunn/fzf.vim')                     " fuzzy finder for loads of differnt things
         call minpac#add('Znuff/consolas-powerline')             " a power line font...
         call minpac#add('vimwiki/vimwiki')
         call minpac#add('adelarsq/vim-matchit')                 " may need support for 2008   see the ftplugins dir in the install dir
         call minpac#add('neomake/neomake')                      "
         call minpac#add('michaeljsmith/vim-indent-object')      "  ai = an indent object and line above, ii an indent object, aI an indent object and lines above/below
-        call minpac#add('seletskiy/vim-pythonx')                " python lib used by ultisnips for autojumping
         call minpac#add('unblevable/quick-scope')               " highlights letters for easier spotting of f/t actios; :QuickScopeToggle to turn it off
-
     endfunction
 
     command! PackUpdate call PackInit() | call minpac#update('', {'do': 'call minpac#status()'})
     command! PackClean  call PackInit() | call minpac#clean()
     command! PackStatus call PackInit() | call minpac#status()
 
-"}}}
-" {{{ SETTINGS
+" }}} Packages -- minpac "
+" Settings {{{ "
     if &encoding ==# 'latin1' && has('gui_running')
         set encoding=utf-8
     endif
 
     filetype plugin indent on                   " this is also needed for UltiSnip
-    syntax enable                               " turn on syntax highlighting -- using on instead of enable overrides settings with defaults
+    syntax on                                   " turn on syntax highlighting
 
     " If you have vim >=8.0 or Neovim >= 0.1.5
     if (has("termguicolors"))
@@ -111,6 +106,7 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     let &viminfofile=g:my_cache_vim.'/viminfo'
     " set viminfo^=%                              " %  - When included, save and restore the buffer list.
 
+    set sessionoptions+=slash                   " covert all paths to use /
     set backspace=indent,eol,start              " let the backspace key work normally
     set hidden                                  " hide unsaved buffers
     set autoread                                " auto read file when changed outside of buffer
@@ -120,7 +116,7 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     set cmdheight=2                             " set command window height to 2.
     set showmatch                               " show matching brackets
     set autochdir                               " always switch to the current file directory.. Messes with some plugins, but I like it
-    set shortmess=aAOstT                         " shortens messages to avoid 'press a key' prompt " stops swp file warnings. In windows using --remote-silent opening two files with warnings freezes vim
+    set shortmess=aAOstT                        " shortens messages to avoid 'press a key' prompt " stops swp file warnings. In windows using --remote-silent opening two files with warnings freezes vim
     set switchbuf=useopen,usetab                " better behavior for the quickfix window and :sb
     set wildmenu                                " better command line completion, shows a list of matches
     set wildignore=*.swp,*.bak                  " ignore these file in the
@@ -128,13 +124,14 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     set nowrap                                  " turn off line wrap
     set textwidth=0                             " stop line breaks when writing.
     set mouse=                                  " going to play with gvim. Turn off mouse. It's too tempting.
-    set clipboard+=unnamed                      " share windows clip board
-    set formatoptions-=c                        " turn off auto comment. there's an example of how to set this per filetype
-    set formatoptions-=r                        " turn off auto comment. there's an example of how to set this per filetype
-    set formatoptions-=o                        " turn off auto comment. there's an example of how to set this per filetype
-    if v:version > 703 || v:version == 703 && has("patch541")
-        set formatoptions+=j                    " Delete comment character when joining commented lines
-    endif
+    "set autoindent
+    "set smartindent
+    "set cindent
+    "set clipboard+=unnamed                      " :h quotestar - text yanked in vim gets sent to system clipboard in windows. Not want
+    set formatoptions-=c                        " Auto-wrap comments using textwidth, inserting the current comment leader automatically.
+    set formatoptions-=r                        " Automatically insert the current comment leader after hitting <Enter> in Insert mode.
+    set formatoptions-=o                        " Automatically insert the current comment leader after hitting 'o' or 'O' in Normal mode.
+    set formatoptions+=j                        " Delete comment character when joining commented lines
     set guioptions+=c                           " 'c'	Use console dialogs instead of popup dialogs for simple choices.
     set guioptions-=m                           " 'm'	Menu bar is present.
     set guioptions-=T                           " 'T'	Include Toolbar.  Currently only in Win32, GTK+, Motif, Photon and Athena GUIs.
@@ -160,6 +157,9 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     set sidescroll=5                            " only scroll by 5 char, not a half page
     set hlsearch                                " light searches
     set visualbell                              " Use visual bell instead of beeping when doing something wrong
+    set noerrorbells                            " turn off the error bells
+    set belloff=all
+    set t_vb=
     set ignorecase                              " ignore case when searching.
     set smartcase                               " ignore case unless you use capitals in the search
     set showcmd                                 " Show partial commands in the last line of the screen
@@ -167,7 +167,7 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     set nrformats-=octal                        " remove octal from increment command
     set noinfercase                             " infer case in completionl
     set noshowmode                              " don't show the mode in the command line as it's in airline
-    " set omnifunc                                " enable completion <c-x><c-o> 
+    "set omnifunc                                " enable completion <c-x><c-o> 
 
     set foldenable                              " enable folding
     set foldmethod=marker                       " enable folding at option - markers
@@ -179,10 +179,7 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     set splitbelow                              " default split behavior
     set splitright                              " default split behavior
     set lazyredraw                              " Don't redraw while executing macros (good performance config) 
-    set noerrorbells                            " turn off the error bells
-    "set novisualbell
-    "set t_vb=
-    "set tm=500
+    set timeoutlen=3000
     set incsearch                             " incremental search rules
     set list
     if &listchars ==# 'eol:$'
@@ -200,8 +197,8 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     endif
     colorscheme darkblue_modified                         " modified darkblue color scheme, with edges match the dark color scheme in airline
 
-" }}}
-" {{{ STATUSLINE
+" }}} Settings "
+" Statusline {{{  "
     set statusline=                             " clear the statusline for when vimrc is reloaded
     set statusline+=%-3.3n\                     " buffer number
     set statusline+=%f\                         " file name
@@ -211,8 +208,8 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     set statusline+=%=
     set statusline+=%10((%l/%L,%c)%)\           " line and column
     set statusline+=%P\                         " percentage of file
-" }}}
-" {{{ KEY MAPPINGS
+" }}} Statusline "
+" Key Mappings {{{ "
     " :map {key sequence} returns the current assignment for the sequence
 
     " \\ \/ toggle forward and back slash on the current line
@@ -223,7 +220,7 @@ set guioptions+=M                          " M = don't load menu. has to be run 
 
     " mapping for FZF, Files, lines in buffer, lines in all buffers, History, cmd hist, search hist
     nnoremap  <Leader>ff :Files<CR>
-    nnoremap  <Leader>fl :Blines<CR>
+    nnoremap  <Leader>fl :BLines<CR>
     nnoremap  <Leader>fL :Lines<CR>
     nnoremap  <Leader>ft :BTags<CR>
     nnoremap  <Leader>fh :History<CR>
@@ -256,8 +253,8 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     " Revert with ":iunmap <C-U>".
     inoremap <C-U> <C-G>u<C-U>
 
-" }}}
-" {{{ Windows stuff   
+" }}} Key Mappings "
+" Windows stuff {{{ "
 
     " taken from mswim.vim
     " Set options and add mapping such that Vim behaves a lot like MS-Windows
@@ -310,16 +307,10 @@ set guioptions+=M                          " M = don't load menu. has to be run 
         unlet s:save_cpo
     endif
 
-" }}}
-" {{{ autocmd
+" }}} Windows Stuff "
+" Autocmd {{{ "
     " only enable autocmds when they're supported
     if has("autocmd")
-
-        function! Trim_Whitespace()
-            let l:save = winsaveview()
-            keeppatterns %s/\s\+$//e
-            call winrestview(l:save)
-        endfunction
 
         " group the commands so they are cleared when you re-source the vimrc file.
         augroup my_vim_commands " {
@@ -330,7 +321,7 @@ set guioptions+=M                          " M = don't load menu. has to be run 
 
             "exapmple of per type tabsettings
             "autocmd FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab
-            autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o      " turn off autocomment
+            " autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o      " turn off autocomment
             autocmd FileType make set noexpandtab shiftwidth=8 softtabstop=0
             autocmd FileType vhdl set commentstring=--%s
 
@@ -363,16 +354,20 @@ set guioptions+=M                          " M = don't load menu. has to be run 
             autocmd BufWritePost *.vhd,*.py :Neomake
 
             " start the gui maximized
-            if windows
-                autocmd GUIEnter * simalt ~x
+
+            if has("gui_running")
+                autocmd GUIEnter * set visualbell t_vb=
+                if windows
+                    autocmd GUIEnter * simalt ~x
+                endif
             endif
 
         augroup END " }
     endif " has("autocmd")
-" }}}
-" {{{ Taglist
+" }}} Autocmd "
+" Taglist {{{ "
     " ok so ctags needs to be installed - chocolatey has it if windows.
-    " ctags needs to be runs in the directory you want to index - ctags -R .
+    " ctags needs to be runs in the directory you want to index  'ctags -R .'
     " this creaetes a tags file
     " this will search in the current file directory, then up the directory tree
     set tags=./tags;/,tags;/                  " search tags files efficiently
@@ -386,64 +381,77 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     " <C-w>} open tag in preview window - as in open a new window, but don't move cursor into it
     " <C-w>g] open tag list - then open selected in horizontal window
     " let g:tlist_vhdl_settings   = 'vhdl;d:package declarations;b:package bodies;e:entities;a:architecture specifications;t:type declarations;p:processes;f:functions;r:procedures'
-" }}}
-" {{{ Ultisnips
- 
+" }}} Taglist "
+" Ultisnips {{{ "
     let g:my_config_ultisnips = g:my_config_vim.'/UltiSnips'
-
-    if !isdirectory(g:my_config_ultisnips)
-        call mkdir(g:my_config_ultisnips, "p")
-    endif
+    call Make_Directory(g:my_config_ultisnips)
  
     let g:UltiSnipsExpandTrigger="<tab>"                    " this is the default - tab expands snippet (<c-j> goes to next field
     let g:UltiSnipsSnippetsDir=g:my_config_ultisnips
     "let g:UltiSnipsSnippetDirectories=["UltiSnips", "mycoolsnippets"]
     "let g:UltiSnipsSnippetsDir= join([g:my_config_home, "UltiSnips"], '/')     " ultisnips didn't like using string concatonation in this global 
     let g:UltiSnipsEditSplit="horizontal"                   " show this snippet file in a horizontal split
-" }}}
-" {{{ Airline
+" }}} Ultisnips "
+" Airline {{{ "
     let g:airline_detect_spell=0                            " I never use spelling in vim, so turn it off
     let g:airline_detect_spelllang=0                        " ^^
     let g:airline_section_c = '%t'                          " only display the filename
     let g:airline_powerline_fonts = 1                       " powerline fonts for facny airline look
-    " let g:airline_section_z = '%l/%L-%c'              " line and column
     let g:airline_theme='darkblue'
-" }}}
-" {{{ Neomake
+" }}} Airline "
+" Neomake {{{ "
     " When writing a buffer (no delay).
     " call neomake#configure#automake('n')
     let g:neomake_open_list = 2
-    let g:neomake_ghdl_args = ['-s', '--ieee=synopsys', '--work=vhdltool_lib']
     let g:neomake_logfile = g:my_cache_vim.'/neomake.log'
 
-    " ** Error: src/sync_fifo_v2.vhd(76): near "begin": (vcom-1576) expecting == or '+' or '-' or '&'.
-    let &errorformat =
-                \ '** %tRROR: %f(%l): %m,'.
-                \ '** %tRROR: %m,' .
-                \ '** %tARNING: %f(%l): %m,' .
-                \ '** %tARNING: %m,' .
-                \ '** %tOTE: %m,' .
-                \ '%tRROR: %f(%l): %m,' .
-                \ '%tARNING[%*[0-9]]: %f(%l): %m,' .
-                \ '%tRROR: %m,' .
-                \ '%tARNING[%*[0-9]]: %m'
+    " VHDL {{{ "
+        let g:neomake_ghdl_args = ['-s', '--ieee=synopsys', '--work=vhdltool_lib']
 
-    let g:neomake_vhdl_vcom_maker = {
-                \ 'args': ['-2002', '-lint'],
-                \ 'errorformat': &errorformat,
-                \ }
-    let g:neomake_vhdl_enabled_makers = ['vcom']
-    " pip install flake8
-    let g:neomake_flake8_args = ['--max-line-length=240']
-    let g:neomake_python_enable_makers = ['flake8']
+        " ** Error: src/sync_fifo_v2.vhd(76): near "begin": (vcom-1576) expecting == or '+' or '-' or '&'.
+        let &errorformat =
+                    \ '** %tRROR: %f(%l): %m,'.
+                    \ '** %tRROR: %m,' .
+                    \ '** %tARNING: %f(%l): %m,' .
+                    \ '** %tARNING: %m,' .
+                    \ '** %tOTE: %m,' .
+                    \ '%tRROR: %f(%l): %m,' .
+                    \ '%tARNING[%*[0-9]]: %f(%l): %m,' .
+                    \ '%tRROR: %m,' .
+                    \ '%tARNING[%*[0-9]]: %m'
 
-" }}}
-" {{{ vimwiki
+        " help vcom options?
+        " -modelsimini <path/modelsim.ini>
+        let g:my_cache_vcom = g:my_cache_home.'/vcom'
+        let g:neomake_vhdl_vcom_maker = {
+                    \ 'args': [
+                                \ '-2002',
+                                \ '-lint',
+                                \ '-check_synthesis',
+                                \ '-bindAtCompile',
+                                \ '-quiet',
+                                \ '-work', g:my_cache_vcom
+                            \ ],
+                    \ 'errorformat': &errorformat,
+                    \ }
+        let g:neomake_vhdl_enabled_makers = ['vcom']
+    " }}} VHDL "
+    " Python {{{ "
+        " --append-config=APPEND_CONFIG 
+        " pip install flake8
+        " I've set the env var PYLINTHOME to .cache/pylint.d to set the location of the stats file
+        let g:neomake_flake8_args = ['--max-line-length=240']
+        let g:neomake_python_enable_makers = ['flake8']
+    " }}} Python "
+
+" }}} Neomake "
+" vimwiki {{{ "
     let g:vimwiki_list = [ {'path': g:my_config_home.'/vimwiki'} ]
-" }}}
+" }}} vimwiki "
 " Quick-Scope {{{ "
     let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 " }}} Quick-Scope "
+
 "stop sourcing this file from clearing the rtp / packpath in windows. 
 " stop guifonts from resizing the window
 let g:my_dont_reload = 1

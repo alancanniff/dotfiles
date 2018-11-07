@@ -158,10 +158,14 @@ end architecture $1;
 endsnippet
 
 snippet dbg_e
+library ieee;
+    use ieee.std_logic_1164.ALL;
+    use ieee.numeric_std.ALL;
+
 entity ${1:`!p snip.rv=snip.basename`} is
     generic
     (
-        ${3}
+        ${2}
     );`!p 
 if t[1] == "tb":
     snip += "end entity %s;" % t[1];
@@ -169,15 +173,16 @@ else:
     snip >> 1
     snip += "port"
     snip += "("
-    snip += ")"
+    snip += ");"
     snip << 1
     snip += "end entity %s;" % t[1];
 `
 
 architecture `!p snip.rv = "sim" if t[1] in "tb" else "rtl" ` of $1 is
-    ${0}
+    ${4}
 begin
-end architecture $1;
+	${5}
+end architecture `!p snip.rv = "sim" if t[1] in "tb" else "rtl" `;
 endsnippet
 
 ########################
