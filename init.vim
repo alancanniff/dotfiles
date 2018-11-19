@@ -5,9 +5,9 @@ set guioptions+=M                          " M = don't load menu. has to be run 
 " zc close a fold under cursor
 " zM close all
 " zR open all
- 
 
 " Functions {{{ "
+
     function! Make_Directory(path)
         if !isdirectory(a:path)
             call mkdir(a:path, "p", 0700)
@@ -19,8 +19,10 @@ set guioptions+=M                          " M = don't load menu. has to be run 
         keeppatterns %s/\s\+$//e
         call winrestview(l:save)
     endfunction
+
 " }}} Functions "
 " Directory and rtp config {{{ "
+
     let windows = has('win32') || has('win64')
     let unix    = has('unix')
 
@@ -60,19 +62,21 @@ set guioptions+=M                          " M = don't load menu. has to be run 
         packadd minpac
         call minpac#init()
         call minpac#add('k-takata/minpac', {'type':'opt'})      " let minpac manage itself
+        call minpac#add('python-mode/python-mode', {'type':'opt'})
         call minpac#add('tpope/vim-vinegar')                    " basic directory tree navigation plug in
         call minpac#add('tpope/vim-surround')                   " for swapping around braces: change - cs([, delete - ds(, added - ysiw(
         call minpac#add('tpope/vim-fugitive')
-        "call minpac#add('tpope/vim-unimpaired')
+        call minpac#add('tpope/vim-unimpaired')
         call minpac#add('SirVer/ultisnips')                     " expand code snippet
         call minpac#add('honza/vim-snippets')                   " library of snippets
         call minpac#add('seletskiy/vim-pythonx')                " python lib used by ultisnips for autojumping
         call minpac#add('vim-airline/vim-airline')              " fancy status line
         call minpac#add('vim-airline/vim-airline-themes')       " airline themes
+        call minpac#add('Znuff/consolas-powerline')             " a power line font...
+        " call minpac#add('itchyny/lightline.vim')               " a statusline manager
         call minpac#add('tommcdo/vim-lion')                     " :h lion - glip: --spaces to left of align char, gL adds them to the right
         call minpac#add('junegunn/fzf')                         " fuzzy finder for loads of differnt things
         call minpac#add('junegunn/fzf.vim')                     " fuzzy finder for loads of differnt things
-        call minpac#add('Znuff/consolas-powerline')             " a power line font...
         call minpac#add('vimwiki/vimwiki')
         call minpac#add('adelarsq/vim-matchit')                 " may need support for 2008   see the ftplugins dir in the install dir
         call minpac#add('neomake/neomake')                      "
@@ -86,6 +90,7 @@ set guioptions+=M                          " M = don't load menu. has to be run 
 
 " }}} Packages -- minpac "
 " Settings {{{ "
+
     if &encoding ==# 'latin1' && has('gui_running')
         set encoding=utf-8
     endif
@@ -226,8 +231,11 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     nnoremap  <Leader>fh :History<CR>
     nnoremap  <Leader>f: :History:<CR>
     nnoremap  <Leader>f/ :History/<CR>
+    nnoremap  gb         :ls<CR>:buffer<Space>
+    nnoremap  gB         :ls<CR>:sbuffer<Space>
+    " nnoremap  <Leader>b  :buffer *
+    " nnoremap  <Leader>B   :sbuffer *
 
-    " toggle the column highlighting 
     " nnoremap <Leader>c :set cursorline! cursorcolumn!<CR>
     " Start interactive EasyAlign in visual mode (e.g. vipga)
 
@@ -243,8 +251,9 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     " vnoremap > >gv
 
     " Y yanks to end of line, line D and C (not like yy)
-    " map Y y$
+    map Y y$
 
+     " 
     " Don't use Ex mode, use Q for formatting. Revert with :unmap Q".
     "map Q gq
 
@@ -313,7 +322,7 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     if has("autocmd")
 
         " group the commands so they are cleared when you re-source the vimrc file.
-        augroup my_vim_commands " {
+        augroup aug_general " {
             autocmd!
 
             " For all text files set 'textwidth' to 78 characters.
@@ -343,15 +352,14 @@ set guioptions+=M                          " M = don't load menu. has to be run 
             autocmd BufWritePre *.vhd,*.csh,*.cpp,*.c silent! :call Trim_Whitespace()<CR>
 
             " Jump to last know position in a file (if the '" is set)
-            autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
-
+            autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute 'normal! g`"zvzz' | endif
             " Template for new vhdl files.
             " :wautocmd BufNewFile *.vhd silent! execute '0r $my_OneDrive/Vim/templates/skeleton.vhd'
 
             " source vimrc after you save it
             autocmd BufWritePost init.vim source $MYVIMRC
 
-            autocmd BufWritePost *.vhd,*.py :Neomake
+            "autocmd BufWritePost *.vhd,*.py :Neomake
 
             " start the gui maximized
 
@@ -440,9 +448,17 @@ set guioptions+=M                          " M = don't load menu. has to be run 
         " --append-config=APPEND_CONFIG 
         " pip install flake8
         " I've set the env var PYLINTHOME to .cache/pylint.d to set the location of the stats file
-        let g:neomake_flake8_args = ['--max-line-length=240']
-        let g:neomake_python_enable_makers = ['flake8']
+        "let g:neomake_flake8_args = ['--max-line-length=240']
+        "let g:neomake_python_enable_makers = ['flake8']
     " }}} Python "
+
+    if has("autocmd")
+        augroup aug_neomake
+            autocmd!
+            autocmd BufWritePost *.vhd :Neomake
+            "autocmd BufWritePost *.py :Neomake
+        augroup END
+    endif " has("autocmd")
 
 " }}} Neomake "
 " vimwiki {{{ "
@@ -451,8 +467,13 @@ set guioptions+=M                          " M = don't load menu. has to be run 
 " Quick-Scope {{{ "
     let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 " }}} Quick-Scope "
+" Not Decided {{{ "
+
+nnoremap <Space><Space> :'{,'}s/\<<C-r>=expand('<cword>')<CR>\>/
+nnoremap <Space>%       :%s/\<<C-r>=expand('<cword>')<CR>\>/
+
+" }}} Not Decided "
 
 "stop sourcing this file from clearing the rtp / packpath in windows. 
 " stop guifonts from resizing the window
 let g:my_dont_reload = 1
-
