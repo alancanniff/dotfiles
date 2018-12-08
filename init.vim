@@ -5,21 +5,17 @@ set guioptions+=M                          " M = don't load menu. has to be run 
 " zc close a fold under cursor
 " zM close all
 " zR open all
+" I've started moving things into plugin directories. 
+"       " :scriptnames to see what's been loaded
 
 " Functions {{{ "
 
-    function! Make_Directory(path)
-        if !isdirectory(a:path)
-            call mkdir(a:path, "p", 0700)
-        endif
-    endfunction
-
-    function! Trim_Whitespace()
-        let l:save = winsaveview()
-        keeppatterns %s/\s\+$//e
-        call winrestview(l:save)
-    endfunction
-
+function! Make_Directory(path)
+    if !isdirectory(a:path)
+        call mkdir(a:path, "p", 0700)
+    endif
+endfunction
+"
 " }}} Functions "
 " Directory and rtp config {{{ "
 
@@ -67,13 +63,12 @@ set guioptions+=M                          " M = don't load menu. has to be run 
         call minpac#add('tpope/vim-surround')                   " for swapping around braces: change - cs([, delete - ds(, added - ysiw(
         call minpac#add('tpope/vim-fugitive')
         call minpac#add('tpope/vim-unimpaired')
+        call minpac#add('tpope/vim-repeat')
         call minpac#add('SirVer/ultisnips')                     " expand code snippet
         call minpac#add('honza/vim-snippets')                   " library of snippets
         call minpac#add('seletskiy/vim-pythonx')                " python lib used by ultisnips for autojumping
-        call minpac#add('vim-airline/vim-airline')              " fancy status line
-        call minpac#add('vim-airline/vim-airline-themes')       " airline themes
         call minpac#add('Znuff/consolas-powerline')             " a power line font...
-        " call minpac#add('itchyny/lightline.vim')               " a statusline manager
+        call minpac#add('itchyny/lightline.vim')                " a statusline manager
         call minpac#add('tommcdo/vim-lion')                     " :h lion - glip: --spaces to left of align char, gL adds them to the right
         call minpac#add('junegunn/fzf')                         " fuzzy finder for loads of differnt things
         call minpac#add('junegunn/fzf.vim')                     " fuzzy finder for loads of differnt things
@@ -82,6 +77,8 @@ set guioptions+=M                          " M = don't load menu. has to be run 
         call minpac#add('neomake/neomake')                      "
         call minpac#add('michaeljsmith/vim-indent-object')      "  ai = an indent object and line above, ii an indent object, aI an indent object and lines above/below
         call minpac#add('unblevable/quick-scope')               " highlights letters for easier spotting of f/t actios; :QuickScopeToggle to turn it off
+        call minpac#add('https://gitlab.com/ducktape/monotone-termnial.git')
+        call minpac#add('Lokaltog/vim-monotone')
     endfunction
 
     command! PackUpdate call PackInit() | call minpac#update('', {'do': 'call minpac#status()'})
@@ -105,11 +102,10 @@ set guioptions+=M                          " M = don't load menu. has to be run 
 
     if !exists("g:my_dont_reload") 
         set guifont=Consolas_NF:h11:cANSI:qDRAFT,Consolas:h11 " Consolas_NF is the powerline font
-    "    set guifont=Noto_Mono_for_Powerline:h10:cANSI:qDRAFT
+    "    set guifont=Anonymice_Powerline:h11:cANSI:qDRAFT
     endif
 
     let &viminfofile=g:my_cache_vim.'/viminfo'
-    " set viminfo^=%                              " %  - When included, save and restore the buffer list.
 
     set sessionoptions+=slash                   " covert all paths to use /
     set backspace=indent,eol,start              " let the backspace key work normally
@@ -117,15 +113,15 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     set autoread                                " auto read file when changed outside of buffer
     set ruler                                   " show the ruler 
     set laststatus=2                            " always show the statusline in the last (bottom) window
-    set confirm                                 " Confirm instead of fail a command
     set cmdheight=2                             " set command window height to 2.
+    set confirm                                 " Confirm instead of fail a command
     set showmatch                               " show matching brackets
     set autochdir                               " always switch to the current file directory.. Messes with some plugins, but I like it
     set shortmess=aAOstT                        " shortens messages to avoid 'press a key' prompt " stops swp file warnings. In windows using --remote-silent opening two files with warnings freezes vim
     set switchbuf=useopen,usetab                " better behavior for the quickfix window and :sb
     set wildmenu                                " better command line completion, shows a list of matches
     set wildignore=*.swp,*.bak                  " ignore these file in the
-    set title                                   " change the terminal's title
+    "set title                                   " change the terminal's title
     set nowrap                                  " turn off line wrap
     set textwidth=0                             " stop line breaks when writing.
     set mouse=                                  " going to play with gvim. Turn off mouse. It's too tempting.
@@ -137,13 +133,13 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     set formatoptions-=r                        " Automatically insert the current comment leader after hitting <Enter> in Insert mode.
     set formatoptions-=o                        " Automatically insert the current comment leader after hitting 'o' or 'O' in Normal mode.
     set formatoptions+=j                        " Delete comment character when joining commented lines
-    set guioptions+=c                           " 'c'	Use console dialogs instead of popup dialogs for simple choices.
-    set guioptions-=m                           " 'm'	Menu bar is present.
-    set guioptions-=T                           " 'T'	Include Toolbar.  Currently only in Win32, GTK+, Motif, Photon and Athena GUIs.
-    set guioptions-=r                           " 'r'	Right-hand scrollbar is always present.
-    set guioptions-=L                           " 'L'	Left-hand scrollbar is present when there is a vertically split window.
+    set guioptions+=c                           " 'c'   Use console dialogs instead of popup dialogs for simple choices.
+    set guioptions-=m                           " 'm'   Menu bar is present.
+    set guioptions-=T                           " 'T'   Include Toolbar.  Currently only in Win32, GTK+, Motif, Photon and Athena GUIs.
+    set guioptions-=r                           " 'r'   Right-hand scrollbar is always present.
+    set guioptions-=L                           " 'L'   Left-hand scrollbar is present when there is a vertically split window.
     if windows
-        set guioptions-=a                       " 'a'	Autoselect:...  (auto copy when you select - see help) needed to make <c-v> work
+        set guioptions-=a                       " 'a'   Autoselect:...  (auto copy when you select - see help) needed to make <c-v> work
     endif
     set cursorline                              " highlight current line
     set cursorcolumn                            " highlight current col
@@ -194,25 +190,33 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     set nonumber                                " show line numbers
     set relativenumber                        " line nubers are relative to the current one
     set numberwidth=5                           " We are good up to 99999 lines
-    " colorscheme tempus_warp                         " modified darkblue color scheme, with edges match the dark color scheme in airline
     "  http://bytefluent.com/vivify/index.php       " a site for editing colorscheme
     if windows
         " set shell=c:\cygwin64\bin\bash.exe
         " set shell=C:\cygwin\bin\bash.exe
     endif
-    colorscheme darkblue_modified                         " modified darkblue color scheme, with edges match the dark color scheme in airline
 
+    " colorscheme darkblue_modified                         " modified darkblue color scheme, with edges match the dark color scheme in airline
+
+    colorscheme monotone
+    
 " }}} Settings "
 " Statusline {{{  "
-    set statusline=                             " clear the statusline for when vimrc is reloaded
-    set statusline+=%-3.3n\                     " buffer number
-    set statusline+=%f\                         " file name
-    set statusline+=%h%m%r%w                    " flags
-    set statusline+=[%{strlen(&ft)?&ft:'none'}, " filetype
-    set statusline+=%{&fileformat}]             " file format
-    set statusline+=%=
-    set statusline+=%10((%l/%L,%c)%)\           " line and column
-    set statusline+=%P\                         " percentage of file
+
+    " set statusline=                             " clear the statusline for when vimrc is reloaded
+    " set statusline+=%f\                         " file name
+    " set statusline+=%h%m%r%w                    " flags
+    " set statusline+=[%{strlen(&ft)?&ft:'none'}, " filetype
+    " set statusline+=%{&fileformat}]             " file format
+    " set statusline+=%=
+    " set statusline+=%10((%l/%L,%c)%)\           " line and column
+    " set statusline+=%P\                         " percentage of file
+    " hi StatusLine gui=NONE
+    " hi StatusLineNC gui=NONE
+    " '%<${ repeat("─", winwidth(0)) }>'
+    "https://github.com/ralismark/vimfiles
+    "let &statusline = '%f%h%m%r%w '. repeat("\u2014", winwidth(0)-40) 
+
 " }}} Statusline "
 " Key Mappings {{{ "
     " :map {key sequence} returns the current assignment for the sequence
@@ -231,90 +235,79 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     nnoremap  <Leader>fh :History<CR>
     nnoremap  <Leader>f: :History:<CR>
     nnoremap  <Leader>f/ :History/<CR>
-    nnoremap  gb         :ls<CR>:buffer<Space>
-    nnoremap  gB         :ls<CR>:sbuffer<Space>
-    " nnoremap  <Leader>b  :buffer *
-    " nnoremap  <Leader>B   :sbuffer *
-
-    " nnoremap <Leader>c :set cursorline! cursorcolumn!<CR>
-    " Start interactive EasyAlign in visual mode (e.g. vipga)
+    nnoremap  gb         :ls<CR>:b<Space>
+    nnoremap  gB         :ls<CR>:vb<Space>
 
     " remove last search highlighting -- taken from tpopes vim-sensible
-    " nnoremap <C-L> :nohl<CR><C-L>         " ==# is equal with match case
     if maparg('<C-L>', 'n') ==# ''
         nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
     endif
     nnoremap  :simalt ~x
 
-    " keep things visually selected when you indent them
-    " vnoremap < <gv
-    " vnoremap > >gv
-
     " Y yanks to end of line, line D and C (not like yy)
     map Y y$
-
-     " 
-    " Don't use Ex mode, use Q for formatting. Revert with :unmap Q".
-    "map Q gq
 
     " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
     " so that you can undo CTRL-U after inserting a line break.
     " Revert with ":iunmap <C-U>".
     inoremap <C-U> <C-G>u<C-U>
 
+    " this function has been moved to the plugins dir
+    nmap <leader>h <Plug>Highlight_SynStack
+
 " }}} Key Mappings "
 " Windows stuff {{{ "
 
-    " taken from mswim.vim
-    " Set options and add mapping such that Vim behaves a lot like MS-Windows
-    " set the 'cpoptions' to its Vim default
-    if 1	" only do this when compiled with expression evaluation
-        let s:save_cpo = &cpoptions
-    endif
-    set cpo&vim           " return cpo options to vim defaults
+    " " taken from mswim.vim
+    " " Set options and add mapping such that Vim behaves a lot like MS-Windows
+    " " set the 'cpoptions' to its Vim default
+    " if 1    " only do this when compiled with expression evaluation
+    "     let s:save_cpo = &cpoptions
+    " endif
+    " set cpo&vim           " return cpo options to vim defaults
 
-    " set 'selection', 'selectmode', 'mousemodel' and 'keymodel' for MS-Windows
-    behave mswin
+    " " set 'selection', 'selectmode', 'mousemodel' and 'keymodel' for MS-Windows
+    " behave mswin
 
-    " CTRL-X and SHIFT-Del are Cut
-    vnoremap <C-X> "+x
+    " " CTRL-X and SHIFT-Del are Cut
+    " vnoremap <C-X> "+x
 
-    " CTRL-C and CTRL-Insert are Copy
-    vnoremap <C-C> "+y
+    " " CTRL-C and CTRL-Insert are Copy
+    " vnoremap <C-C> "+y
 
-    " CTRL-V and SHIFT-Insert are Paste
-    "map <C-V>		"+gP
-    cmap <C-V>		<C-R>+
+    " " CTRL-V and SHIFT-Insert are Paste
+    " "map <C-V>      "+gP
+    " " cmap <C-V>      <C-R>+
 
-    " Pasting blockwise and linewise selections is not possible in Insert and
-    " Visual mode without the +virtualedit feature.  They are pasted as if they
-    " were characterwise instead.
-    " Uses the paste.vim autoload script.
-    " Use CTRL-G u to have CTRL-Z only undo the paste.
+    " " Pasting blockwise and linewise selections is not possible in Insert and
+    " " Visual mode without the +virtualedit feature.  They are pasted as if they
+    " " were characterwise instead.
+    " " Uses the paste.vim autoload script.
+    " " Use CTRL-G u to have CTRL-Z only undo the paste.
 
-    exe 'inoremap <script> <C-V> <C-G>u' . paste#paste_cmd['i']
-    exe 'vnoremap <script> <C-V> ' . paste#paste_cmd['v']
+    " exe 'inoremap <script> <C-V> <C-G>u' . paste#paste_cmd['i']
+    " exe 'vnoremap <script> <C-V> ' . paste#paste_cmd['v']
 
-    " Use CTRL-Q to do what CTRL-V used to do
-    noremap <C-Q>		<C-V>
+    " " Use CTRL-Q to do what CTRL-V used to do
+    " "noremap <C-Q>       <C-V>
 
-    " For CTRL-V to work autoselect must be off.
-    " On Unix we have two selections, autoselect can be used.
+    " " For CTRL-V to work autoselect must be off.
+    " " On Unix we have two selections, autoselect can be used.
 
-    " CTRL-A is Select all
-    " noremap <C-A> gggH<C-O>G
-    " inoremap <C-A> <C-O>gg<C-O>gH<C-O>G
-    " cnoremap <C-A> <C-C>gggH<C-O>G
-    " onoremap <C-A> <C-C>gggH<C-O>G
-    " snoremap <C-A> <C-C>gggH<C-O>G
-    " xnoremap <C-A> <C-C>ggVG
+    " " CTRL-A is Select all
+    " " noremap <C-A> gggH<C-O>G
+    " " inoremap <C-A> <C-O>gg<C-O>gH<C-O>G
+    " " cnoremap <C-A> <C-C>gggH<C-O>G
+    " " onoremap <C-A> <C-C>gggH<C-O>G
+    " " snoremap <C-A> <C-C>gggH<C-O>G
+    " " xnoremap <C-A> <C-C>ggVG
 
-    " restore 'cpoptions'
-    set cpo&
-    if 1
-        let &cpoptions = s:save_cpo
-        unlet s:save_cpo
-    endif
+    " " restore 'cpoptions'
+    " set cpo&
+    " if 1
+    "     let &cpoptions = s:save_cpo
+    "     unlet s:save_cpo
+    " endif
 
 " }}} Windows Stuff "
 " Autocmd {{{ "
@@ -329,18 +322,9 @@ set guioptions+=M                          " M = don't load menu. has to be run 
             " autocmd FileType text setlocal textwidth=78
 
             "exapmple of per type tabsettings
-            "autocmd FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab
-            " autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o      " turn off autocomment
             autocmd FileType make set noexpandtab shiftwidth=8 softtabstop=0
-            autocmd FileType vhdl set commentstring=--%s
 
             " AUTOCOMMAND
-            autocmd BufRead,BufNewFile *.do set filetype=tcl                                    " open do files as tcl
-            autocmd BufRead,BufNewFile *.ttcl set filetype=tcl                                  " open ttcl files as tcl
-            autocmd BufRead,BufNewFile *.xdc set filetype=tcl                                   " open xdc files as tcl
-            autocmd BufRead,BufNewFile *.vhdm set filetype=vhdl                                 " open vhdm files as vhdl
-            autocmd BufRead,BufNewFile *.psl set filetype=vhdl                                  " open psl files as vhdl
-            autocmd BufRead,BufNewFile *.vho set filetype=vhdl                                  " open template files as vhdl
 
             " auto reload files with a warning message
             " https://unix.stackexchange.com/questions/149209/refresh-changed-content-of-file-opened-in-vim/383044#383044
@@ -357,19 +341,23 @@ set guioptions+=M                          " M = don't load menu. has to be run 
             " :wautocmd BufNewFile *.vhd silent! execute '0r $my_OneDrive/Vim/templates/skeleton.vhd'
 
             " source vimrc after you save it
-            autocmd BufWritePost init.vim source $MYVIMRC
+            autocmd BufWritePost init.vim source $MYVIMRC | call lightline#init()
 
             "autocmd BufWritePost *.vhd,*.py :Neomake
 
-            " start the gui maximized
-
             if has("gui_running")
+                " kill the alarm bell
                 autocmd GUIEnter * set visualbell t_vb=
+                " start the gui maximized
                 if windows
                     autocmd GUIEnter * simalt ~x
                 endif
             endif
 
+            autocmd BufLeave * :set nocursorcolumn | set nocursorline
+            autocmd BufEnter * :set cursorcolumn | set cursorline
+
+            autocmd User NeomakeFinished nested call lightline#update()
         augroup END " }
     endif " has("autocmd")
 " }}} Autocmd "
@@ -393,7 +381,7 @@ set guioptions+=M                          " M = don't load menu. has to be run 
 " Ultisnips {{{ "
     let g:my_config_ultisnips = g:my_config_vim.'/UltiSnips'
     call Make_Directory(g:my_config_ultisnips)
- 
+
     let g:UltiSnipsExpandTrigger="<tab>"                    " this is the default - tab expands snippet (<c-j> goes to next field
     let g:UltiSnipsSnippetsDir=g:my_config_ultisnips
     "let g:UltiSnipsSnippetDirectories=["UltiSnips", "mycoolsnippets"]
@@ -405,15 +393,18 @@ set guioptions+=M                          " M = don't load menu. has to be run 
     let g:airline_detect_spelllang=0                        " ^^
     let g:airline_section_c = '%t'                          " only display the filename
     let g:airline_powerline_fonts = 1                       " powerline fonts for facny airline look
-    let g:airline_theme='darkblue'
+
+    "hi StatusLine guibg=#222222
+    "hi StatusLineNC guibg=#222222
+    
 " }}} Airline "
 " Neomake {{{ "
     " When writing a buffer (no delay).
     " call neomake#configure#automake('n')
-    let g:neomake_open_list = 2
+    let g:neomake_open_list = 0  " don't open the location list by default  - set to 2 if you want to changes this
     let g:neomake_logfile = g:my_cache_vim.'/neomake.log'
 
-    " VHDL {{{ "
+    " Neomake - VHDL {{{ "
         let g:neomake_ghdl_args = ['-s', '--ieee=synopsys', '--work=vhdltool_lib']
 
         " ** Error: src/sync_fifo_v2.vhd(76): near "begin": (vcom-1576) expecting == or '+' or '-' or '&'.
@@ -444,7 +435,7 @@ set guioptions+=M                          " M = don't load menu. has to be run 
                     \ }
         let g:neomake_vhdl_enabled_makers = ['vcom']
     " }}} VHDL "
-    " Python {{{ "
+    " Neomake - Python {{{ "
         " --append-config=APPEND_CONFIG 
         " pip install flake8
         " I've set the env var PYLINTHOME to .cache/pylint.d to set the location of the stats file
@@ -464,8 +455,97 @@ set guioptions+=M                          " M = don't load menu. has to be run 
 " vimwiki {{{ "
     let g:vimwiki_list = [ {'path': g:my_config_home.'/vimwiki'} ]
 " }}} vimwiki "
+" lightline {{{ "
+    " if I'm going to have lightline, I may as well remove the underline from the status line
+
+    " remove the underline from the statusline
+    highlight statusline cterm=none
+    highlight statuslinenc cterm=none
+    highlight statusline gui=none
+    highlight statuslinenc gui=none
+    " make the vert split and statusline a unified color, different from background
+    highlight statusline guibg=#303030
+    highlight statuslinenc guibg=#303030
+    highlight vertsplit guibg=#303030
+    highlight vertsplit guifg=#303030
+    highlight vertsplit guifg=#303030
+    " change the color of the cursor columns
+    highlight CursorColumn guibg=grey20
+    highlight CursorLine guibg=grey20
+
+    
+    " component_expand allows different color for neomake. see help
+    let g:lightline = {
+        \ 'active': {
+        \   'left'  : [
+        \       [ 'mode', 'paste' ],
+        \       [  'fugitive' ],
+        \       [ 'readonly', 'filename', 'modified' ]
+        \   ],
+        \   'right' : [
+        \       ['neomake', 'lineinfo'],
+        \       ['percent'],
+        \       ['fileformat', 'fileencoding', 'filetype'],
+        \   ],
+        \ },
+        \ 'component': {
+        \   'lineinfo': '%3l:%-2v',
+        \ },
+        \ 'component_expand': {
+        \   'neomake' : 'LightlineNeomake'
+        \ },
+        \ 'component_function': {
+        \   'readonly': 'LightlineReadonly',
+        \   'fugitive': 'LightlineFugitive',
+        \ },
+        \ 'component_type': {
+        \   'neomake': 'error',
+        \ },
+        \ 'separator': { 'left': '', 'right': '' },
+        \ 'subseparator': { 'left': '', 'right': '' }
+        \ }
+
+    function! LightlineNeomake() abort
+        let stats = []
+        let lcounts = neomake#statusline#LoclistCounts()
+        for key in sort(keys(lcounts))
+            call add(stats, printf( '%s: %d', key, lcounts[key]))
+        endfor
+        return join(stats, ' ')
+    endfunction
+
+    augroup aug_lightline
+        autocmd!
+        autocmd User NeomakeFinished nested call lightline#update()
+        "autocmd BufWritePost *.py :Neomake
+    augroup END " }
+
+    function! LightlineReadonly()
+        return &readonly ? '' : ''
+    endfunction
+
+    " !~? -- doesn't regex and ignores case
+    function! LightlineFugitive()
+        if &ft !~? 'help\|vimfiler' && exists('*fugitive#head')
+            let branch = fugitive#head()
+            return branch !=# '' ? ' '.branch : ''
+        endif
+        return ''
+    endfunction
+
+" }}} lightline "
 " Quick-Scope {{{ "
     let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+
+    highlight QuickScopePrimary guifg=yellow gui=NONE ctermfg=yellow cterm=NONE
+    highlight QuickScopeSecondary guifg=green gui=NONE ctermfg=green cterm=NONE
+
+    augroup qs_colors
+        autocmd!
+        autocmd ColorScheme * highlight QuickScopePrimary guifg=yellow gui=NONE ctermfg=yellow cterm=NONE
+        autocmd ColorScheme * highlight QuickScopeSecondary guifg=green gui=NONE ctermfg=green cterm=NONE
+    augroup END
+
 " }}} Quick-Scope "
 " Not Decided {{{ "
 
