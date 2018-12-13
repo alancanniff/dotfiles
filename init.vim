@@ -27,8 +27,8 @@ endfunction
     let g:my_cache_home = substitute($HOME.'/.cache', '\', '/', 'g')
 
     let g:my_config_vim = g:my_config_home.'/vim'
-
     call Make_Directory(g:my_config_vim)
+
     let g:my_cache_vim = g:my_cache_home.'/vim'
 
     if !exists("g:my_dont_reload") 
@@ -343,8 +343,6 @@ endfunction
             " source vimrc after you save it
             autocmd BufWritePost init.vim source $MYVIMRC | call lightline#init()
 
-            "autocmd BufWritePost *.vhd,*.py :Neomake
-
             if has("gui_running")
                 " kill the alarm bell
                 autocmd GUIEnter * set visualbell t_vb=
@@ -398,60 +396,6 @@ endfunction
     "hi StatusLineNC guibg=#222222
     
 " }}} Airline "
-" Neomake {{{ "
-    " When writing a buffer (no delay).
-    " call neomake#configure#automake('n')
-    let g:neomake_open_list = 0  " don't open the location list by default  - set to 2 if you want to changes this
-    let g:neomake_logfile = g:my_cache_vim.'/neomake.log'
-
-    " Neomake - VHDL {{{ "
-        let g:neomake_ghdl_args = ['-s', '--ieee=synopsys', '--work=vhdltool_lib']
-
-        " ** Error: src/sync_fifo_v2.vhd(76): near "begin": (vcom-1576) expecting == or '+' or '-' or '&'.
-        let &errorformat =
-                    \ '** %tRROR: %f(%l): %m,'.
-                    \ '** %tRROR: %m,' .
-                    \ '** %tARNING: %f(%l): %m,' .
-                    \ '** %tARNING: %m,' .
-                    \ '** %tOTE: %m,' .
-                    \ '%tRROR: %f(%l): %m,' .
-                    \ '%tARNING[%*[0-9]]: %f(%l): %m,' .
-                    \ '%tRROR: %m,' .
-                    \ '%tARNING[%*[0-9]]: %m'
-
-        " help vcom options?
-        " -modelsimini <path/modelsim.ini>
-        let g:my_cache_vcom = g:my_cache_home.'/vcom'
-        let g:neomake_vhdl_vcom_maker = {
-                    \ 'args': [
-                                \ '-2002',
-                                \ '-lint',
-                                \ '-check_synthesis',
-                                \ '-bindAtCompile',
-                                \ '-quiet',
-                                \ '-work', g:my_cache_vcom
-                            \ ],
-                    \ 'errorformat': &errorformat,
-                    \ }
-        let g:neomake_vhdl_enabled_makers = ['vcom']
-    " }}} VHDL "
-    " Neomake - Python {{{ "
-        " --append-config=APPEND_CONFIG 
-        " pip install flake8
-        " I've set the env var PYLINTHOME to .cache/pylint.d to set the location of the stats file
-        "let g:neomake_flake8_args = ['--max-line-length=240']
-        "let g:neomake_python_enable_makers = ['flake8']
-    " }}} Python "
-
-    if has("autocmd")
-        augroup aug_neomake
-            autocmd!
-            autocmd BufWritePost *.vhd :Neomake
-            "autocmd BufWritePost *.py :Neomake
-        augroup END
-    endif " has("autocmd")
-
-" }}} Neomake "
 " vimwiki {{{ "
     let g:vimwiki_list = [ {'path': g:my_config_home.'/vimwiki'} ]
 " }}} vimwiki "
@@ -534,25 +478,6 @@ endfunction
     endfunction
 
 " }}} lightline "
-" Quick-Scope {{{ "
-    let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
-
-    highlight QuickScopePrimary guifg=yellow gui=NONE ctermfg=yellow cterm=NONE
-    highlight QuickScopeSecondary guifg=green gui=NONE ctermfg=green cterm=NONE
-
-    augroup qs_colors
-        autocmd!
-        autocmd ColorScheme * highlight QuickScopePrimary guifg=yellow gui=NONE ctermfg=yellow cterm=NONE
-        autocmd ColorScheme * highlight QuickScopeSecondary guifg=green gui=NONE ctermfg=green cterm=NONE
-    augroup END
-
-" }}} Quick-Scope "
-" Not Decided {{{ "
-
-nnoremap <Space><Space> :'{,'}s/\<<C-r>=expand('<cword>')<CR>\>/
-nnoremap <Space>%       :%s/\<<C-r>=expand('<cword>')<CR>\>/
-
-" }}} Not Decided "
 
 "stop sourcing this file from clearing the rtp / packpath in windows. 
 " stop guifonts from resizing the window
