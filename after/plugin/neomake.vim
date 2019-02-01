@@ -1,3 +1,7 @@
+if !exists("g:loaded_neomake")
+    finish
+endif
+
 " Neomake {{{ "
     " When writing a buffer (no delay).
     call neomake#configure#automake('w')
@@ -5,8 +9,6 @@
     let g:neomake_logfile = g:my_cache_vim.'/neomake.log'
 
     " Neomake - VHDL {{{ "
-        " I've started moving this stuff into the compiler directory...
-
         " ** Error: src/sync_fifo_v2.vhd(76): near "begin": (vcom-1576) expecting == or '+' or '-' or '&'.
         let &errorformat =
                     \ '** %tRROR: %f(%l): %m,'.
@@ -33,7 +35,8 @@
                             \ ],
                     \ 'errorformat': &errorformat,
                     \ }
-        let g:neomake_vhdl_enabled_makers = ['vcom']
+    "    let g:neomake_vhdl_enabled_makers = ['vcom']
+    let g:neomake_vhdl_enabled_makers = ['ghdl']
     " }}} VHDL "
     " Neomake - Python {{{ "
         " --append-config=APPEND_CONFIG 
