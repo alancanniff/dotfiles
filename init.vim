@@ -8,6 +8,10 @@ set guioptions+=M                          " M = don't load menu. has to be run 
 " I've started moving things into plugin directories. 
 "       " :scriptnames to see what's been loaded
 
+if has('nvim')
+    let g:python_host_prog = 'c:/Python27/python.exe'
+    let g:python3_host_prog = 'c:/Python37/python.exe'
+endif
 " Functions {{{ "
 
 function! Make_Directory(path)
@@ -18,29 +22,31 @@ endfunction
 "
 " remove the underline from the statusline
 function! MonotoneMods() abort
-    if g:colors_name =~? 'monotone'
-        highlight statusline cterm=none
-        highlight statusline ctermbg=236
-        highlight statusline gui=none
-        highlight statusline guibg=#303030
-        highlight statuslinenc cterm=none
-        highlight statuslinenc ctermbg=236
-        highlight statuslinenc gui=none
-        highlight statuslinenc guibg=#303030
-        " make the vert split and statusline a unified color, different from background
-        highlight vertsplit guibg=#303030
-        highlight vertsplit guifg=#303030
-        highlight vertsplit ctermbg=236
-        highlight vertsplit ctermfg=236
-        " change the color of the cursor columns
-        highlight CursorColumn guibg=grey20
-        highlight CursorLine guibg=grey20
-        highlight CursorColumn ctermbg=235
-        highlight CursorLine ctermbg=235
+    if exists("g:colors_name")
+        if g:colors_name =~? 'monotone'
+            highlight statusline cterm=none
+            highlight statusline ctermbg=236
+            highlight statusline gui=none
+            highlight statusline guibg=#303030
+            highlight statuslinenc cterm=none
+            highlight statuslinenc ctermbg=236
+            highlight statuslinenc gui=none
+            highlight statuslinenc guibg=#303030
+            " make the vert split and statusline a unified color, different from background
+            highlight vertsplit guibg=#303030
+            highlight vertsplit guifg=#303030
+            highlight vertsplit ctermbg=236
+            highlight vertsplit ctermfg=236
+            " change the color of the cursor columns
+            highlight CursorColumn guibg=grey20
+            highlight CursorLine guibg=grey20
+            highlight CursorColumn ctermbg=235
+            highlight CursorLine ctermbg=235
+        endif
     endif
 endfunction
-    
-    
+
+
 " }}} Functions "
 " Directory and rtp config {{{ "
 
@@ -60,8 +66,13 @@ endfunction
         " don't reload when this file is saved as it breaks the plugins by clearing them from the rtp
         " in windows call a file '.vimrc.' to create .vimrc - .vim. to get .vim directory
         " the & indicates the let is setting a setting, not a variable
-        let &runtimepath=g:my_config_vim.",$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,".g:my_config_vim."/after"
-        let &packpath=g:my_config_vim.",$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,".g:my_config_vim."/after"
+        " let &runtimepath=g:my_config_vim.",$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,".g:my_config_vim."/after"
+        " let &packpath = &runtimepath
+
+        let &runtimepath=g:my_config_vim.",".&runtimepath
+        let &runtimepath.=",".g:my_config_vim."/after"
+	    let &packpath = &runtimepath
+
     endif
 
     "set default direcotry for swap files
@@ -129,7 +140,9 @@ endfunction
     "    set guifont=Anonymice_Powerline:h11:cANSI:qDRAFT
     endif
 
-    let &viminfofile=g:my_cache_vim.'/viminfo'
+    if !has('nvim')
+        let &viminfofile=g:my_cache_vim.'/viminfo'
+    endif
 
     set sessionoptions+=slash                   " covert all paths to use /
     set backspace=indent,eol,start              " let the backspace key work normally
