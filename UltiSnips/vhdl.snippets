@@ -32,7 +32,7 @@
 # prc - clk  - vim-snippets
 
 # lib - a lib to complete
-# libs - std enitity libs 
+# libs - std enitity libs
 # unisim  - unisim lib
 
 global !p
@@ -78,7 +78,7 @@ def goto_eol(snip):
 # def make_jumper(snip, on_tabstop=1):
 #     if snip.tabstop != on_tabstop:
 #         return
-# 
+#
 #     snip.context.update({'jumper': {'enabled': True, 'snip': snip}})
 
 # theres a dummy context - this stores the snippet as part of the context so it can be accessed to do the autojump
@@ -87,9 +87,9 @@ def jump(snip, tabstop):
     # make jumper - takes the snip and the tabstop to create the jumper at
     # this stores the snip in the jumper - which is part of the context, which is why the dummy context is created
     px.snippets.make_jumper(snip, 2)
-    
-    # at the tabstop you want to jump - 
-    # check if the current tab stop is the one your want. 
+
+    # at the tabstop you want to jump -
+    # check if the current tab stop is the one your want.
     # then if the text of the jumper snip is empty
     # then jump.
     if snip.tabstop == tabstop and not px.snippets.get_jumper_text(snip):
@@ -105,11 +105,11 @@ def autojump(snip):
 
 
 endglobal
- 
+
 #############################################
 #  This is a dev secton for playing around  #
 #############################################
- 
+
 context "px.snippets.make_context(snip)"
 post_jump "clean_first_placeholder(snip)"
 snippet x "Description" b
@@ -166,7 +166,7 @@ entity ${1:`!p snip.rv=snip.basename`} is
     generic
     (
         ${2}
-    );`!p 
+    );`!p
 if t[1] == "tb":
     snip += "end entity %s;" % t[1];
 else:
@@ -188,7 +188,7 @@ endsnippet
 ########################
 #  end of dev section  #
 ########################
- 
+
 snippet lib
 library ${1};
     use $1.${2}.${3:all};${0}
@@ -199,12 +199,12 @@ library ieee;
     use ieee.std_logic_1164.ALL;
     use ieee.numeric_std.ALL;
 endsnippet
- 
+
 snippet unisim
 library unisim;
     use unisim.vcomponents.ALL;
 endsnippet
-        
+
 snippet pr
 process(${1})
 begin`!p
@@ -221,75 +221,75 @@ if re.search('clk', t[1],re.IGNORECASE):
     snip >> 1
     snip += "end if;"
 else:
-    snip.rv="" 
+    snip.rv=""
 `
 end process;
 endsnippet
 
-snippet sl 
+snippet sl
 signal ${1:${VISUAL}} : std_logic := '0';${0}
 endsnippet
 
-snippet sv 
+snippet sv
 signal ${1:${VISUAL}} : std_logic_vector(${2} downto 0) := (others => '0');
 endsnippet
- 
-snippet ss 
+
+snippet ss
 signal ${1:${VISUAL}} : signed(${2} downto 0) := (others => '0');
 endsnippet
 
-snippet su 
+snippet su
 signal ${1:${VISUAL}} : unsigned(${2} downto 0) := (others => '0');
 endsnippet
 
-snippet si 
+snippet si
 signal ${1:${VISUAL}} : integer ${2:range ${3}} := 0;
 endsnippet
 
-snippet sb 
+snippet sb
 signal ${1:${VISUAL}} : boolean := ${2:false};
 endsnippet
 
-snippet vl 
+snippet vl
 variable ${1:${VISUAL}} : std_logic;
 endsnippet
 
-snippet vv 
+snippet vv
 variable ${1:${VISUAL}} : std_logic_vector(${2} downto 0);
 endsnippet
-                         
-snippet vs 
+
+snippet vs
 variable ${1:${VISUAL}} : signed(${2} downto 0);
 endsnippet
-          
-snippet vu 
+
+snippet vu
 variable ${1:${VISUAL}} : unsigned(${2} downto 0);
 endsnippet
-        
-snippet vi 
+
+snippet vi
 variable ${1:${VISUAL}} : integer ${2:range ${3}};
 endsnippet
-        
-snippet vb 
+
+snippet vb
 variable ${1:${VISUAL}} : boolean;
 endsnippet
- 
-snippet il 
+
+snippet il
 ${1:${VISUAL}} : in  std_logic;
 endsnippet
 
-snippet iv 
+snippet iv
 ${1:${VISUAL}} : in  std_logic_vector(${2} downto 0);
 endsnippet
- 
-snippet ol 
+
+snippet ol
 ${1:${VISUAL}} : out std_logic;
 endsnippet
 
-snippet ov 
+snippet ov
 ${1:${VISUAL}} : out std_logic_vector(${2} downto 0);
 endsnippet
-                   
+
 
 snippet bl "block..."
 ${1} : block
@@ -354,10 +354,10 @@ for ${1:i} in ${2:0 to ${3} - 1} loop
 end for;
 endsnippet
 
-snippet slv "std_logic_vector" 
+snippet slv "std_logic_vector"
 std_logic_vector(${1} downto 0)${2: := (others => '0')};${3}
-endsnippet       
- 
+endsnippet
+
 snippet proc "procedure"
 ${1:impure} function ${2} (${3}) return ${4:return_type} is
 begin
