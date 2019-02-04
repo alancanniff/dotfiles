@@ -387,7 +387,6 @@ endfunction
             autocmd BufLeave * :set nocursorcolumn | set nocursorline
             autocmd BufEnter * :set cursorcolumn | set cursorline
 
-            autocmd User NeomakeFinished nested call lightline#update()
             autocmd ColorScheme * call MonotoneMods()
 
         augroup END " }
@@ -471,7 +470,7 @@ endfunction
     augroup aug_lightline
         autocmd!
         autocmd User NeomakeFinished nested call lightline#update()
-        autocmd BufWritePost *.txt call s:whitespace_check()
+        autocmd BufWritePost * call s:whitespace_check()
     augroup END " }
 
     function! LightlineReadonly()
