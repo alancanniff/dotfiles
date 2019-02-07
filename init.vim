@@ -1,5 +1,3 @@
-set guioptions+=M                          " M = don't load menu. has to be run before other options which is why it's done here. See help
-
 " <c-k> over keyword to goto help for it
 " :h keyword <c-d> brings up list of matching entries
 " zc close a fold under cursor
@@ -8,6 +6,7 @@ set guioptions+=M                          " M = don't load menu. has to be run 
 " I've started moving things into plugin directories. 
 "       " :scriptnames to see what's been loaded
 
+set guioptions+=M                          " M = don't load menu. has to be run before other options which is why it's done here. See help
 if has('nvim')
     let g:python_host_prog = 'c:/Python27/python.exe'
     let g:python3_host_prog = 'c:/Python37/python.exe'
@@ -71,7 +70,7 @@ endfunction
 
         let &runtimepath=g:my_config_vim.",".&runtimepath
         let &runtimepath.=",".g:my_config_vim."/after"
-	    let &packpath = &runtimepath
+        let &packpath = &runtimepath
 
     endif
 
@@ -98,7 +97,7 @@ endfunction
         call minpac#add('tpope/vim-vinegar')                    " basic directory tree navigation plug in
         call minpac#add('tpope/vim-surround')                   " for swapping around braces: change - cs([, delete - ds(, added - ysiw(
         call minpac#add('tpope/vim-fugitive')
-        call minpac#add('tpope/vim-unimpaired')
+        "call minpac#add('tpope/vim-unimpaired')
         call minpac#add('tpope/vim-repeat')
         call minpac#add('SirVer/ultisnips')                     " expand code snippet
         call minpac#add('honza/vim-snippets')                   " library of snippets
@@ -135,6 +134,7 @@ endfunction
         set termguicolors
     endif
 
+    " chagning the guifont in Windows was resizing the window. don't reload it when souring this file
     if !exists("g:my_dont_reload") 
         set guifont=Consolas_NF:h11:cANSI:qDRAFT,Consolas:h11 " Consolas_NF is the powerline font
     "    set guifont=Anonymice_Powerline:h11:cANSI:qDRAFT
@@ -170,9 +170,6 @@ endfunction
     set guioptions-=T                           " 'T'   Include Toolbar.  Currently only in Win32, GTK+, Motif, Photon and Athena GUIs.
     set guioptions-=r                           " 'r'   Right-hand scrollbar is always present.
     set guioptions-=L                           " 'L'   Left-hand scrollbar is present when there is a vertically split window.
-    if windows
-        set guioptions-=a                       " 'a'   Autoselect:...  (auto copy when you select - see help) needed to make <c-v> work
-    endif
     set cursorline                              " highlight current line
     set cursorcolumn                            " highlight current col
     set tabstop=4                               " The width of a hard tabstop measured in spaces
@@ -206,8 +203,9 @@ endfunction
     set foldnestmax=1
     set foldopen=block,hor,jump,mark,quickfix,search,tag " what movements open folds - hor is horizontal
 
-    set splitbelow                              " default split behavior
-    set splitright                              " default split behavior
+    " I'm remoting into enough machines what this might be annoying
+    " set splitbelow                              " default split behavior
+    " set splitright                              " default split behavior
     set lazyredraw                              " Don't redraw while executing macros (good performance config) 
     set timeoutlen=3000
     set incsearch                             " incremental search rules
@@ -264,13 +262,13 @@ endfunction
     " nnoremap  <Leader>f :simalt ~x<CR>
 
     " mapping for FZF, Files, lines in buffer, lines in all buffers, History, cmd hist, search hist
-    nnoremap  \ff :Files<CR>
-    nnoremap  \fl :BLines<CR>
-    nnoremap  \fL :Lines<CR>
-    nnoremap  \ft :BTags<CR>
-    nnoremap  \fh :History<CR>
-    nnoremap  \f: :History:<CR>
-    nnoremap  \f/ :History/<CR>
+    nnoremap  <SPACE>f :Files<CR>
+    nnoremap  <SPACE>l :BLines<CR>
+    nnoremap  <SPACE>L :Lines<CR>
+    nnoremap  <SPACE>t :BTags<CR>
+    nnoremap  <SPACE>h :History<CR>
+    nnoremap  <SPACE>: :History:<CR>
+    nnoremap  <SPACE>/ :History/<CR>
     nnoremap  gb  :ls<CR>:b<Space>
     nnoremap  gB  :ls<CR>:vb<Space>
 
@@ -292,60 +290,6 @@ endfunction
     nmap \h <Plug>Highlight_SynStack
 
 " }}} Key Mappings "
-" Windows stuff {{{ "
-
-    " " taken from mswim.vim
-    " " Set options and add mapping such that Vim behaves a lot like MS-Windows
-    " " set the 'cpoptions' to its Vim default
-    " if 1    " only do this when compiled with expression evaluation
-    "     let s:save_cpo = &cpoptions
-    " endif
-    " set cpo&vim           " return cpo options to vim defaults
-
-    " " set 'selection', 'selectmode', 'mousemodel' and 'keymodel' for MS-Windows
-    " behave mswin
-
-    " " CTRL-X and SHIFT-Del are Cut
-    " vnoremap <C-X> "+x
-
-    " " CTRL-C and CTRL-Insert are Copy
-    " vnoremap <C-C> "+y
-
-    " " CTRL-V and SHIFT-Insert are Paste
-    " "map <C-V>      "+gP
-    " " cmap <C-V>      <C-R>+
-
-    " " Pasting blockwise and linewise selections is not possible in Insert and
-    " " Visual mode without the +virtualedit feature.  They are pasted as if they
-    " " were characterwise instead.
-    " " Uses the paste.vim autoload script.
-    " " Use CTRL-G u to have CTRL-Z only undo the paste.
-
-    " exe 'inoremap <script> <C-V> <C-G>u' . paste#paste_cmd['i']
-    " exe 'vnoremap <script> <C-V> ' . paste#paste_cmd['v']
-
-    " " Use CTRL-Q to do what CTRL-V used to do
-    " "noremap <C-Q>       <C-V>
-
-    " " For CTRL-V to work autoselect must be off.
-    " " On Unix we have two selections, autoselect can be used.
-
-    " " CTRL-A is Select all
-    " " noremap <C-A> gggH<C-O>G
-    " " inoremap <C-A> <C-O>gg<C-O>gH<C-O>G
-    " " cnoremap <C-A> <C-C>gggH<C-O>G
-    " " onoremap <C-A> <C-C>gggH<C-O>G
-    " " snoremap <C-A> <C-C>gggH<C-O>G
-    " " xnoremap <C-A> <C-C>ggVG
-
-    " " restore 'cpoptions'
-    " set cpo&
-    " if 1
-    "     let &cpoptions = s:save_cpo
-    "     unlet s:save_cpo
-    " endif
-
-" }}} Windows Stuff "
 " Autocmd {{{ "
     " only enable autocmds when they're supported
     if has("autocmd")
@@ -366,7 +310,7 @@ endfunction
             autocmd FileChangedShellPost * echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
 
             " Remove trailing white spaces. This is dangerous for some filetypes - like this one!
-            autocmd BufWritePre *.vhd,*.csh,*.cpp,*.c silent! :call Trim_Whitespace()<CR>
+            " autocmd BufWritePre *.vhd,*.csh,*.cpp,*.c silent! :call Trim_Whitespace()<CR>
 
             " Jump to last know position in a file (if the '" is set)
             autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute 'normal! g`"zvzz' | endif
@@ -423,10 +367,27 @@ endfunction
     let g:vimwiki_list = [ {'path': g:my_config_home.'/vimwiki'} ]
 " }}} vimwiki "
 " lightline {{{ "
-    " if I'm going to have lightline, I may as well remove the underline from the status line
-
     " component_expand allows different color for neomake. see help
     let g:lightline = {
+        \ 'mode_map' : {
+        \   'n' : 'N',
+        \   'i' : 'I',
+        \   'R' : 'R',
+        \   'v' : 'V',
+        \   'V' : 'VL',
+        \   "\<C-v>": 'VB',
+        \   'c' : 'C',
+        \   's' : 'S',
+        \   'S' : 'SL',
+        \   "\<C-s>": 'SB',
+        \   't': 'T',
+        \ },
+        \ 'inactive' : {
+        \   'left': [ 
+        \       [ 'absolutepath'] 
+        \   ],
+        \   'right': [ ],
+        \ },
         \ 'active': {
         \   'left'  : [
         \       [ 'mode', 'paste' ],
@@ -434,8 +395,8 @@ endfunction
         \       [ 'readonly', 'filename', 'modified' ]
         \   ],
         \   'right' : [
-        \       ['neomake', 'whitespace', 'lineinfo'],
-        \       ['percent'],
+        \       ['neomake',  'lineinfo'],
+        \       ['mixedindent',  'unwantedtab', 'whitespace'],
         \       ['fileformat', 'fileencoding', 'filetype'],
         \   ],
         \ },
@@ -444,6 +405,8 @@ endfunction
         \ },
         \ 'component_expand': {
         \   'neomake' : 'LightlineNeomake',
+        \   'mixedindent' : 'LightlineMixedIndent',
+        \   'unwantedtab' : 'LightlineUnwantedTab',
         \   'whitespace' : 'LightlineWhitespace',
         \ },
         \ 'component_function': {
@@ -452,11 +415,19 @@ endfunction
         \ },
         \ 'component_type': {
         \   'neomake': 'error',
+        \   'mixedindent': 'error',
+        \   'unwantedtab': 'error',
         \   'whitespace': 'warning',
         \ },
-        \ 'separator': { 'left': '', 'right': '' },
-        \ 'subseparator': { 'left': '', 'right': '' }
+        \ 'separator': {
+        \   'left': '',
+        \   'right': '',
+        \ },
+        \ 'subseparator': {
+        \   'left': '',
+        \   'right': '', 
         \ }
+    \ }
  
     function! LightlineNeomake() abort
         let stats = []
@@ -470,7 +441,7 @@ endfunction
     augroup aug_lightline
         autocmd!
         autocmd User NeomakeFinished nested call lightline#update()
-        autocmd BufWritePost * call s:whitespace_check()
+        autocmd CursorHold,BufWritePost * call s:whitespace_check()
     augroup END " }
 
     function! LightlineReadonly()
@@ -486,18 +457,43 @@ endfunction
         return ''
     endfunction
 
+    function! LightlineUnwantedTab() abort
+        if &expandtab
+            if &ft !~? 'help'
+                let tabs = search('\t', 'nw')
+                return tabs == '0' ? '' : '▸'.tabs
+            endif
+        endif
+        return ''
+    endfunction
+
+    " https://github.com/vim-airline/vim-airline/blob/master/autoload/airline/extensions/whitespace.vim
+    function! LightlineMixedIndent() abort
+        " check if there is mixed indentingin the file. Use the value of expandtab to return the tab or space line
+        if &ft !~? 'help'
+            let tabs = search('^\t', 'nw')
+            let spaces = search('^ ', 'nw')
+            if (tabs > 0) && (spaces > 0)
+            return &expandtab == '0' ? '▸┅'.spaces : '┅▸'.tabs
+            endif
+        endif
+        return ''
+    endfunction
+
     " checks for trailing whiite spaces in selected filetypes
     " returns line number
     function! LightlineWhitespace() abort
-        if &ft !~? 'help\|vim' && exists('*fugitive#head')
+        if &ft !~? 'help\|vim'
             let replace = search(' \+$', 'wn')
-            return replace == '0' ? '' : 'Trailing ln:'.replace
+            return replace == '0' ? '' : '┅'.replace
         endif
         return ''
     endfunction
 
     function! s:whitespace_check()
         call LightlineWhitespace()
+        call LightlineMixedIndent()
+        call LightlineUnwantedTab()
         call lightline#update()
     endfunction
 
