@@ -165,6 +165,7 @@ endfunction
     set formatoptions-=r                        " Automatically insert the current comment leader after hitting <Enter> in Insert mode.
     set formatoptions-=o                        " Automatically insert the current comment leader after hitting 'o' or 'O' in Normal mode.
     set formatoptions+=j                        " Delete comment character when joining commented lines
+
     set guioptions+=c                           " 'c'   Use console dialogs instead of popup dialogs for simple choices.
     set guioptions-=m                           " 'm'   Menu bar is present.
     set guioptions-=T                           " 'T'   Include Toolbar.  Currently only in Win32, GTK+, Motif, Photon and Athena GUIs.
@@ -298,8 +299,8 @@ endfunction
         augroup aug_general " {
             autocmd!
 
-            " For all text files set 'textwidth' to 78 characters.
-            " autocmd FileType text setlocal textwidth=78
+            " set the format options I want. always.
+            autocmd FileType * setlocal formatoptions+=j formatoptions-=c formatoptions-=r formatoptions-=o
 
             " AUTOCOMMAND
 
@@ -366,139 +367,6 @@ endfunction
 " vimwiki {{{ "
     let g:vimwiki_list = [ {'path': g:my_config_home.'/vimwiki'} ]
 " }}} vimwiki "
-" lightline {{{ "
-    " component_expand allows different color for neomake. see help
-    let g:lightline = {
-        \ 'mode_map' : {
-        \   'n' : 'N',
-        \   'i' : 'I',
-        \   'R' : 'R',
-        \   'v' : 'V',
-        \   'V' : 'VL',
-        \   "\<C-v>": 'VB',
-        \   'c' : 'C',
-        \   's' : 'S',
-        \   'S' : 'SL',
-        \   "\<C-s>": 'SB',
-        \   't': 'T',
-        \ },
-        \ 'inactive' : {
-        \   'left': [ 
-        \       [ 'absolutepath'] 
-        \   ],
-        \   'right': [ ],
-        \ },
-        \ 'active': {
-        \   'left'  : [
-        \       [ 'mode', 'paste' ],
-        \       [  'fugitive' ],
-        \       [ 'readonly', 'filename', 'modified' ]
-        \   ],
-        \   'right' : [
-        \       ['neomake',  'lineinfo'],
-        \       ['mixedindent',  'unwantedtab', 'whitespace'],
-        \       ['fileformat', 'fileencoding', 'filetype'],
-        \   ],
-        \ },
-        \ 'component': {
-        \   'lineinfo': '%3l:%-2v',
-        \ },
-        \ 'component_expand': {
-        \   'neomake' : 'LightlineNeomake',
-        \   'mixedindent' : 'LightlineMixedIndent',
-        \   'unwantedtab' : 'LightlineUnwantedTab',
-        \   'whitespace' : 'LightlineWhitespace',
-        \ },
-        \ 'component_function': {
-        \   'readonly': 'LightlineReadonly',
-        \   'fugitive': 'LightlineFugitive',
-        \ },
-        \ 'component_type': {
-        \   'neomake': 'error',
-        \   'mixedindent': 'error',
-        \   'unwantedtab': 'error',
-        \   'whitespace': 'warning',
-        \ },
-        \ 'separator': {
-        \   'left': '',
-        \   'right': '',
-        \ },
-        \ 'subseparator': {
-        \   'left': '',
-        \   'right': '', 
-        \ }
-    \ }
- 
-    function! LightlineNeomake() abort
-        let stats = []
-        let lcounts = neomake#statusline#LoclistCounts()
-        for key in sort(keys(lcounts))
-            call add(stats, printf( '%s: %d', key, lcounts[key]))
-        endfor
-        return join(stats, ' ')
-    endfunction
-
-    augroup aug_lightline
-        autocmd!
-        autocmd User NeomakeFinished nested call lightline#update()
-        autocmd CursorHold,BufWritePost * call s:whitespace_check()
-    augroup END " }
-
-    function! LightlineReadonly()
-        return &readonly ? '' : ''
-    endfunction
-
-    " !~? -- doesn't regex and ignores case
-    function! LightlineFugitive()
-        if &ft !~? 'help\|vimfiler' && exists('*fugitive#head')
-            let branch = fugitive#head()
-            return branch !=# '' ? ' '.branch : ''
-        endif
-        return ''
-    endfunction
-
-    function! LightlineUnwantedTab() abort
-        if &expandtab
-            if &ft !~? 'help'
-                let tabs = search('\t', 'nw')
-                return tabs == '0' ? '' : '▸'.tabs
-            endif
-        endif
-        return ''
-    endfunction
-
-    " https://github.com/vim-airline/vim-airline/blob/master/autoload/airline/extensions/whitespace.vim
-    function! LightlineMixedIndent() abort
-        " check if there is mixed indentingin the file. Use the value of expandtab to return the tab or space line
-        if &ft !~? 'help'
-            let tabs = search('^\t', 'nw')
-            let spaces = search('^ ', 'nw')
-            if (tabs > 0) && (spaces > 0)
-            return &expandtab == '0' ? '▸┅'.spaces : '┅▸'.tabs
-            endif
-        endif
-        return ''
-    endfunction
-
-    " checks for trailing whiite spaces in selected filetypes
-    " returns line number
-    function! LightlineWhitespace() abort
-        if &ft !~? 'help\|vim'
-            let replace = search(' \+$', 'wn')
-            return replace == '0' ? '' : '┅'.replace
-        endif
-        return ''
-    endfunction
-
-    function! s:whitespace_check()
-        call LightlineWhitespace()
-        call LightlineMixedIndent()
-        call LightlineUnwantedTab()
-        call lightline#update()
-    endfunction
-
-        
-" }}} lightline "
 " quick-scope {{{ "
     let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
     " see after/plugins
