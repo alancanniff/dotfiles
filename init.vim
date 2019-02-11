@@ -152,9 +152,9 @@ endfunction
     set cmdheight=2                             " set command window height to 2.
     set confirm                                 " Confirm instead of fail a command
     set showmatch                               " show matching brackets
-    set autochdir                               " always switch to the current file directory.. Messes with some plugins, but I like it
     set shortmess=aAOstT                        " shortens messages to avoid 'press a key' prompt " stops swp file warnings. In windows using --remote-silent opening two files with warnings freezes vim
     set switchbuf=useopen,usetab                " better behavior for the quickfix window and :sb
+    set wildmode=list:longest,full              " on 1st tab, complete longest common string, on 2nd complete fully
     set wildmenu                                " better command line completion, shows a list of matches
     set wildignore=*.swp,*.bak                  " ignore these file in the
     "set title                                   " change the terminal's title
@@ -273,6 +273,21 @@ endfunction
     nnoremap  gb  :ls<CR>:b<Space>
     nnoremap  gB  :ls<CR>:vb<Space>
 
+    " copy some of the mappings from unimpared.
+    nnoremap  [B :bfirst<CR>
+    nnoremap  [b :bprevious<CR>
+    nnoremap  ]b :bnext<CR>
+    nnoremap  ]B :blast<CR>
+
+    nnoremap  [T :tfirst<CR>
+    nnoremap  [t :tprevious<CR>
+    nnoremap  ]t :tnext<CR>
+    nnoremap  ]T :tlast<CR>
+
+    " see what remapping these feels like
+    nnoremap  o o<ESC>
+    nnoremap  O O<ESC>
+
     " remove last search highlighting -- taken from tpopes vim-sensible
     if maparg('<C-L>', 'n') ==# ''
         nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
@@ -311,7 +326,7 @@ endfunction
             autocmd FileChangedShellPost * echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
 
             " Remove trailing white spaces. This is dangerous for some filetypes - like this one!
-            " autocmd BufWritePre *.vhd,*.csh,*.cpp,*.c silent! :call Trim_Whitespace()<CR>
+            autocmd BufWritePre *.bash,*.sh,*.vhd,*.csh,*.cpp,*.c silent! :call Trim_Whitespace()<CR>
 
             " Jump to last know position in a file (if the '" is set)
             autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute 'normal! g`"zvzz' | endif
@@ -342,7 +357,11 @@ endfunction
     " ctags needs to be runs in the directory you want to index  'ctags -R .'
     " this creaetes a tags file
     " this will search in the current file directory, then up the directory tree
-    set tags=./tags;/,tags;/                  " search tags files efficiently
+    " set tags=./vimtags;/,vimtags;/                  " search tags files efficiently
+    set tags=./TAGS;/,TAGS;/                  " search tags files efficiently
+    set notagrelative                           " If tags file in another directory, filenames in that file are not relative (absolute)
+    set noautochdir                             " always switch to the current file directory. Turning this off because of tags
+    "set tags=./vimTAGS;/,vimTAGS;/                  " search tags files efficiently
     " for vhdl the support is poor. you can improve it with a .ctags file in home dir 
     " (to name a file starting with . call it '.ctags.'
     " home dir is $HOME  or $HOMEPATH + $HOMEDRIVE - posssibley...
@@ -369,10 +388,11 @@ endfunction
 " }}} vimwiki "
 " quick-scope {{{ "
     let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
-    " see after/plugins
+    "see after\plugin\quick-scope.vim
 " }}} quick-scope "
 
 "stop sourcing this file from clearing the rtp / packpath in windows. 
 " stop guifonts from resizing the window
 colorscheme monotone
+
 let g:my_dont_reload = 1

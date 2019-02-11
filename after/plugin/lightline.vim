@@ -7,7 +7,7 @@ endif
     augroup aug_lightline
         autocmd!
         autocmd User NeomakeFinished nested call lightline#update()
-        autocmd CursorHold,BufWritePost * call s:whitespace_check()
+        "autocmd CursorHold,BufWritePost * call s:whitespace_check()
     augroup END " }
 
     " component_expand allows different color for neomake. see help
@@ -128,10 +128,10 @@ endif
     endfunction
 
     function! s:whitespace_check()
-        call LightlineWhitespace()
-        call LightlineMixedIndent()
-        call LightlineUnwantedTab()
-        call lightline#update()
+    "    call LightlineWhitespace()
+    "    call LightlineMixedIndent()
+    "    call LightlineUnwantedTab()
+    "    call lightline#update()
     endfunction
 
         
