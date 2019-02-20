@@ -87,16 +87,18 @@ endfunction
     let &backupdir=dir_back.'//,.'
 
 " }}} Directory and rtp config "
-" Packages -- minpac {{{ "
+" Packages {{{ "
 
     function! PackInit() abort
         packadd minpac
         call minpac#init()
         call minpac#add('k-takata/minpac', {'type':'opt'})      " let minpac manage itself
-        call minpac#add('python-mode/python-mode', {'type':'opt'})
+        "call minpac#add('python-mode/python-mode', {'type':'opt'})
+        call minpac#add('python-mode/python-mode')
         call minpac#add('tpope/vim-vinegar')                    " basic directory tree navigation plug in
         call minpac#add('tpope/vim-surround')                   " for swapping around braces: change - cs([, delete - ds(, added - ysiw(
         call minpac#add('tpope/vim-fugitive')
+        call minpac#add('tpope/vim-commentary')
         "call minpac#add('tpope/vim-unimpaired')
         call minpac#add('tpope/vim-repeat')
         call minpac#add('SirVer/ultisnips')                     " expand code snippet
@@ -112,6 +114,9 @@ endfunction
         call minpac#add('neomake/neomake')                      " async maker
         call minpac#add('michaeljsmith/vim-indent-object')      "  ai = an indent object and line above, ii an indent object, aI an indent object and lines above/below
         call minpac#add('unblevable/quick-scope')               " highlights letters for easier spotting of f/t actios; :QuickScopeToggle to turn it off
+        call minpac#add('fidian/hexmode')                       " better support for editing hexfiles
+
+        "call minpac#add('vim-scripts/vcscommand.vim')               " plug in for vcs things...
         " colorschemes
         call minpac#add('https://gitlab.com/ducktape/monotone-termnial.git')
         call minpac#add('Lokaltog/vim-monotone')
@@ -120,8 +125,22 @@ endfunction
     command! PackUpdate call PackInit() | call minpac#update('', {'do': 'call minpac#status()'})
     command! PackClean  call PackInit() | call minpac#clean()
     command! PackStatus call PackInit() | call minpac#status()
+    
+    "packadd python-mode
+    let g:neomake_python_enabled_makers = ['pylint']
 
-" }}} Packages -- minpac "
+" }}} Packages "
+" Packages Config {{{ "
+    "see after\plugin\airline.vim
+    "see after\plugin\lightline.vim
+    "see after\plugin\neomake.vim
+    let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+    "see after\plugin\quick-scope.vim
+
+    " vimwiki {{{ "
+        let g:vimwiki_list = [ {'path': g:my_config_home.'/vimwiki'} ]
+    " }}} vimwiki "
+" }}} Packages Config "
 " Settings {{{ "
 
     set encoding=utf-8
@@ -254,7 +273,7 @@ endfunction
 
 " }}} Statusline "
 " Key Mappings {{{ "
-    " :map {key sequence} returns the current assignment for the sequence
+   " :map {key sequence} returns the current assignment for the sequence
 
     " \\ \/ toggle forward and back slash on the current line
     nnoremap <silent> <Leader>/ :let tmp=@/<Bar>s:\\:/:ge<Bar>let @/=tmp<Bar>noh<CR>
@@ -284,9 +303,10 @@ endfunction
     nnoremap  ]t :tnext<CR>
     nnoremap  ]T :tlast<CR>
 
-    " see what remapping these feels like
-    nnoremap  o o<ESC>
-    nnoremap  O O<ESC>
+    nnoremap  <SPACE>o o<ESC>
+    nnoremap  <SPACE>O O<ESC>
+
+    nnoremap  \cd :cd %:p:h<CR>
 
     " remove last search highlighting -- taken from tpopes vim-sensible
     if maparg('<C-L>', 'n') ==# ''
@@ -334,6 +354,7 @@ endfunction
 
             " source vimrc after you save it
             autocmd BufWritePost init.vim nested source $MYVIMRC | call lightline#init()
+            autocmd BufRead,BufNewFile *.inc set filetype=make                                    "
 
             if has("gui_running")
                 " kill the alarm bell
@@ -373,23 +394,13 @@ endfunction
     " <C-w>g] open tag list - then open selected in horizontal window
     " let g:tlist_vhdl_settings   = 'vhdl;d:package declarations;b:package bodies;e:entities;a:architecture specifications;t:type declarations;p:processes;f:functions;r:procedures'
 " }}} Taglist "
-" Ultisnips {{{ "
-    let g:my_config_ultisnips = g:my_config_vim.'/UltiSnips'
-    call Make_Directory(g:my_config_ultisnips)
+" netrw {{{ "
+    let g:netrw_preview   = 1
+    "let g:netrw_liststyle = 3
+    let g:netrw_winsize   = 30
+" }}} netrw "
 
-    let g:UltiSnipsExpandTrigger="<tab>"                    " this is the default - tab expands snippet (<c-j> goes to next field
-    let g:UltiSnipsSnippetsDir=g:my_config_ultisnips
-    "let g:UltiSnipsSnippetDirectories=["UltiSnips", "mycoolsnippets"]
-    "let g:UltiSnipsSnippetsDir= join([g:my_config_home, "UltiSnips"], '/')     " ultisnips didn't like using string concatonation in this global 
-    let g:UltiSnipsEditSplit="horizontal"                   " show this snippet file in a horizontal split
-" }}} Ultisnips "
-" vimwiki {{{ "
-    let g:vimwiki_list = [ {'path': g:my_config_home.'/vimwiki'} ]
-" }}} vimwiki "
-" quick-scope {{{ "
-    let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
-    "see after\plugin\quick-scope.vim
-" }}} quick-scope "
+let g:vhdl_indent_genportmap = 0
 
 "stop sourcing this file from clearing the rtp / packpath in windows. 
 " stop guifonts from resizing the window
