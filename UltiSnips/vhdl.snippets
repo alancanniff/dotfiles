@@ -205,25 +205,32 @@ library unisim;
     use unisim.vcomponents.ALL;
 endsnippet
 
+snippet prs
+P_${1} : process
+begin
+	${0}
+end process P_$1;
+endsnippet
+
 snippet pr
-process(${1})
+P_${1} : process(${2})
 begin`!p
-if re.search('clk', t[1],re.IGNORECASE):
+if re.search('clk', t[2],re.IGNORECASE):
     snip >> 1
-    snip += "if rising_edge(%s) then" % t[1]
+    snip += "if rising_edge(%s) then" % t[2]
     snip >> 1
     snip+=""
 else:
     snip >> 1
     snip+=""
 `${0}`!p
-if re.search('clk', t[1],re.IGNORECASE):
+if re.search('clk', t[2],re.IGNORECASE):
     snip >> 1
     snip += "end if;"
 else:
     snip.rv=""
 `
-end process;
+end process P_$1;
 endsnippet
 
 snippet sl
@@ -275,19 +282,19 @@ variable ${1:${VISUAL}} : boolean;
 endsnippet
 
 snippet il
-${1:${VISUAL}} : in  std_logic;
+${1:${VISUAL}}: in  std_logic;
 endsnippet
 
 snippet iv
-${1:${VISUAL}} : in  std_logic_vector(${2} downto 0);
+${1:${VISUAL}}: in  std_logic_vector(${2} downto 0);
 endsnippet
 
 snippet ol
-${1:${VISUAL}} : out std_logic;
+${1:${VISUAL}}: out std_logic;
 endsnippet
 
 snippet ov
-${1:${VISUAL}} : out std_logic_vector(${2} downto 0);
+${1:${VISUAL}}: out std_logic_vector(${2} downto 0);
 endsnippet
 
 

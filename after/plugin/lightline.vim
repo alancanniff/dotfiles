@@ -62,16 +62,28 @@ endif
         \   'unwantedtab': 'error',
         \   'whitespace': 'warning',
         \ },
+        \ 'tabline_separator': {
+        \   'left': '',
+        \   'right': '',
+        \ },
+        \ 'tabline_subseparator': {
+        \   'left': '',
+        \   'right': '',
+        \ }, 
         \ 'separator': {
         \   'left': '',
         \   'right': '',
         \ },
         \ 'subseparator': {
         \   'left': '',
-        \   'right': '', 
+        \   'right': '',
+        \ },
+        \ 'tabline': {
+        \   'left': [  ['tabs'  ]],
+        \   'right':  [ ['close' ]],
         \ }
     \ }
- 
+
     function! LightlineNeomake() abort
         let stats = []
         let lcounts = neomake#statusline#LoclistCounts()

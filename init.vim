@@ -1,15 +1,13 @@
-" <c-k> over keyword to goto help for it
+" K over keyword to goto help for it
 " :h keyword <c-d> brings up list of matching entries
-" zc close a fold under cursor
-" zM close all
-" zR open all
 " I've started moving things into plugin directories. 
 "       " :scriptnames to see what's been loaded
 
 set guioptions+=M                          " M = don't load menu. has to be run before other options which is why it's done here. See help
+
 if has('nvim')
     let g:python_host_prog = 'c:/Python27/python.exe'
-    let g:python3_host_prog = 'c:/Python37/python.exe'
+    let g:python3_host_prog = 'C:/Tools/Python/3.7.1/python.exe'
 endif
 " Functions {{{ "
 
@@ -23,6 +21,8 @@ endfunction
 function! MonotoneMods() abort
     if exists("g:colors_name")
         if g:colors_name =~? 'monotone'
+            highlight Todo ctermfg=58
+            highlight Todo guifg=Orange4
             highlight statusline cterm=none
             highlight statusline ctermbg=236
             highlight statusline gui=none
@@ -32,13 +32,13 @@ function! MonotoneMods() abort
             highlight statuslinenc gui=none
             highlight statuslinenc guibg=#303030
             " make the vert split and statusline a unified color, different from background
-            highlight vertsplit guibg=#303030
+            "highlight vertsplit guibg=#303030
             highlight vertsplit guifg=#303030
-            highlight vertsplit ctermbg=236
+            "highlight vertsplit ctermbg=236
             highlight vertsplit ctermfg=236
             " change the color of the cursor columns
-            highlight CursorColumn guibg=grey20
-            highlight CursorLine guibg=grey20
+            highlight CursorColumn guibg=grey15
+            highlight CursorLine guibg=grey15
             highlight CursorColumn ctermbg=235
             highlight CursorLine ctermbg=235
         endif
@@ -87,19 +87,16 @@ endfunction
     let &backupdir=dir_back.'//,.'
 
 " }}} Directory and rtp config "
-" Packages {{{ "
+" Packges {{{ "
 
     function! PackInit() abort
         packadd minpac
         call minpac#init()
         call minpac#add('k-takata/minpac', {'type':'opt'})      " let minpac manage itself
-        "call minpac#add('python-mode/python-mode', {'type':'opt'})
-        call minpac#add('python-mode/python-mode')
         call minpac#add('tpope/vim-vinegar')                    " basic directory tree navigation plug in
-        call minpac#add('tpope/vim-surround')                   " for swapping around braces: change - cs([, delete - ds(, added - ysiw(
+        call minpac#add('machakann/vim-sandwich')
         call minpac#add('tpope/vim-fugitive')
         call minpac#add('tpope/vim-commentary')
-        "call minpac#add('tpope/vim-unimpaired')
         call minpac#add('tpope/vim-repeat')
         call minpac#add('SirVer/ultisnips')                     " expand code snippet
         call minpac#add('honza/vim-snippets')                   " library of snippets
@@ -115,19 +112,16 @@ endfunction
         call minpac#add('michaeljsmith/vim-indent-object')      "  ai = an indent object and line above, ii an indent object, aI an indent object and lines above/below
         call minpac#add('unblevable/quick-scope')               " highlights letters for easier spotting of f/t actios; :QuickScopeToggle to turn it off
         call minpac#add('fidian/hexmode')                       " better support for editing hexfiles
-
-        "call minpac#add('vim-scripts/vcscommand.vim')               " plug in for vcs things...
+        " call minpac#add('romainl/vim-cool')
         " colorschemes
-        call minpac#add('https://gitlab.com/ducktape/monotone-termnial.git')
         call minpac#add('Lokaltog/vim-monotone')
     endfunction
 
-    command! PackUpdate call PackInit() | call minpac#update('', {'do': 'call minpac#status()'})
+    command! PackUpdate call PackInit() | call minpac#update() | call minpac#update('', {'do': 'call minpac#status()'})
     command! PackClean  call PackInit() | call minpac#clean()
     command! PackStatus call PackInit() | call minpac#status()
     
     "packadd python-mode
-    let g:neomake_python_enabled_makers = ['pylint']
 
 " }}} Packages "
 " Packages Config {{{ "
@@ -140,6 +134,7 @@ endfunction
     " vimwiki {{{ "
         let g:vimwiki_list = [ {'path': g:my_config_home.'/vimwiki'} ]
     " }}} vimwiki "
+    
 " }}} Packages Config "
 " Settings {{{ "
 
@@ -155,7 +150,11 @@ endfunction
 
     " chagning the guifont in Windows was resizing the window. don't reload it when souring this file
     if !exists("g:my_dont_reload") 
-        set guifont=Consolas_NF:h11:cANSI:qDRAFT,Consolas:h11 " Consolas_NF is the powerline font
+        if has('nvim')
+            set guifont=Consolas\ NF:h11:cANSI:qDRAFT,Consolas:h11 " Consolas_NF is the powerline font
+        else
+            set guifont=Consolas_NF:h11:cANSI:qDRAFT,Consolas:h11 " Consolas_NF is the powerline font
+        endif
     "    set guifont=Anonymice_Powerline:h11:cANSI:qDRAFT
     endif
 
@@ -173,19 +172,23 @@ endfunction
     set showmatch                               " show matching brackets
     set shortmess=aAOstT                        " shortens messages to avoid 'press a key' prompt " stops swp file warnings. In windows using --remote-silent opening two files with warnings freezes vim
     set switchbuf=useopen,usetab                " better behavior for the quickfix window and :sb
-    set wildmode=list:longest,full              " on 1st tab, complete longest common string, on 2nd complete fully
+    "set wildmode=list,full                     " on 1st tab, complete 1st match and list options in popup windows
+    set wildmode=list:longest,list:full              " on 1st tab, complete longest common string, on 2nd complete fully
     set wildmenu                                " better command line completion, shows a list of matches
     set wildignore=*.swp,*.bak                  " ignore these file in the
     "set title                                   " change the terminal's title
     set nowrap                                  " turn off line wrap
     set textwidth=0                             " stop line breaks when writing.
-    set mouse=                                  " going to play with gvim. Turn off mouse. It's too tempting.
+    set mouse=a                                  " going to play with gvim. Turn off mouse. It's too tempting.
     set formatoptions-=c                        " Auto-wrap comments using textwidth, inserting the current comment leader automatically.
     set formatoptions-=r                        " Automatically insert the current comment leader after hitting <Enter> in Insert mode.
     set formatoptions-=o                        " Automatically insert the current comment leader after hitting 'o' or 'O' in Normal mode.
     set formatoptions+=j                        " Delete comment character when joining commented lines
 
+    set guioptions+=a                           " '!'   External commands executed in a terminal window
+    set guioptions+=!                           " '!'   External commands executed in a terminal window
     set guioptions+=c                           " 'c'   Use console dialogs instead of popup dialogs for simple choices.
+    set guioptions-=e                           " 'e'   don't use the gui tabline.
     set guioptions-=m                           " 'm'   Menu bar is present.
     set guioptions-=T                           " 'T'   Include Toolbar.  Currently only in Win32, GTK+, Motif, Photon and Athena GUIs.
     set guioptions-=r                           " 'r'   Right-hand scrollbar is always present.
@@ -229,6 +232,7 @@ endfunction
     set lazyredraw                              " Don't redraw while executing macros (good performance config) 
     set timeoutlen=3000
     set incsearch                             " incremental search rules
+    set fillchars=vert:\┃,fold:-
     set list
     set listchars=tab:▸\ ,trail:·,extends:>,precedes:<,nbsp:+
     set nonumber                                " show line numbers
@@ -303,8 +307,23 @@ endfunction
     nnoremap  ]t :tnext<CR>
     nnoremap  ]T :tlast<CR>
 
+    nnoremap  [Q :cfirst<CR>
+    nnoremap  [q :cprevious<CR>
+    nnoremap  ]q :cnext<CR>
+    nnoremap  ]Q :clast<CR>
+
+    nnoremap  [L :lfirst<CR>
+    nnoremap  [l :lprevious<CR>
+    nnoremap  ]l :lnext<CR>
+    nnoremap  ]L :llast<CR>
+
     nnoremap  <SPACE>o o<ESC>
     nnoremap  <SPACE>O O<ESC>
+
+
+    " change the behaviour of jump to last mark so ' gets me to the exact positio, and not just the line
+    nnoremap  ' `
+    nnoremap  ` '
 
     nnoremap  \cd :cd %:p:h<CR>
 
@@ -317,6 +336,10 @@ endfunction
     " Y yanks to end of line, line D and C (not like yy)
     map Y y$
 
+    if has('nvim')
+        "automatically yank mouse selections to the system clipboard
+        noremap <LeftRelease> <LeftRelease>"*y
+    endif   
     " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
     " so that you can undo CTRL-U after inserting a line break.
     " Revert with ":iunmap <C-U>".
@@ -369,6 +392,10 @@ endfunction
             autocmd BufEnter * :set cursorcolumn | set cursorline
 
             autocmd ColorScheme * call MonotoneMods()
+            autocmd BufNewFile * :set fileformat=unix
+
+            "delete netrw buffers when they become hidden
+            autocmd FileType netrw setl bufhidden=delete
 
         augroup END " }
     endif " has("autocmd")
@@ -378,8 +405,12 @@ endfunction
     " ctags needs to be runs in the directory you want to index  'ctags -R .'
     " this creaetes a tags file
     " this will search in the current file directory, then up the directory tree
-    " set tags=./vimtags;/,vimtags;/                  " search tags files efficiently
-    set tags=./TAGS;/,TAGS;/                  " search tags files efficiently
+    if has('nvim')
+        " neovim doesn't support emacs style tags
+        set tags=./vTAGS;/,vTAGS;/                  " search tags files efficiently
+    else
+        set tags=./TAGS;/,TAGS;/                  " search tags files efficiently
+    endif
     set notagrelative                           " If tags file in another directory, filenames in that file are not relative (absolute)
     set noautochdir                             " always switch to the current file directory. Turning this off because of tags
     "set tags=./vimTAGS;/,vimTAGS;/                  " search tags files efficiently
@@ -400,10 +431,9 @@ endfunction
     let g:netrw_winsize   = 30
 " }}} netrw "
 
-let g:vhdl_indent_genportmap = 0
-
 "stop sourcing this file from clearing the rtp / packpath in windows. 
 " stop guifonts from resizing the window
+
 colorscheme monotone
 
 let g:my_dont_reload = 1
