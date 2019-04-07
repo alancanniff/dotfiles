@@ -1,5 +1,5 @@
 " Vim Compiler File
-" Compiler: vcom
+" Compiler: rsim
 " Maintainer:   Alan Canniff
 " Last Change:  2018/12/15
 
