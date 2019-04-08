@@ -35,7 +35,7 @@ endif
         \   'left'  : [
         \       [ 'mode', 'paste' ],
         \       [  'fugitive' ],
-        \       [ 'readonly', 'filename', 'modified' ]
+        \       [ 'readonly', 'absolutepath', 'modified' ]
         \   ],
         \   'right' : [
         \       ['neomake',  'lineinfo'],

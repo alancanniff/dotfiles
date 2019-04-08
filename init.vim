@@ -1,22 +1,13 @@
 " K over keyword to goto help for it
 " :h keyword <c-d> brings up list of matching entries
 
-set guioptions+=M                          " M = don't load menu. has to be run before other options which is why it's done here. See help
 
 if has('nvim')
     let g:python_host_prog = 'c:/Python27/python.exe'
     let g:python3_host_prog = 'C:/Tools/Python/3.7.1/python.exe'
 endif
 
-" Functions {{{ "
-function! Make_Directory(path)
-    if !isdirectory(a:path)
-        call mkdir(a:path, "p", 0700)
-    endif
-endfunction
-" }}} Functions "
 " Directory and rtp config {{{ "
-
     let windows = has('win32') || has('win64')
 
     " convert all back slashes to forward slashes
@@ -24,8 +15,6 @@ endfunction
     let g:my_cache_home = substitute($HOME.'/.cache', '\', '/', 'g')
 
     let g:my_config_vim = g:my_config_home.'/vim'
-    call Make_Directory(g:my_config_vim)
-
     let g:my_cache_vim = g:my_cache_home.'/vim'
 
     " don't reload when this file is saved as it breaks the plugins by clearing them from the rtp
@@ -39,15 +28,14 @@ endfunction
     "set default direcotry for swap files
     set swapfile
     let dir_swap=g:my_cache_vim.'/swp'
-    call Make_Directory(dir_swap)
+    call my_utils#Make_Directory(dir_swap)
     let &dir= dir_swap.'//,.'
 
     "set default direcotry for backup files
     set backup                                "enable backup
     let dir_back=g:my_cache_vim.'/backup'
-    call Make_Directory(dir_back)
+    call my_utils#Make_Directory(dir_back)
     let &backupdir=dir_back.'//,.'
-
 " }}} Directory and rtp config "
 " Packges {{{ "
 
@@ -98,6 +86,7 @@ endfunction
 " }}} Packages Config "
 " Settings {{{ "
 
+    set guioptions+=M                          " M = don't load menu. has to be run before other options which is why it's done here. See help
     set encoding=utf-8
 
     filetype plugin indent on                   " this is also needed for UltiSnip
@@ -118,6 +107,7 @@ endfunction
 
     if !has('nvim')
         let &viminfofile=g:my_cache_vim.'/viminfo'
+        set t_vb=
     else        
         set wildoptions =pum
 
@@ -137,6 +127,7 @@ endfunction
     set showmatch                               " show matching brackets
     set shortmess=aAOstT                        " shortens messages to avoid 'press a key' prompt " stops swp file warnings. In windows using --remote-silent opening two files with warnings freezes vim
     set switchbuf=useopen,usetab                " better behavior for the quickfix window and :sb
+    set pumheight=10                            " set max height of popupmenu
     "set wildmode=list,full                     " on 1st tab, complete 1st match and list options in popup windows
     "set wildmode=list:longest,list:full              " on 1st tab, complete longest common string, on 2nd complete fully
     "set wildmenu                                " better command line completion, shows a list of matches
@@ -150,7 +141,7 @@ endfunction
     set formatoptions-=o                        " Automatically insert the current comment leader after hitting 'o' or 'O' in Normal mode.
     set formatoptions+=j                        " Delete comment character when joining commented lines
 
-    set guioptions+=a                           " '!'   External commands executed in a terminal window
+    set guioptions+=a                           " 'a'   autoselect
     set guioptions+=!                           " '!'   External commands executed in a terminal window
     set guioptions+=c                           " 'c'   Use console dialogs instead of popup dialogs for simple choices.
     set guioptions-=e                           " 'e'   don't use the gui tabline.
@@ -173,7 +164,6 @@ endfunction
     set visualbell                              " Use visual bell instead of beeping when doing something wrong
     set noerrorbells                            " turn off the error bells
     set belloff=all
-    set t_vb=
     set ignorecase                              " ignore case when searching.
     set smartcase                               " ignore case unless you use capitals in the search
     set showcmd                                 " Show partial commands in the last line of the screen
@@ -186,10 +176,6 @@ endfunction
     set foldmarker={{{,}}} 
     set foldnestmax=1
     set foldopen=block,hor,jump,mark,quickfix,search,tag " what movements open folds - hor is horizontal
-
-    " I'm remoting into enough machines what this might be annoying
-    " set splitbelow                              " default split behavior
-    " set splitright                              " default split behavior
     set lazyredraw                              " Don't redraw while executing macros (good performance config) 
     set timeoutlen=3000
     set incsearch                             " incremental search rules
@@ -199,11 +185,6 @@ endfunction
     set nonumber                                " show line numbers
     set relativenumber                        " line nubers are relative to the current one
     set numberwidth=5                           " We are good up to 99999 lines
-    "  http://bytefluent.com/vivify/index.php       " a site for editing colorscheme
-    if windows
-        " set shell=c:\cygwin64\bin\bash.exe
-        " set shell=C:\cygwin\bin\bash.exe
-    endif
 
     "set diffopt-=internal
     set diffopt+=algorithm:patience
@@ -216,8 +197,6 @@ endfunction
     " patience   patience diff algorithm
     " histogram  histogram diff algorithm
 
-    " colorscheme darkblue_modified                         " modified darkblue color scheme, with edges match the dark color scheme in airline
-    
 " }}} Settings "
 " Key Mappings {{{ "
    " :map {key sequence} returns the current assignment for the sequence
@@ -263,6 +242,8 @@ endfunction
     nnoremap  <SPACE>o o<ESC>
     nnoremap  <SPACE>O O<ESC>
 
+    nnoremap <C-]> g<C-]>
+
     " change the behaviour of jump to last mark so ' gets me to the exact positio, and not just the line
     nnoremap  ' `
     nnoremap  ` '
@@ -284,9 +265,8 @@ endfunction
         tnoremap <ESC> <C-\><C-n> 
         tnoremap <C-w> <C-\><C-n><C-w>
     endif   
-    " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
-    " so that you can undo CTRL-U after inserting a line break.
-    " Revert with ":iunmap <C-U>".
+
+    " CTRL-U in insert mode deletes a lot.  break the undo sequnce of better undo
     inoremap <C-U> <C-G>u<C-U>
 
     " this function has been moved to the plugins dir
@@ -304,20 +284,16 @@ endfunction
             " set the format options I want. always.
             autocmd FileType * setlocal formatoptions+=j formatoptions-=c formatoptions-=r formatoptions-=o
 
-            " AUTOCOMMAND
-
             " auto reload files with a warning message
             " https://unix.stackexchange.com/questions/149209/refresh-changed-content-of-file-opened-in-vim/383044#383044
-            " try do something about the dialog box in gvim
             autocmd FocusGained,BufEnter * :checktime
             autocmd FileChangedShellPost * echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
 
             " Remove trailing white spaces. This is dangerous for some filetypes - like this one!
-            autocmd BufWritePre *.py,*.bash,*.sh,*.vhd,*.csh,*.cpp,*.c silent! :call Trim_Whitespace()<CR>
+            autocmd BufWritePre *.py,*.bash,*.sh,*.vhd,*.csh,*.cpp,*.c silent! :call my_utils#Trim_Whitespace()<CR>
 
             " Jump to last know position in a file (if the '" is set)
             autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute 'normal! g`"zvzz' | endif
-            " :wautocmd BufNewFile *.vhd silent! execute '0r $my_OneDrive/Vim/templates/skeleton.vhd'
 
             " source vimrc after you save it
             autocmd BufWritePost init.vim nested source $MYVIMRC | call lightline#init()
@@ -328,7 +304,7 @@ endfunction
 
             autocmd BufNewFile * :set fileformat=unix
 
-            autocmd ColorScheme * call colorscheme_mods#MyMonotone()
+            autocmd ColorScheme * call my_utils#Monotone_Mods()
             "delete netrw buffers when they become hidden
             autocmd FileType netrw setl bufhidden=delete
 

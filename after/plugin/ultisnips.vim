@@ -4,7 +4,7 @@ endif
 
 " Ultisnips {{{ "
     let g:my_config_ultisnips = g:my_config_vim.'/UltiSnips'
-    call Make_Directory(g:my_config_ultisnips)
+    call my_utils#Make_Directory(g:my_config_ultisnips)
 
     let g:UltiSnipsExpandTrigger="<tab>"                    " this is the default - tab expands snippet (<c-j> goes to next field
     let g:UltiSnipsSnippetsDir=g:my_config_ultisnips

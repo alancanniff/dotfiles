@@ -1,4 +1,4 @@
-function! my_utils#MyMonotone() abort
+function! my_utils#Monotone_Mods() abort
     if exists("g:colors_name")
         if g:colors_name =~? 'monotone'
             highlight Todo ctermfg=58
@@ -30,3 +30,9 @@ function! my_utils#Make_Directory(path)
         call mkdir(a:path, "p", 0700)
     endif
 endfunction
+
+ function my_utils#Trim_Whitespace()
+    let l:save = winsaveview()
+    keeppatterns %s/\s\+$//e
+    call winrestview(l:save)
+endfunction    
