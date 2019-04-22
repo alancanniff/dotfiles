@@ -1,7 +1,6 @@
 " K over keyword to goto help for it
 " :h keyword <c-d> brings up list of matching entries
 
-
 if has('nvim')
     let g:python_host_prog = 'c:/Python27/python.exe'
     let g:python3_host_prog = 'C:/Tools/Python/3.7.1/python.exe'
@@ -11,8 +10,11 @@ endif
     let windows = has('win32') || has('win64')
 
     " convert all back slashes to forward slashes
-    let g:my_config_home = substitute($HOME.'/.config', '\', '/', 'g')
-    let g:my_cache_home = substitute($HOME.'/.cache', '\', '/', 'g')
+    " let g:my_config_home = substitute($HOME.'/.config', '\', '/', 'g')
+    " let g:my_cache_home = substitute($HOME.'/.cache', '\', '/', 'g')
+
+    let g:my_config_home = $HOME.'/.config'
+    let g:my_cache_home = $HOME.'/.cache'
 
     let g:my_config_vim = g:my_config_home.'/vim'
     let g:my_cache_vim = g:my_cache_home.'/vim'
@@ -36,44 +38,32 @@ endif
     let dir_back=g:my_cache_vim.'/backup'
     call my_utils#Make_Directory(dir_back)
     let &backupdir=dir_back.'//,.'
+
 " }}} Directory and rtp config "
 " Packges {{{ "
-
-    function! PackInit() abort
-        packadd minpac
-        call minpac#init()
-        call minpac#add('k-takata/minpac', {'type':'opt'})      " let minpac manage itself
-        call minpac#add('tpope/vim-vinegar')                    " basic directory tree navigation plug in
-        call minpac#add('machakann/vim-sandwich')
-        call minpac#add('tpope/vim-fugitive')
-        call minpac#add('tpope/vim-commentary')
-        call minpac#add('tpope/vim-repeat')
-        call minpac#add('SirVer/ultisnips')                     " expand code snippet
-        call minpac#add('honza/vim-snippets')                   " library of snippets
-        call minpac#add('seletskiy/vim-pythonx')                " python lib used by ultisnips for autojumping
-        call minpac#add('Znuff/consolas-powerline')             " a power line font...
-        call minpac#add('itchyny/lightline.vim')                " a statusline manager
-        call minpac#add('tommcdo/vim-lion')                     " :h lion - glip: --spaces to left of align char, gL adds them to the right
-        call minpac#add('junegunn/fzf')                         " fuzzy finder for loads of differnt things
-        call minpac#add('junegunn/fzf.vim')                     " fuzzy finder for loads of differnt things
-        call minpac#add('vimwiki/vimwiki')
-        call minpac#add('adelarsq/vim-matchit')                 " may need support for 2008   see the ftplugins dir in the install dir
-        call minpac#add('neomake/neomake')                      " async maker
-        call minpac#add('michaeljsmith/vim-indent-object')      "  ai = an indent object and line above, ii an indent object, aI an indent object and lines above/below
-        call minpac#add('unblevable/quick-scope')               " highlights letters for easier spotting of f/t actios; :QuickScopeToggle to turn it off
-        call minpac#add('fidian/hexmode')                       " better support for editing hexfiles
-        call minpac#add('equalsraf/neovim-gui-shim')            " 
-        " call minpac#add('romainl/vim-cool')
-        " colorschemes
-        call minpac#add('Lokaltog/vim-monotone')
-    endfunction
-
-    command! PackUpdate call PackInit() | call minpac#update() | call minpac#update('', {'do': 'call minpac#status()'})
-    command! PackClean  call PackInit() | call minpac#clean()
-    command! PackStatus call PackInit() | call minpac#status()
-    
-    "packadd python-mode
-
+    call plug#begin(my_config_vim.'/plugged')
+        Plug 'tpope/vim-vinegar'                     " basic directory tree navigation plug in
+        Plug 'tpope/vim-fugitive' 
+        Plug 'tpope/vim-commentary' 
+        Plug 'tpope/vim-repeat' 
+        Plug 'machakann/vim-sandwich' 
+        Plug 'SirVer/ultisnips'                      " expand code snippet
+        Plug 'honza/vim-snippets'                    " library of snippets
+        Plug 'seletskiy/vim-pythonx'                 " python lib used by ultisnips for autojumping
+        Plug 'Znuff/consolas-powerline'              " a power line font...
+        Plug 'itchyny/lightline.vim'                 " a statusline manager
+        Plug 'tommcdo/vim-lion'                      " :h lion - glip: --spaces to left of align char, gL adds them to the right
+        Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+        Plug 'junegunn/fzf.vim'
+        Plug 'vimwiki/vimwiki' 
+        Plug 'adelarsq/vim-matchit'                  " may need support for 2008   see the ftplugins dir in the install dir
+        Plug 'neomake/neomake'                       " async maker
+        Plug 'michaeljsmith/vim-indent-object'       "  ai = an indent object and line above, ii an indent object, aI an indent object and lines above/below
+        Plug 'unblevable/quick-scope'                " highlights letters for easier spotting of f/t actios; :QuickScopeToggle to turn it off
+        Plug 'fidian/hexmode'                        " better support for editing hexfiles
+        "Plug 'equalsraf/neovim-gui-shim'             " 
+        Plug 'Lokaltog/vim-monotone' 
+    call plug#end()
 " }}} Packages "
 " Packages Config {{{ "
     "see after\plugin\airline.vim
@@ -312,12 +302,7 @@ endif
     endif " has("autocmd")
 " }}} Autocmd "
 " Taglist {{{ "
-   if has('nvim')
-        " neovim doesn't support emacs style tags
-        set tags=./vTAGS;/,vTAGS;/                  " search tags files efficiently
-    else
-        set tags=./TAGS;/,TAGS;/                  " search tags files efficiently
-    endif
+    set tags=./vTAGS;/,vTAGS;/                  " search tags files efficiently
     set notagrelative                           " If tags file in another directory, filenames in that file are not relative (absolute)
     set noautochdir                             " always switch to the current file directory. Turning this off because of tags
 " }}} Taglist "
@@ -326,5 +311,4 @@ endif
 " stop guifonts from resizing the window
 
 colorscheme monotone
-
 let g:my_dont_reload = 1

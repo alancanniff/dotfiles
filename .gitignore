@@ -1,3 +1,4 @@
 .netrwhist
-pack\minpac\*
+pack\*
+plugged\*
 after\plugin\netrw.vim
