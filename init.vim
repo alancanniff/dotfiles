@@ -59,13 +59,14 @@ endif
         Plug 'adelarsq/vim-matchit'                  " may need support for 2008   see the ftplugins dir in the install dir
         Plug 'neomake/neomake'                       " async maker
         Plug 'michaeljsmith/vim-indent-object'       "  ai = an indent object and line above, ii an indent object, aI an indent object and lines above/below
-        Plug 'unblevable/quick-scope'                " highlights letters for easier spotting of f/t actios; :QuickScopeToggle to turn it off
         Plug 'fidian/hexmode'                        " better support for editing hexfiles
         "Plug 'equalsraf/neovim-gui-shim'             " 
+        "Plug 'unblevable/quick-scope'                " highlights letters for easier spotting of f/t actios; :QuickScopeToggle to turn it off
         Plug 'Lokaltog/vim-monotone' 
     call plug#end()
 " }}} Packages "
 " Packages Config {{{ "
+    "see after\plugin\hexmode.vim
     "see after\plugin\airline.vim
     "see after\plugin\lightline.vim
     "see after\plugin\neomake.vim
