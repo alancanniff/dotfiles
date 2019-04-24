@@ -41,6 +41,11 @@ endif
 
 " }}} Directory and rtp config "
 " Packges {{{ "
+    if empty(glob(g:my_config_vim.'/autoload/plug.vim'))
+        execute('silent !curl -fLo '. g:my_config_vim . '/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
+	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+    endif
+
     call plug#begin(my_config_vim.'/plugged')
         Plug 'tpope/vim-vinegar'                     " basic directory tree navigation plug in
         Plug 'tpope/vim-fugitive' 
@@ -142,10 +147,13 @@ endif
     set guioptions-=L                           " 'L'   Left-hand scrollbar is present when there is a vertically split window.
     set cursorline                              " highlight current line
     set cursorcolumn                            " highlight current col
-    set tabstop=4                               " The width of a hard tabstop measured in spaces
+
+    set autoindent
+    set tabstop=8                               " The width of a hard tabstop measured in spaces
     set softtabstop=4                           " when hitting tab or backspace, how many spaces should a tab be (see expandtab)
-    set expandtab                               " uses spaces instead of tab
     set shiftwidth=4                            " size of indent
+    set expandtab                               " uses spaces instead of tab
+
     set virtualedit=all                         " move the cursor anywhere on the screen
     set history=1000                            " increase the history buffer
     set scrolloff=3                             " leave 3 lines when scolling
@@ -273,7 +281,8 @@ endif
             autocmd!
 
             " set the format options I want. always.
-            autocmd FileType * setlocal formatoptions+=j formatoptions-=c formatoptions-=r formatoptions-=o
+            "autocmd FileType * setlocal formatoptions+=j formatoptions-=c formatoptions-=r formatoptions-=o
+            "autocmd FileType erf :Hexmode
 
             " auto reload files with a warning message
             " https://unix.stackexchange.com/questions/149209/refresh-changed-content-of-file-opened-in-vim/383044#383044
@@ -295,7 +304,7 @@ endif
 
             autocmd BufNewFile * :set fileformat=unix
 
-            autocmd ColorScheme * call my_utils#Monotone_Mods()
+            autocmd ColorScheme monotone call my_utils#Monotone_Mods()
             "delete netrw buffers when they become hidden
             autocmd FileType netrw setl bufhidden=delete
 
