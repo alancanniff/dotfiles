@@ -1,4 +1,8 @@
 .netrwhist
-pack\*
-plugged\*
-after\plugin\netrw.vim
+git
+nvim
+vim/pack
+vim/plugged
+vim/after/plugin/netrw.vim
+
+

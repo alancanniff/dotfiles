@@ -1,0 +1,14 @@
+chocolatey
+choco install -y autohotkey
+choco install -y cmder
+choco install -y ctags
+choco install -y everything
+choco install -y fzf
+choco install -y neovim
+choco install -y python2
+choco install -y python3
+choco install -y ripgrep
+choco install -y vim-tux
+choco install -y winmerge
+choco install -y yed
+
