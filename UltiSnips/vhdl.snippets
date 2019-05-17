@@ -373,6 +373,13 @@ begin
 end function};
 endsnippet
 
+snippet with "with select combination mux"
+with ${1:condition} select ${2:assign_to} <= ${3:value}  when ${3:equals},
+					     ${4:value}  when ${4:equals},
+					     ${5}        when others; 
+endsnippet
+
+
 snippet header
 -------------------------------------------------------------------------------
 -- Title	  : ${1}
@@ -402,6 +409,20 @@ library work;
 
 endsnippet
 
-
+    
+snippet srbm
+    E_SRB_MERGE : entity work.srb_reply_merge
+    generic map (
+        g_USE_PRE_RST => false,
+        g_COUNT       => srb_replies'length
+    )
+    port map (
+        i_srb_clk       => i_srb_clk,
+        i_srb_clk_reset => i_srb_clk_reset,
+        i_srb_reply     => i_srb_replies,
+        o_srb_reply     => o_srb_reply
+    );
+endsnippet
+       
 
 

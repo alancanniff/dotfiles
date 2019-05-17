@@ -43,7 +43,7 @@ endif
 " Packges {{{ "
     if empty(glob(g:my_config_vim.'/autoload/plug.vim'))
         execute('silent !curl -fLo '. g:my_config_vim . '/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
-	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+        autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
     endif
 
     call plug#begin(my_config_vim.'/plugged')
@@ -51,13 +51,14 @@ endif
         Plug 'tpope/vim-fugitive' 
         Plug 'tpope/vim-commentary' 
         Plug 'tpope/vim-repeat' 
-        Plug 'machakann/vim-sandwich' 
+        Plug 'machakann/vim-sandwich'                " sa - add, sd - delete, sr - replace
         Plug 'SirVer/ultisnips'                      " expand code snippet
         Plug 'honza/vim-snippets'                    " library of snippets
         Plug 'seletskiy/vim-pythonx'                 " python lib used by ultisnips for autojumping
         Plug 'Znuff/consolas-powerline'              " a power line font...
         Plug 'itchyny/lightline.vim'                 " a statusline manager
         Plug 'tommcdo/vim-lion'                      " :h lion - glip: --spaces to left of align char, gL adds them to the right
+        Plug 'junegunn/vim-plug'
         Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
         Plug 'junegunn/fzf.vim'
         Plug 'vimwiki/vimwiki' 
@@ -65,9 +66,10 @@ endif
         Plug 'neomake/neomake'                       " async maker
         Plug 'michaeljsmith/vim-indent-object'       "  ai = an indent object and line above, ii an indent object, aI an indent object and lines above/below
         Plug 'fidian/hexmode'                        " better support for editing hexfiles
-        "Plug 'equalsraf/neovim-gui-shim'             " 
         "Plug 'unblevable/quick-scope'                " highlights letters for easier spotting of f/t actios; :QuickScopeToggle to turn it off
         Plug 'Lokaltog/vim-monotone' 
+        Plug 'tell-k/vim-autopep8'
+
     call plug#end()
 " }}} Packages "
 " Packages Config {{{ "
@@ -253,7 +255,6 @@ endif
     if maparg('<C-L>', 'n') ==# ''
         nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
     endif
-    nnoremap  :simalt ~x
 
     " Y yanks to end of line, line D and C (not like yy)
     map Y y$
@@ -263,6 +264,8 @@ endif
         noremap <LeftRelease> <LeftRelease>"*y
         tnoremap <ESC> <C-\><C-n> 
         tnoremap <C-w> <C-\><C-n><C-w>
+    else
+        nnoremap  :simalt ~x
     endif   
 
     " CTRL-U in insert mode deletes a lot.  break the undo sequnce of better undo
