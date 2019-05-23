@@ -69,10 +69,10 @@ endif
         "Plug 'unblevable/quick-scope'                " highlights letters for easier spotting of f/t actios; :QuickScopeToggle to turn it off
         Plug 'Lokaltog/vim-monotone' 
         Plug 'tell-k/vim-autopep8'
-
     call plug#end()
 " }}} Packages "
 " Packages Config {{{ "
+    "see after\plugin\fzf.vim
     "see after\plugin\hexmode.vim
     "see after\plugin\airline.vim
     "see after\plugin\lightline.vim

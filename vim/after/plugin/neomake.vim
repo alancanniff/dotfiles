@@ -4,6 +4,8 @@ endif
 
 " Neomake {{{ "
     
+
+
     call neomake#configure#automake('w')                    " When writing a buffer (no delay).
     let g:neomake_open_list = 2                             " don't open the location list by default  - set to 2 if you want to changes this
     let g:neomake_logfile = g:my_cache_vim.'/neomake.log'
@@ -25,4 +27,5 @@ endif
 
     " }}} Python "
 
+    hi NeomakeVirtualtextError ctermfg=203 guifg=#f54646
 " }}} Neomake "

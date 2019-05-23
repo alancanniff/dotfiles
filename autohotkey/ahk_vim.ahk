@@ -1,6 +1,9 @@
-Capslock::
-    send, {Esc}
-return
+Capslock::Esc
+; Esc::Capslock
+
+; Capslock::
+;     send, {Esc}
+; return
 
 
 LCtrl & RCtrl::
@@ -11,7 +14,6 @@ LCtrl & RCtrl::
         SetCapsLockState, On
     return
 return
-
 
 ; hack to emulate the \ on uk keyboards
 ; modified from scrip to map caps lock to ctrl and shift ; Author: fwompner gmail com
