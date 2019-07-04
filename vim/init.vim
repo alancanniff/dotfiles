@@ -7,8 +7,6 @@ if has('nvim')
 endif
 
 " Directory and rtp config {{{ "
-    let windows = has('win32') || has('win64')
-
     " convert all back slashes to forward slashes
     " let g:my_config_home = substitute($HOME.'/.config', '\', '/', 'g')
     " let g:my_cache_home = substitute($HOME.'/.cache', '\', '/', 'g')
@@ -68,6 +66,7 @@ endif
         Plug 'fidian/hexmode'                        " better support for editing hexfiles
         "Plug 'unblevable/quick-scope'                " highlights letters for easier spotting of f/t actios; :QuickScopeToggle to turn it off
         Plug 'Lokaltog/vim-monotone' 
+        Plug 'Jorengarenar/vim-colors-B_W'           " background is not black!!
         Plug 'tell-k/vim-autopep8'
     call plug#end()
 " }}} Packages "
@@ -109,7 +108,7 @@ endif
     else        
         set wildoptions =pum
 
-        if &wildoptions == "pum"                                                                                                                
+        if &wildoptions == "pum"
             cnoremap <up> <c-p>
             cnoremap <down> <c-n>
         endif
@@ -126,6 +125,7 @@ endif
     set shortmess=aAOstT                        " shortens messages to avoid 'press a key' prompt " stops swp file warnings. In windows using --remote-silent opening two files with warnings freezes vim
     set switchbuf=useopen,usetab                " better behavior for the quickfix window and :sb
     set pumheight=10                            " set max height of popupmenu
+    " set wildmode=list,longest                     " on 1st tab, complete 1st match and list options in popup windows
     "set wildmode=list,full                     " on 1st tab, complete 1st match and list options in popup windows
     "set wildmode=list:longest,list:full              " on 1st tab, complete longest common string, on 2nd complete fully
     "set wildmenu                                " better command line completion, shows a list of matches
@@ -293,7 +293,7 @@ endif
             autocmd FileChangedShellPost * echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
 
             " Remove trailing white spaces. This is dangerous for some filetypes - like this one!
-            autocmd BufWritePre *.py,*.bash,*.sh,*.vhd,*.csh,*.cpp,*.c silent! :call my_utils#Trim_Whitespace()<CR>
+            autocmd BufWritePre *.tcl,*.py,*.bash,*.sh,*.vhd,*.csh,*.cpp,*.c silent! :call my_utils#Trim_Whitespace()<CR>
 
             " Jump to last know position in a file (if the '" is set)
             autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute 'normal! g`"zvzz' | endif
@@ -308,6 +308,7 @@ endif
             autocmd BufNewFile * :set fileformat=unix
 
             autocmd ColorScheme monotone call my_utils#Monotone_Mods()
+            autocmd ColorScheme black_and_white call my_utils#Black_And_White()
             "delete netrw buffers when they become hidden
             autocmd FileType netrw setl bufhidden=delete
 
@@ -324,4 +325,5 @@ endif
 " stop guifonts from resizing the window
 
 colorscheme monotone
+" colorscheme black_and_white
 let g:my_dont_reload = 1

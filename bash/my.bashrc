@@ -50,4 +50,4 @@ alias rsync='rsync -P -rsh=ssh'
 
 # find xcvr_644_625_fpll -type d \! -name CVS -exec cvs add '{}' \;
 # find xcvr_644_625_fpll \( -type d -name CVS -prune \) -o \( -type f -exec cvs add '{}' \; \)
-alias Xterm='XTerm.exe -fa Consolas -fs 11'
+alias Xterm='XTerm.exe +tb -fg linen -bg black -fa Consolas -fs 11'

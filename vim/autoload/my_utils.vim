@@ -19,8 +19,13 @@ function! my_utils#Monotone_Mods() abort
     highlight CursorLine guibg=grey15
     highlight CursorColumn ctermbg=235
     highlight CursorLine ctermbg=235
+    highlight Fixme cterm=bold,italic ctermfg=58 gui=bold,italic guifg=Orange4
 endfunction          
-
+ 
+function! my_utils#Black_And_White() abort
+    highlight Normal guibg=NONE ctermbg=NONE
+endfunction          
+ 
 function! my_utils#Make_Directory(path)
     if !isdirectory(a:path)
         call mkdir(a:path, "p", 0700)

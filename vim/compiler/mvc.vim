@@ -53,18 +53,10 @@ if g:loaded_neomake
 
     " let g:neomake_asciidoc_asciidoc_postprocess = { entry -> entry.type ==? 'W' ? extend(entry, {'valid': -1}) : entry}
 
-    function! Postprocess_vhdl_rsim_maker(entry)
-      if a:entry.type ==? 'W'
-          " extend(a:entry, {'valid': -1})
-          let a:entry.valid = -1
-      endif
-    endfunction
-
-    let g:neomake_vhdl_rsim_maker = {
+    let g:neomake_vhdl_mvc_maker = {
                 \ 'exe': 'vcom',
                 \ 'args': b:context_args,
                 \ 'errorformat': b:context_errorformat,
-                \ 'postprocess': function('Postprocess_vhdl_rsim_maker')
                 \ }
 
     let g:neomake_vhdl_enabled_makers = ['mvc']
