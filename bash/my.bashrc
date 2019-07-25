@@ -39,8 +39,16 @@ mycvs () {
     fi
 
     if [ "$1" = "add" ]; then
+        # add all the directories, but not cvs
         find "$2" -type d \! -name CVS -exec cvs add '{}' \;
+        # then add all the files, but not cvs
         find "$2" \( -type d -name CVS -prune \) -o \( -type f -exec cvs add '{}' \; \)
+        return 0
+    fi
+
+    if [ "$1" = "remove" ]; then
+        # then remove all the files, but not cvs
+        find "$2" \( -type d -name CVS -prune \) -o \( -type f -exec cvs remove '{}' \; \)
         return 0
     fi
     echo "nothing done. $1 not recognised as a command"
@@ -51,3 +59,4 @@ alias rsync='rsync -P -rsh=ssh'
 # find xcvr_644_625_fpll -type d \! -name CVS -exec cvs add '{}' \;
 # find xcvr_644_625_fpll \( -type d -name CVS -prune \) -o \( -type f -exec cvs add '{}' \; \)
 alias Xterm='XTerm.exe +tb -fg linen -bg black -fa Consolas -fs 11'
+alias vim=nvim

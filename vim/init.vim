@@ -262,7 +262,7 @@ endif
     if has('nvim')
         "automatically yank mouse selections to the system clipboard
         noremap <LeftRelease> <LeftRelease>"*y
-        tnoremap <ESC> <C-\><C-n> 
+        tnoremap <ESC> <C-\><C-n>
         tnoremap <C-w> <C-\><C-n><C-w>
     else
         nnoremap  :simalt ~x
@@ -274,7 +274,7 @@ endif
     " this function has been moved to the plugins dir
     nmap \h <Plug>Highlight_SynStack
 
-" }}} Key Mappings "
+"" }}} Key Mappings "
 " Autocmd {{{ "
     " only enable autocmds when they're supported
     if has("autocmd")
