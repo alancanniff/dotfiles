@@ -60,3 +60,6 @@ alias rsync='rsync -P -rsh=ssh'
 # find xcvr_644_625_fpll \( -type d -name CVS -prune \) -o \( -type f -exec cvs add '{}' \; \)
 alias Xterm='XTerm.exe +tb -fg linen -bg black -fa Consolas -fs 11'
 alias vim=nvim
+alias quart='quartus *.qpf'
+
+

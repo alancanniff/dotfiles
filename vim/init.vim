@@ -1,6 +1,12 @@
 " K over keyword to goto help for it
 " :h keyword <c-d> brings up list of matching entries
 
+let s:is_win = has('win32') || has('win64')
+if s:is_win
+    " be expicit about this on windows as cygwin + quartus sets this to bash
+    set shell=cmd.exe
+endif
+
 if has('nvim')
     let g:python_host_prog = 'c:/Python27/python.exe'
     let g:python3_host_prog = 'C:/Tools/Python/3.7.1/python.exe'
@@ -45,29 +51,28 @@ endif
     endif
 
     call plug#begin(my_config_vim.'/plugged')
-        Plug 'tpope/vim-vinegar'                     " basic directory tree navigation plug in
-        Plug 'tpope/vim-fugitive' 
-        Plug 'tpope/vim-commentary' 
-        Plug 'tpope/vim-repeat' 
-        Plug 'machakann/vim-sandwich'                " sa - add, sd - delete, sr - replace
-        Plug 'SirVer/ultisnips'                      " expand code snippet
+        Plug 'adelarsq/vim-matchit'                  " may need support for 2008   see the ftplugins dir in the install dir
+        Plug 'fidian/hexmode'                        " better support for editing hexfiles
         Plug 'honza/vim-snippets'                    " library of snippets
-        Plug 'seletskiy/vim-pythonx'                 " python lib used by ultisnips for autojumping
-        Plug 'Znuff/consolas-powerline'              " a power line font...
         Plug 'itchyny/lightline.vim'                 " a statusline manager
-        Plug 'tommcdo/vim-lion'                      " :h lion - glip: --spaces to left of align char, gL adds them to the right
         Plug 'junegunn/vim-plug'
         Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
         Plug 'junegunn/fzf.vim'
-        Plug 'vimwiki/vimwiki' 
-        Plug 'adelarsq/vim-matchit'                  " may need support for 2008   see the ftplugins dir in the install dir
-        Plug 'neomake/neomake'                       " async maker
-        Plug 'michaeljsmith/vim-indent-object'       "  ai = an indent object and line above, ii an indent object, aI an indent object and lines above/below
-        Plug 'fidian/hexmode'                        " better support for editing hexfiles
-        "Plug 'unblevable/quick-scope'                " highlights letters for easier spotting of f/t actios; :QuickScopeToggle to turn it off
         Plug 'Lokaltog/vim-monotone' 
-        Plug 'Jorengarenar/vim-colors-B_W'           " background is not black!!
+        Plug 'machakann/vim-sandwich'                " sa - add, sd - delete, sr - replace
+        Plug 'michaeljsmith/vim-indent-object'       "  ai = an indent object and line above, ii an indent object, aI an indent object and lines above/below
+        Plug 'neomake/neomake'                       " async maker
+        Plug 'seletskiy/vim-pythonx'                 " python lib used by ultisnips for autojumping
+        Plug 'SirVer/ultisnips'                      " expand code snippet
         Plug 'tell-k/vim-autopep8'
+        Plug 'tommcdo/vim-lion'                      " :h lion - glip: --spaces to left of align char, gL adds them to the right
+        Plug 'tpope/vim-commentary' 
+        Plug 'tpope/vim-fugitive' 
+        Plug 'tpope/vim-repeat' 
+        Plug 'tpope/vim-vinegar'                     " basic directory tree navigation plug in
+        "Plug 'unblevable/quick-scope'                " highlights letters for easier spotting of f/t actios; :QuickScopeToggle to turn it off
+        Plug 'vimwiki/vimwiki' 
+        Plug 'Znuff/consolas-powerline'              " a power line font...
     call plug#end()
 " }}} Packages "
 " Packages Config {{{ "
@@ -321,9 +326,8 @@ endif
     set noautochdir                             " always switch to the current file directory. Turning this off because of tags
 " }}} Taglist "
 
+colorscheme monotone
+
 "stop sourcing this file from clearing the rtp / packpath in windows. 
 " stop guifonts from resizing the window
-
-colorscheme monotone
-" colorscheme black_and_white
 let g:my_dont_reload = 1

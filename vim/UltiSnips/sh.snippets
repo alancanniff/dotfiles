@@ -1,7 +1,6 @@
 
 
 snippet opt
-
 	function usage () {
 	echo "Usage :  $0 [options]
 
@@ -15,35 +14,36 @@ snippet opt
 	}	 # ----------  end of function usage  ----------
 	 
 	while :; do
-	case $1 in
-	-h|-\?|--help)
-		usage; exit 0;;	# Display a usage synopsis.
+	case \$1 in
 	
 	-c|--card)	 # Takes an option argument; ensure it has been specified.
-		if [ "$2" ]; then
-		CARD=$2
+		if [ "\$2" ]; then
+		CARD=\$2
 		shift
 		else
 		die 'ERROR: "--card" requires a non-empty option argument.'
 		fi
 		;;
 	--card=?*)
-		CARD=${1#*=} # Delete everything up to "=" and assign the remainder.
+		CARD=\${1#*=} # Delete everything up to "=" and assign the remainder.
 		;;
 	--card=)	 # Handle the case of an empty --file=
-		die 'ERROR: "--card" requires a non-empty option argument.'
+		echo 'ERROR: "--card" requires a non-empty option argument.'
+		exit 1
 		;;
 	
+	-h|-\?|--help)
+		usage; exit 0;;	# Display a usage synopsis.
 	-v|--verbose)
-		verbose=$((verbose + 1))  # Each -v adds 1 to verbosity.
+		verbose=\$((verbose + 1))  # Each -v adds 1 to verbosity.
 		;;
-	
 	--)		 # End of all options.
 		shift
 		break
 		;;
 	-?*)
-		printf 'WARN: Unknown option (ignored): %s\n' "$1" >&2
+		printf 'ERROR: Unknown option (ignored): %s\n' "\$1" >&2
+		exit 1
 		;;
 	*)		 # Default case: No more options, so break out of the loop.
 		break

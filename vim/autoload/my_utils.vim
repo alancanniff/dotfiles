@@ -37,3 +37,5 @@ endfunction
     keeppatterns %s/\s\+$//e
     call winrestview(l:save)
 endfunction    
+
+
