@@ -14,5 +14,12 @@ if exists('g:GuiLoaded')
     GuiPopupmenu 0
     GuiFont! Consolas NF:h11
 endif
- 
+
+if exists('g:fvim_loaded')
+    " good old 'set guifont' compatibility
+    "set guifont=Iosevka\ Slab:h16
+    " Ctrl-ScrollWheel for zooming in/out
+    nnoremap <A-CR> :FVimToggleFullScreen<CR>
+endif
+
 set novisualbell 

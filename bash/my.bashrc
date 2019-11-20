@@ -31,6 +31,21 @@ fi
 
 # find . -name CVS -type d -print | xargs /bin/rm -rf
 
+mt () {
+    # "make tail needs 1 argmumnets; the number of lines from make -n to run"
+    if [[ $# = 1  ]]; then
+        make -n | tail -"$1" | bash -
+        return 1
+    fi
+
+    if [[ $# = 0  ]]; then
+        make -n
+        read -r -p "how many lines do you want to run: " answer
+        make -n | tail -"$answer" | bash -
+    fi
+
+}
+
 mycvs () {
     if [[ $# -ne 2  ]]; then
         echo "mycvs needs 2 argmumnets. operation and target"

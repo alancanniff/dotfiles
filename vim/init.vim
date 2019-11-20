@@ -70,7 +70,6 @@ endif
         Plug 'tpope/vim-fugitive' 
         Plug 'tpope/vim-repeat' 
         Plug 'tpope/vim-vinegar'                     " basic directory tree navigation plug in
-        "Plug 'unblevable/quick-scope'                " highlights letters for easier spotting of f/t actios; :QuickScopeToggle to turn it off
         Plug 'vimwiki/vimwiki' 
         Plug 'Znuff/consolas-powerline'              " a power line font...
     call plug#end()
@@ -191,6 +190,8 @@ endif
     set nonumber                                " show line numbers
     set relativenumber                        " line nubers are relative to the current one
     set numberwidth=5                           " We are good up to 99999 lines
+    " set pastetoggle=<F12>
+    " set mousemodel=popup
 
     "set diffopt-=internal
     set diffopt+=algorithm:patience
@@ -279,6 +280,14 @@ endif
     " this function has been moved to the plugins dir
     nmap \h <Plug>Highlight_SynStack
 
+    " Close location list or quickfix list if they are present,
+    " see https://goo.gl/uXncnS
+    nnoremap<silent> \x :windo lclose <bar> cclose<CR>
+
+    " Close a buffer and switching to another buffer, do not close the
+    " window, see https://goo.gl/Wd8yZJ
+    nnoremap <silent> \d :bprevious <bar> bdelete #<CR>
+
 "" }}} Key Mappings "
 " Autocmd {{{ "
     " only enable autocmds when they're supported
@@ -313,7 +322,6 @@ endif
             autocmd BufNewFile * :set fileformat=unix
 
             autocmd ColorScheme monotone call my_utils#Monotone_Mods()
-            autocmd ColorScheme black_and_white call my_utils#Black_And_White()
             "delete netrw buffers when they become hidden
             autocmd FileType netrw setl bufhidden=delete
 
@@ -327,7 +335,7 @@ endif
 " }}} Taglist "
 
 colorscheme monotone
-
+ 
 "stop sourcing this file from clearing the rtp / packpath in windows. 
 " stop guifonts from resizing the window
 let g:my_dont_reload = 1
