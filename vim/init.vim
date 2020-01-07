@@ -58,6 +58,7 @@ endif
         Plug 'junegunn/vim-plug'
         Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
         Plug 'junegunn/fzf.vim'
+        Plug 'justinmk/vim-dirvish'                  " basic directory tree navigation plug in
         Plug 'Lokaltog/vim-monotone' 
         Plug 'machakann/vim-sandwich'                " sa - add, sd - delete, sr - replace
         Plug 'michaeljsmith/vim-indent-object'       "  ai = an indent object and line above, ii an indent object, aI an indent object and lines above/below
@@ -69,7 +70,6 @@ endif
         Plug 'tpope/vim-commentary' 
         Plug 'tpope/vim-fugitive' 
         Plug 'tpope/vim-repeat' 
-        Plug 'tpope/vim-vinegar'                     " basic directory tree navigation plug in
         Plug 'vimwiki/vimwiki' 
         Plug 'Znuff/consolas-powerline'              " a power line font...
     call plug#end()
@@ -308,6 +308,7 @@ endif
 
             " Remove trailing white spaces. This is dangerous for some filetypes - like this one!
             autocmd BufWritePre *.tcl,*.py,*.bash,*.sh,*.vhd,*.csh,*.cpp,*.c silent! :call my_utils#Trim_Whitespace()<CR>
+            autocmd FileType python nnoremap \y :0,$!yapf<Cr><C-o>
 
             " Jump to last know position in a file (if the '" is set)
             autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute 'normal! g`"zvzz' | endif
@@ -339,3 +340,7 @@ colorscheme monotone
 "stop sourcing this file from clearing the rtp / packpath in windows. 
 " stop guifonts from resizing the window
 let g:my_dont_reload = 1
+" stop netrw from loading because it's shit on windows
+
+let g:loaded_netrw = 1
+let g:loaded_netrwPlugin = 1

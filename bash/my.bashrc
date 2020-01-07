@@ -77,4 +77,4 @@ alias Xterm='XTerm.exe +tb -fg linen -bg black -fa Consolas -fs 11'
 alias vim=nvim
 alias quart='quartus *.qpf'
 
-
+source $HOME/.config/bash/git-completion.bash

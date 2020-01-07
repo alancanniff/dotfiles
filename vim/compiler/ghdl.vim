@@ -15,7 +15,7 @@ endif
 let s:cpo_save = &cpo
 set cpo&vim
 
-CompilerSet makeprg=ghdl\ -s\ --ieee=synopsys
+CompilerSet makeprg=ghdl\ -s\ --ieee=synopsys --std=02
 CompilerSet errorformat=
     \%E%f:%l:%c:\ %m
 

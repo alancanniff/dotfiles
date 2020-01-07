@@ -12,6 +12,7 @@ endif
  
         " ../../compiler/rsim.vim 
         " ../../compiler/vcom.vim 
+        let g:neomake_vhdl_ghdl_args = ["-s", "--std=02"]
 
     " }}} VHDL "
     " Neomake - Python {{{ "
