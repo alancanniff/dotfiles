@@ -1,15 +1,16 @@
 " K over keyword to goto help for it
 " :h keyword <c-d> brings up list of matching entries
 
-let s:is_win = has('win32') || has('win64')
-if s:is_win
+let g:is_windows = has('win32') || has('win64')
+if g:is_windows
     " be expicit about this on windows as cygwin + quartus sets this to bash
     set shell=cmd.exe
 endif
 
 if has('nvim')
     let g:python_host_prog = 'c:/Python27/python.exe'
-    let g:python3_host_prog = 'C:/Tools/Python/3.7.1/python.exe'
+    let g:python3_host_prog = 'c:/Python36/python.exe'
+    " let g:python3_host_prog = 'C:/Tools/Python/3.7.1/python.exe'
 endif
 
 " Directory and rtp config {{{ "
@@ -38,7 +39,7 @@ endif
     let &dir= dir_swap.'//,.'
 
     "set default direcotry for backup files
-    set backup                                "enable backup
+    set backup                                "enable backup.
     let dir_back=g:my_cache_vim.'/backup'
     call my_utils#Make_Directory(dir_back)
     let &backupdir=dir_back.'//,.'
@@ -52,24 +53,25 @@ endif
 
     call plug#begin(my_config_vim.'/plugged')
         Plug 'adelarsq/vim-matchit'                  " may need support for 2008   see the ftplugins dir in the install dir
+        Plug 'bounceme/remote-viewer'                " testing out this remove viewer
         Plug 'fidian/hexmode'                        " better support for editing hexfiles
         Plug 'honza/vim-snippets'                    " library of snippets
         Plug 'itchyny/lightline.vim'                 " a statusline manager
         Plug 'junegunn/vim-plug'
         Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
         Plug 'junegunn/fzf.vim'
+        Plug 'justinmk/vim-dirvish'                  " basic directory tree navigation plug in
         Plug 'Lokaltog/vim-monotone' 
         Plug 'machakann/vim-sandwich'                " sa - add, sd - delete, sr - replace
         Plug 'michaeljsmith/vim-indent-object'       "  ai = an indent object and line above, ii an indent object, aI an indent object and lines above/below
         Plug 'neomake/neomake'                       " async maker
         Plug 'seletskiy/vim-pythonx'                 " python lib used by ultisnips for autojumping
+        Plug 'simnalamburt/vim-mundo'                " Undo tree visualisation
         Plug 'SirVer/ultisnips'                      " expand code snippet
-        Plug 'tell-k/vim-autopep8'
         Plug 'tommcdo/vim-lion'                      " :h lion - glip: --spaces to left of align char, gL adds them to the right
         Plug 'tpope/vim-commentary' 
         Plug 'tpope/vim-fugitive' 
         Plug 'tpope/vim-repeat' 
-        Plug 'tpope/vim-vinegar'                     " basic directory tree navigation plug in
         Plug 'vimwiki/vimwiki' 
         Plug 'Znuff/consolas-powerline'              " a power line font...
     call plug#end()
@@ -118,6 +120,7 @@ endif
         endif
     endif
 
+    set inccommand=nosplit                      " /nosplit/split : Also shows partial off-screen results in a preview window.
     set sessionoptions+=slash                   " covert all paths to use /
     set backspace=indent,eol,start              " let the backspace key work normally
     set hidden                                  " hide unsaved buffers
@@ -129,9 +132,9 @@ endif
     set shortmess=aAOstT                        " shortens messages to avoid 'press a key' prompt " stops swp file warnings. In windows using --remote-silent opening two files with warnings freezes vim
     set switchbuf=useopen,usetab                " better behavior for the quickfix window and :sb
     set pumheight=10                            " set max height of popupmenu
-    " set wildmode=list,longest                     " on 1st tab, complete 1st match and list options in popup windows
+    "set wildmode=list,longest                  " on 1st tab, complete 1st match and list options in popup windows
     "set wildmode=list,full                     " on 1st tab, complete 1st match and list options in popup windows
-    "set wildmode=list:longest,list:full              " on 1st tab, complete longest common string, on 2nd complete fully
+    "set wildmode=list:longest,list:full        " on 1st tab, complete longest common string, on 2nd complete fully
     "set wildmenu                                " better command line completion, shows a list of matches
     set wildignore=*.swp,*.bak                  " ignore these file in the
     set title                                   " change the terminal's title
@@ -203,6 +206,8 @@ endif
     " smallest possible diff
     " patience   patience diff algorithm
     " histogram  histogram diff algorithm
+
+
 
 " }}} Settings "
 " Key Mappings {{{ "
@@ -284,8 +289,8 @@ endif
     " see https://goo.gl/uXncnS
     nnoremap<silent> \x :windo lclose <bar> cclose<CR>
 
-    " Close a buffer and switching to another buffer, do not close the
-    " window, see https://goo.gl/Wd8yZJ
+    " Close a buffer and switching to another buffer, do not close the window, 
+    " see https://goo.gl/Wd8yZJ
     nnoremap <silent> \d :bprevious <bar> bdelete #<CR>
 
 "" }}} Key Mappings "
@@ -308,6 +313,7 @@ endif
 
             " Remove trailing white spaces. This is dangerous for some filetypes - like this one!
             autocmd BufWritePre *.tcl,*.py,*.bash,*.sh,*.vhd,*.csh,*.cpp,*.c silent! :call my_utils#Trim_Whitespace()<CR>
+            autocmd FileType python nnoremap \y :0,$!yapf<Cr><C-o> :w<CR>
 
             " Jump to last know position in a file (if the '" is set)
             autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute 'normal! g`"zvzz' | endif
@@ -336,6 +342,7 @@ endif
 
 colorscheme monotone
  
-"stop sourcing this file from clearing the rtp / packpath in windows. 
+"stop sourcing this file as it  clears the rtp / packpath in windows. 
 " stop guifonts from resizing the window
 let g:my_dont_reload = 1
+

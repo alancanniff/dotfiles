@@ -4,10 +4,6 @@ this_host=$(hostname)
 export DISPLAY=$this_host:0.0
 
 # enanle colors and a few detauls for common commands
-alias grep='grep --color=auto'                     # show differences in colour
-alias egrep='egrep --color=auto'              # show differences in colour
-alias fgrep='fgrep --color=auto'              # show differences in colour
-
 alias ls='ls -hF --color=auto'                 # classify files in colour
 alias ll='ls -l'                              # long list
 alias la='ls -lA'                              # all but . and ..
@@ -77,4 +73,4 @@ alias Xterm='XTerm.exe +tb -fg linen -bg black -fa Consolas -fs 11'
 alias vim=nvim
 alias quart='quartus *.qpf'
 
-
+# source $HOME/.config/bash/git-completion.bash
