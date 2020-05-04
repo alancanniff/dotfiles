@@ -68,6 +68,7 @@ endif
         Plug 'seletskiy/vim-pythonx'                 " python lib used by ultisnips for autojumping
         Plug 'simnalamburt/vim-mundo'                " Undo tree visualisation
         Plug 'SirVer/ultisnips'                      " expand code snippet
+        Plug 'tell-k/vim-autopep8'
         Plug 'tommcdo/vim-lion'                      " :h lion - glip: --spaces to left of align char, gL adds them to the right
         Plug 'tpope/vim-commentary' 
         Plug 'tpope/vim-fugitive' 
