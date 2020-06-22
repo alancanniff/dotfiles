@@ -33,10 +33,18 @@ function! my_utils#Make_Directory(path)
     endif
 endfunction
 
- function my_utils#Trim_Whitespace()
+function my_utils#Trim_Whitespace()
     let l:save = winsaveview()
     keeppatterns %s/\s\+$//e
     call winrestview(l:save)
 endfunction    
+
+function! my_utils#Copy_Generic(arg)
+
+    if a:arg ==# "full"
+        let @+ = expand("%")
+    endif
+    
+endf
 
 

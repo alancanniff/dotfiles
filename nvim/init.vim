@@ -57,13 +57,14 @@
         call minpac#add('k-takata/minpac', {'type': 'opt'})
         call minpac#add('Lokaltog/vim-monotone')
         call minpac#add('machakann/vim-sandwich')                " sa - add, sd - delete, sr - replace
-        " call minpac#add('neomake/neomake')                       " async maker
+        call minpac#add('neomake/neomake')                       " async maker
         call minpac#add('neovim/nvim-lsp')
         call minpac#add('seletskiy/vim-pythonx')                 " python lib used by ultisnips for autojumping
         call minpac#add('simnalamburt/vim-mundo')                " Undo tree visualisation
         call minpac#add('SirVer/ultisnips')                      " expand code snippet
         call minpac#add('tommcdo/vim-lion')                      " :h lion - glip: --spaces to left of align char, gL adds them to the right
         call minpac#add('tpope/vim-commentary') 
+        call minpac#add('vim-scripts/DoxygenToolkit.vim')
         " call minpac#add('tpope/vim-fugitive') 
         call minpac#add('tpope/vim-repeat') 
         " call minpac#add('vimwiki/vimwiki') 
@@ -94,7 +95,7 @@
         cnoremap <down> <c-n>
     endif
 
-    set completeopt=menuone,noinsert,noselect
+    set completeopt=menuone
     set inccommand=nosplit                      " /nosplit/split : Also shows partial off-screen results in a preview window.
     set sessionoptions+=slash                   " covert all paths to use /
     " set backspace=indent,eol,start              " let the backspace key work normally - now the default...
@@ -236,11 +237,15 @@
     " Y yanks to end of line, line D and C (not like yy)
     map Y y$
 
+
     if has('nvim')
         "automatically yank mouse selections to the system clipboard
-        noremap <LeftRelease> <LeftRelease>"*y
-        tnoremap <ESC> <C-\><C-n>
-        tnoremap <C-w> <C-\><C-n><C-w>
+
+        if g:is_windows
+            noremap <LeftRelease> <LeftRelease>"*y
+            tnoremap <ESC> <C-\><C-n>
+            tnoremap <C-w> <C-\><C-n><C-w>
+        endif
     endif   
 
     " CTRL-U in insert mode deletes a lot.  break the undo sequnce of better undo
@@ -275,8 +280,8 @@
         autocmd FileChangedShellPost * echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
 
         " Remove trailing white spaces. This is dangerous for some filetypes - like this one!
-        autocmd BufWritePre *.tcl,*.py,*.bash,*.sh,*.vhd,*.csh,*.cpp,*.c silent! :call my_utils#Trim_Whitespace()<CR>
-        " autocmd FileType python nnoremap \y :0,$!yapf<Cr><C-o> :w<CR>
+        " autocmd BufWritePre *.tcl,*.py,*.bash,*.sh,*.vhd,*.csh,*.cpp,*.c silent! :call my_utils#Trim_Whitespace()<CR>
+        autocmd FileType python nnoremap \f :0,$!yapf<Cr> :w<CR>
 
         " Jump to last know position in a file (if the '" is set)
         autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute 'normal! g`"zvzz' | endif
@@ -314,5 +319,11 @@
     silent! colorscheme monotone
 " }} " colorscheme
 
+
+" commands {{{1 "
+
+    command! -nargs=1 Copy call my_utils#Copy_Generic(<f-args>)
+
+" }} " commands
 
       
