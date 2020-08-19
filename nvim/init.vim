@@ -46,6 +46,7 @@
     if exists('*minpac#init')
         call minpac#init()
         call minpac#add('adelarsq/vim-matchit')                  " may need support for 2008   see the ftplugins dir in the install dir
+        call minpac#add('bounceme/remote-viewer')                " browse remote directory using dirvish
         call minpac#add('fidian/hexmode')                        " better support for editing hexfiles
         call minpac#add('haorenW1025/completion-nvim')           " a completion framework
         call minpac#add('haorenW1025/diagnostic-nvim')           " settings wrapper for lsp
@@ -57,6 +58,7 @@
         call minpac#add('k-takata/minpac', {'type': 'opt'})
         call minpac#add('Lokaltog/vim-monotone')
         call minpac#add('machakann/vim-sandwich')                " sa - add, sd - delete, sr - replace
+        call minpac#add('michaeljsmith/vim-indent-object')       " ai - indent lvl and line above, ii - no line above, aI - line above and below
         call minpac#add('neomake/neomake')                       " async maker
         call minpac#add('neovim/nvim-lsp')
         call minpac#add('seletskiy/vim-pythonx')                 " python lib used by ultisnips for autojumping
@@ -95,7 +97,7 @@
         cnoremap <down> <c-n>
     endif
 
-    set completeopt=menuone
+    set completeopt=menu
     set inccommand=nosplit                      " /nosplit/split : Also shows partial off-screen results in a preview window.
     set sessionoptions+=slash                   " covert all paths to use /
     " set backspace=indent,eol,start              " let the backspace key work normally - now the default...
@@ -132,7 +134,7 @@
     set cursorcolumn                            " highlight current col
 
     set autoindent
-    set tabstop=8                               " The width of a hard tabstop measured in spaces
+    set tabstop=4                               " The width of a hard tabstop measured in spaces
     set softtabstop=4                           " when hitting tab or backspace, how many spaces should a tab be (see expandtab)
     set shiftwidth=4                            " size of indent
     set expandtab                               " uses spaces instead of tab
@@ -239,12 +241,14 @@
 
 
     if has('nvim')
-        "automatically yank mouse selections to the system clipboard
+
+        " this might cause issues in fzf...
+        tnoremap <ESC> <C-\><C-n>
+        tnoremap <C-w> <C-\><C-n><C-w>
 
         if g:is_windows
+            "automatically yank mouse selections to the system clipboard
             noremap <LeftRelease> <LeftRelease>"*y
-            tnoremap <ESC> <C-\><C-n>
-            tnoremap <C-w> <C-\><C-n><C-w>
         endif
     endif   
 
@@ -280,7 +284,7 @@
         autocmd FileChangedShellPost * echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
 
         " Remove trailing white spaces. This is dangerous for some filetypes - like this one!
-        " autocmd BufWritePre *.tcl,*.py,*.bash,*.sh,*.vhd,*.csh,*.cpp,*.c silent! :call my_utils#Trim_Whitespace()<CR>
+        autocmd BufWritePre *.tcl,*.bash,*.sh,*.vhd, silent! :call my_utils#Trim_Whitespace()<CR>
         autocmd FileType python nnoremap \f :0,$!yapf<Cr> :w<CR>
 
         " Jump to last know position in a file (if the '" is set)
@@ -304,7 +308,7 @@
 " }}} Autocmd "
 
 " Taglist {{{ "
-    set tags=./TAGS;/,TAGS;/                  " search tags files efficiently
+    set tags=./tags;/,tags;/                  " search tags files efficiently
     set notagrelative                           " If tags file in another directory, filenames in that file are not relative (absolute)
     set noautochdir                             " always switch to the current file directory. Turning this off because of tags
 " }}} Taglist "

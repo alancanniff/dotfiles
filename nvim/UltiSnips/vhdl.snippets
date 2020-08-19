@@ -200,14 +200,14 @@ library unisim;
 endsnippet
 
 snippet prs
-P_${1} : process
+p_${1} : process
 begin
 	${0}
-end process P_$1;
+end process p_$1;
 endsnippet
 
 snippet pr
-P_${1} : process(${2})
+p_${1} : process(${2})
 begin`!p
 if re.search('clk', t[2],re.IGNORECASE):
 	snip >> 1
@@ -224,7 +224,7 @@ if re.search('clk', t[2],re.IGNORECASE):
 else:
 	snip.rv=""
 `
-end process P_$1;
+end process p_$1;
 endsnippet
 
 snippet sl
@@ -382,16 +382,9 @@ endsnippet
 
 snippet header
 -------------------------------------------------------------------------------
--- Title	  : ${1}
--- Project	  : Dag
+-- Author	  : Alan Canniff  <a.canniff@rocketlab.co.nz>
+-- Company	  : Rocket Lab
 -------------------------------------------------------------------------------
--- File		  : $1
--- Author	  : Alan Canniff  <alan.canniff@endace.com>
--- Company	  : Endace Technology
--- CVS ID	  : $Id$
--------------------------------------------------------------------------------
--- Copyright Endace 2018. All rights reserved.
---
 -- DESCRIPTION:
 --
 -- ${0}
