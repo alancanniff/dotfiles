@@ -46,10 +46,7 @@
     if exists('*minpac#init')
         call minpac#init()
         call minpac#add('adelarsq/vim-matchit')                  " may need support for 2008   see the ftplugins dir in the install dir
-        call minpac#add('bounceme/remote-viewer')                " browse remote directory using dirvish
-        call minpac#add('fidian/hexmode')                        " better support for editing hexfiles
-        call minpac#add('haorenW1025/completion-nvim')           " a completion framework
-        call minpac#add('haorenW1025/diagnostic-nvim')           " settings wrapper for lsp
+        call minpac#add('fidian/hexmode', {'type': 'opt'})       " better support for editing hexfiles
         call minpac#add('honza/vim-snippets')                    " library of snippets
         " call minpac#add('itchyny/lightline.vim')                 " a statusline manager
         call minpac#add('junegunn/fzf', { 'do': { -> fzf#install() } })
@@ -60,13 +57,20 @@
         call minpac#add('machakann/vim-sandwich')                " sa - add, sd - delete, sr - replace
         call minpac#add('michaeljsmith/vim-indent-object')       " ai - indent lvl and line above, ii - no line above, aI - line above and below
         call minpac#add('neomake/neomake')                       " async maker
-        call minpac#add('neovim/nvim-lsp')
+
+        call minpac#add('neovim/nvim-lspconfig')
+        call minpac#add('nvim-lua/completion-nvim')              " a completion framework
+        call minpac#add('nvim-lua/diagnostic-nvim')              " settings wrapper for lsp
+        " call minpac#add('nvim-lua/popup.nvim')
+        " call minpac#add('nvim-lua/plenary.nvim')
+        " call minpac#add('nvim-lua/telescope.nvim')
+
         call minpac#add('seletskiy/vim-pythonx')                 " python lib used by ultisnips for autojumping
         call minpac#add('simnalamburt/vim-mundo')                " Undo tree visualisation
         call minpac#add('SirVer/ultisnips')                      " expand code snippet
         call minpac#add('tommcdo/vim-lion')                      " :h lion - glip: --spaces to left of align char, gL adds them to the right
         call minpac#add('tpope/vim-commentary') 
-        call minpac#add('vim-scripts/DoxygenToolkit.vim')
+        call minpac#add('vim-scripts/DoxygenToolkit.vim', {'type': 'opt'})
         " call minpac#add('tpope/vim-fugitive') 
         call minpac#add('tpope/vim-repeat') 
         " call minpac#add('vimwiki/vimwiki') 
@@ -329,5 +333,3 @@
     command! -nargs=1 Copy call my_utils#Copy_Generic(<f-args>)
 
 " }} " commands
-
-      

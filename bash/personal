@@ -4,14 +4,15 @@ setxkbmap -option "caps:escape"
 
 alias rm="rm -f"
 # alias vim="nvim"
+alias vim="nvim"
 export EDITOR="nvim"
 export VISUAL="nvim"
 
-export LESS="-R"
+export LESS="-FRX"
 export RANGER_LOAD_DEFAULT_RC=FALSE
 export PATH="$PATH:/app/location/node_modules/.bin"
 export PATH="$PATH:/home/a.canniff/.config/nvim/pack/minpac/start/fzf/bin"
-export PATH="$PATH:/home/a.canniff/source/rust_hdl/rust_hdl/target/release/"
+export PATH="$PATH:/home/a.canniff/source/rust_hdl/rust_hdl/target/release"
 export PATH="$PATH:/opt/Ozone_Linux_V320a_x86_64"
 
 hg () { history | grep -iE --color "$1" ; }

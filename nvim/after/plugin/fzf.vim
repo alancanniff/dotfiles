@@ -8,6 +8,8 @@ augroup aug_fzf
     autocmd  FileType fzf tnoremap <buffer> <ESC> <ESC>
 augroup END " }
 
+let g:fzf_layout = { 'down': '~40%' }
+
 " let g:fzf_preview_window = ''
 nnoremap  <SPACE>f :Files<CR>
 nnoremap  <SPACE>l :BLines<CR>
