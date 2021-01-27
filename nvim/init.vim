@@ -1,4 +1,3 @@
-
 " Assorted Setup and configuration {{{ "
 
     " K over keyword to goto help for it
@@ -48,7 +47,7 @@
         call minpac#add('adelarsq/vim-matchit')                  " may need support for 2008   see the ftplugins dir in the install dir
         call minpac#add('fidian/hexmode', {'type': 'opt'})       " better support for editing hexfiles
         call minpac#add('honza/vim-snippets')                    " library of snippets
-        " call minpac#add('itchyny/lightline.vim')                 " a statusline manager
+        call minpac#add('itchyny/lightline.vim')                 " a statusline manager
         call minpac#add('junegunn/fzf', { 'do': { -> fzf#install() } })
         call minpac#add('junegunn/fzf.vim')
         call minpac#add('justinmk/vim-dirvish')                  " basic directory tree navigation plug in
@@ -70,9 +69,9 @@
         call minpac#add('SirVer/ultisnips')                      " expand code snippet
         call minpac#add('tommcdo/vim-lion')                      " :h lion - glip: --spaces to left of align char, gL adds them to the right
         call minpac#add('tpope/vim-commentary') 
-        call minpac#add('vim-scripts/DoxygenToolkit.vim', {'type': 'opt'})
-        " call minpac#add('tpope/vim-fugitive') 
+        call minpac#add('tpope/vim-fugitive') 
         call minpac#add('tpope/vim-repeat') 
+        call minpac#add('vim-scripts/DoxygenToolkit.vim')
         " call minpac#add('vimwiki/vimwiki') 
     endif
 
@@ -224,8 +223,9 @@
     nnoremap  ]l :lnext<CR>
     nnoremap  ]L :llast<CR>
 
-    nnoremap  <SPACE>o o<ESC>
-    nnoremap  <SPACE>O O<ESC>
+    nnoremap  <SPACE>o moo<ESC>`o
+    nnoremap  <SPACE>O moO<ESC>`o
+
 
     nnoremap <C-]> g<C-]>
 
@@ -288,7 +288,7 @@
         autocmd FileChangedShellPost * echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
 
         " Remove trailing white spaces. This is dangerous for some filetypes - like this one!
-        autocmd BufWritePre *.tcl,*.bash,*.sh,*.vhd, silent! :call my_utils#Trim_Whitespace()<CR>
+        autocmd BufWritePre *.md,*.yaml,*.tcl,*.bash,*.sh,*.vhd, silent! :call my_utils#Trim_Whitespace()<CR>
         autocmd FileType python nnoremap \f :0,$!yapf<Cr> :w<CR>
 
         " Jump to last know position in a file (if the '" is set)

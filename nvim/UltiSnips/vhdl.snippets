@@ -133,27 +133,6 @@ ts 3 = ${3:test3}
 ts 4 = ${4:test4}
 endsnippet
 
-snippet dbg_f
-entity ${1:`!p snip.rv=snip.basename`} is
-	generic (
-		${3}
-	); `!p
-if t[1] == "tb":
-	snip += "end entity %s;" % t[1];
-else:
-	snip >> 1
-	snip += "port ("
-	snip += ")"
-	snip << 1
-	snip += "end entity %s;" % t[1];
-`
-
-architecture `!p snip.rv = "sim" if t[1] in "tb" else "rtl" ` of $1 is
-	${4}
-begin
-	${5}
-end architecture $1;
-endsnippet
 
 snippet dbg_e
 entity ${1:`!p snip.rv=snip.basename`} is
@@ -199,15 +178,26 @@ library unisim;
 	use unisim.vcomponents.ALL;
 endsnippet
 
+snippet pra
+${1}: process(${2}, ${3})
+begin
+	if $3 = '0' then
+
+	elsif rising_edge($2) then
+		${0}
+	end if;
+end process $1;
+endsnippet
+
 snippet prs
-p_${1} : process
+${1}: process
 begin
 	${0}
-end process p_$1;
+end process $1;
 endsnippet
 
 snippet pr
-p_${1} : process(${2})
+${1}: process(${2})
 begin`!p
 if re.search('clk', t[2],re.IGNORECASE):
 	snip >> 1
@@ -224,7 +214,7 @@ if re.search('clk', t[2],re.IGNORECASE):
 else:
 	snip.rv=""
 `
-end process p_$1;
+end process $1;
 endsnippet
 
 snippet sl
@@ -299,15 +289,15 @@ begin
 end block $1;
 endsnippet
 
-snippet gfor "generate if"
-${1} : for ${2:i} in 0 to ${3} generate
+snippet gfor "generate for"
+${1}: for ${2:i} in 0 to ${3} generate
 begin
 	${0}
 end generate $1;
 endsnippet
 
 snippet gif "generate if"
-${1} : if ${2} generate
+${1}: if ${2} generate
 begin
 	${0}
 end generate $1;
@@ -374,16 +364,17 @@ end function};
 endsnippet
 
 snippet with "with select combination mux"
-with ${1:condition} select ${2:assign_to} <= ${3:value}  when ${3:equals},
-					     ${4:value}  when ${4:equals},
-					     ${5}        when others; 
+with ${1:condition} select ${2:assign_to} <= 
+	${3:value}  when ${4:equals},
+	${5:value}  when ${6:equals},
+	${7}        when others; 
 endsnippet
 
 
 snippet header
 -------------------------------------------------------------------------------
--- Author	  : Alan Canniff  <a.canniff@rocketlab.co.nz>
--- Company	  : Rocket Lab
+-- Author     : Alan Canniff  <a.canniff@rocketlab.co.nz>
+-- Company    : Rocket Lab
 -------------------------------------------------------------------------------
 -- DESCRIPTION:
 --
@@ -397,25 +388,26 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-library work;
-
-
 endsnippet
 
-    
-snippet srbm
-    E_SRB_MERGE : entity work.srb_reply_merge
-    generic map (
-        g_USE_PRE_RST => false,
-        g_COUNT       => srb_replies'length
-    )
-    port map (
-        i_srb_clk       => i_srb_clk,
-        i_srb_clk_reset => i_srb_clk_reset,
-        i_srb_reply     => i_srb_replies,
-        o_srb_reply     => o_srb_reply
-    );
+snippet ent
+entity ${1:`!p snip.rv=snip.basename`} is
+	generic (
+		${3}
+	); `!p
+if t[1] == "tb":
+	snip += "end entity %s;" % t[1];
+else:
+	snip >> 1
+	snip += "port ("
+	snip += ")"
+	snip << 1
+	snip += "end entity %s;" % t[1];
+`
+
+architecture `!p snip.rv = "sim" if t[1] in "tb" else "rtl" ` of $1 is
+	${4}
+begin
+	${5}
+end architecture $1;
 endsnippet
-       
-
-
