@@ -53,26 +53,29 @@
         call minpac#add('justinmk/vim-dirvish')                  " basic directory tree navigation plug in
         call minpac#add('k-takata/minpac', {'type': 'opt'})
         call minpac#add('Lokaltog/vim-monotone')
+        call minpac#add('ludovicchabant/vim-gutentags')
         call minpac#add('machakann/vim-sandwich')                " sa - add, sd - delete, sr - replace
         call minpac#add('michaeljsmith/vim-indent-object')       " ai - indent lvl and line above, ii - no line above, aI - line above and below
         call minpac#add('neomake/neomake')                       " async maker
 
         call minpac#add('neovim/nvim-lspconfig')
-        call minpac#add('nvim-lua/completion-nvim')              " a completion framework
-        call minpac#add('nvim-lua/diagnostic-nvim')              " settings wrapper for lsp
-        " call minpac#add('nvim-lua/popup.nvim')
-        " call minpac#add('nvim-lua/plenary.nvim')
-        " call minpac#add('nvim-lua/telescope.nvim')
+        " call minpac#add('nvim-lua/completion-nvim')              " a completion framework
+        " call minpac#add('nvim-lua/diagnostic-nvim')              " settings wrapper for lsp
+        call minpac#add('nvim-lua/popup.nvim')
+        call minpac#add('nvim-lua/plenary.nvim')
+        call minpac#add('nvim-lua/telescope.nvim')
 
+        call minpac#add('rafcamlet/nvim-luapad')
         call minpac#add('seletskiy/vim-pythonx')                 " python lib used by ultisnips for autojumping
         call minpac#add('simnalamburt/vim-mundo')                " Undo tree visualisation
         call minpac#add('SirVer/ultisnips')                      " expand code snippet
         call minpac#add('tommcdo/vim-lion')                      " :h lion - glip: --spaces to left of align char, gL adds them to the right
+        " call minpac#add('nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'})
         call minpac#add('tpope/vim-commentary') 
         call minpac#add('tpope/vim-fugitive') 
         call minpac#add('tpope/vim-repeat') 
         call minpac#add('vim-scripts/DoxygenToolkit.vim')
-        " call minpac#add('vimwiki/vimwiki') 
+        call minpac#add('vimwiki/vimwiki') 
     endif
 
     command! PackUpdate packadd minpac | source $MYVIMRC | call minpac#update('', {'do': 'call minpac#status()'})
@@ -270,6 +273,8 @@
     " see https://goo.gl/Wd8yZJ
     nnoremap <silent> \d :bprevious <bar> bdelete #<CR>
 
+    nnoremap <space>w :call my_utils#Trim_Whitespace()<CR>
+
 "" }}} Key Mappings "
 
 " Autocmd {{{ "
@@ -297,6 +302,8 @@
         " source vimrc after you save it
         autocmd BufWritePost init.vim nested source $MYVIMRC 
         autocmd BufRead,BufNewFile *.inc set filetype=make
+
+        autocmd BufLeave *.vhd,*.vhdl, :set isfname+=.
 
         autocmd BufLeave * :set nocursorcolumn | set nocursorline
         autocmd BufEnter * :set cursorcolumn | set cursorline
@@ -333,3 +340,26 @@
     command! -nargs=1 Copy call my_utils#Copy_Generic(<f-args>)
 
 " }} " commands
+"
+
+nnoremap <space>f <cmd>lua require('telescope.builtin').find_files()<cr>
+nnoremap <space>h <cmd>lua require('telescope.builtin').oldfiles()<cr>
+
+lua << EOF
+local actions = require('telescope.actions')
+require('telescope').setup{
+  defaults = {
+    mappings = {
+      i = {
+        ["<esc>"] = actions.close
+      },
+    },
+  }
+}
+
+-- require('telescope.builtin').find_files{
+--     find_command = { "ag", "--nogroup", "--column", "--color" }
+-- }
+
+EOF
+

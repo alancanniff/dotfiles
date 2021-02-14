@@ -7,5 +7,5 @@ setlocal path=.,**
 setlocal suffixesadd=.vhd,.vhdl,.v,.sv
 setlocal isfname-=.
 let g:vhdl_indent_genportmap = 0
-let b:undo_ftplugin = 'setlocal isfname-=. suffixesadd< path< commentstring< tagcase< colorcolumn<'
+let b:undo_ftplugin = 'setlocal isfname< suffixesadd< path< fileformat< commentstring< tagcase< colorcolumn<'
 

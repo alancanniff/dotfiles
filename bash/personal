@@ -15,6 +15,8 @@ export PATH="$PATH:/home/a.canniff/.config/nvim/pack/minpac/start/fzf/bin"
 export PATH="$PATH:/home/a.canniff/source/rust_hdl/rust_hdl/target/release"
 export PATH="$PATH:/opt/Ozone_Linux_V320a_x86_64"
 
+source /tools/Xilinx/Vivado/2020.2/settings64.sh
+
 hg () { history | grep -iE --color "$1" ; }
 
 # -i        ignore case

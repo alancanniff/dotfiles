@@ -5,7 +5,7 @@ endif
 "  
 "
 " lua require'lspconfig'.pyls.setup{}
-" lua require'lspconfig'.clangd.setup{}
+lua require'lspconfig'.clangd.setup{}
 lua require'lspconfig'.vhdl_ls.setup{}
 " " lua require'lspconfig'.yamlls.setup{}
 
@@ -13,7 +13,7 @@ lua require'lspconfig'.vhdl_ls.setup{}
 " autocmd Filetype python setlocal omnifunc=v:lua.vim.lsp.omnifunc
 " " autocmd Filetype vhdl setlocal omnifunc=v:lua.vim.lsp.omnifunc
 " autocmd Filetype cpp setlocal omnifunc=v:lua.vim.lsp.omnifunc
-" autocmd Filetype c setlocal omnifunc=v:lua.vim.lsp.omnifunc
+autocmd Filetype c setlocal omnifunc=v:lua.vim.lsp.omnifunc
 autocmd Filetype vhdl setlocal omnifunc=v:lua.vim.lsp.omnifunc
 " " autocmd Filetype sh setlocal omnifunc=v:lua.vim.lsp.omnifunc
 " " autocmd Filetype yaml setlocal omnifunc=v:lua.vim.lsp.omnifunc | setlocal completeopt=menuone,noselect
