@@ -14,6 +14,7 @@ export PATH="$PATH:/app/location/node_modules/.bin"
 export PATH="$PATH:/home/a.canniff/.config/nvim/pack/minpac/start/fzf/bin"
 export PATH="$PATH:/home/a.canniff/source/rust_hdl/rust_hdl/target/release"
 export PATH="$PATH:/opt/Ozone_Linux_V320a_x86_64"
+export XDG_CONFIG_HOME="~/.config"
 
 hg () { history | grep -iE --color "$1" ; }
 
