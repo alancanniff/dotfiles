@@ -58,8 +58,7 @@
         call minpac#add('neomake/neomake')                       " async maker
 
         call minpac#add('neovim/nvim-lspconfig')
-        " call minpac#add('nvim-lua/completion-nvim')              " a completion framework
-        " call minpac#add('nvim-lua/diagnostic-nvim')              " settings wrapper for lsp
+        call minpac#add('nvim-lua/completion-nvim')              " a completion framework
         call minpac#add('nvim-lua/popup.nvim')
         call minpac#add('nvim-lua/plenary.nvim')
         call minpac#add('nvim-lua/telescope.nvim')
@@ -67,9 +66,10 @@
         " call minpac#add('seletskiy/vim-pythonx')                 " python lib used by ultisnips for autojumping
         call minpac#add('simnalamburt/vim-mundo')                " Undo tree visualisation
         " call minpac#add('SirVer/ultisnips')                      " expand code snippet
-        call minpac#add('tommcdo/vim-lion')                      " :h lion - glip: --spaces to left of align char, gL adds them to the right
         call minpac#add('tpope/vim-commentary') 
-        " call minpac#add('tpope/vim-fugitive') 
+        call minpac#add('tpope/vim-eunuch')                     " wrapper for cmds, Move, Renmae, Chmod, Cfind, Clocate, Sudowrite, Sudoedit
+        call minpac#add('tommcdo/vim-lion')                      " :h lion - glip: --spaces to left of align char, gL adds them to the right
+        call minpac#add('tpope/vim-fugitive') 
         call minpac#add('tpope/vim-repeat') 
         call minpac#add('vim-scripts/DoxygenToolkit.vim')
         " call minpac#add('vimwiki/vimwiki') 
@@ -100,7 +100,8 @@
         cnoremap <down> <c-n>
     endif
 
-    set completeopt=menu
+    
+    set completeopt=menuone,noinsert,noselect   " Set completeopt to have a better completion experience
     set inccommand=nosplit                      " /nosplit/split : Also shows partial off-screen results in a preview window.
     set sessionoptions+=slash                   " covert all paths to use /
     " set backspace=indent,eol,start              " let the backspace key work normally - now the default...
@@ -185,9 +186,6 @@
     " smallest possible diff
     " patience   patience diff algorithm
     " histogram  histogram diff algorithm
-
-
-
 
 " }}} Settings "
 
@@ -325,14 +323,13 @@
 
     " make sure the autocmd is set before configuring the colorscheme
     silent! colorscheme monotone
-" }} " colorscheme
+" }}} " colorscheme
 
-
-" commands {{{1 "
+" commands {{{ "
 
     command! -nargs=1 Copy call my_utils#Copy_Generic(<f-args>)
 
-" }} " commands
+" }}} " commands
 
 lua << EOF
 require('_lspconfig')

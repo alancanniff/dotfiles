@@ -26,6 +26,8 @@ language server for vhdl
 }
 
 local on_attach = function(_client, bufnr)
+    require'completion'.on_attach(client)
+
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
     local opts = { noremap=true, silent=true }
