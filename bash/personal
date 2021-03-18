@@ -5,6 +5,7 @@ setxkbmap -option "caps:escape"
 alias rm="rm -f"
 # alias vim="nvim"
 alias vim="nvim"
+alias untar="tar -zxvf"
 export EDITOR="nvim"
 export VISUAL="nvim"
 

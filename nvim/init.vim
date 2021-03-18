@@ -75,7 +75,7 @@
         call minpac#add('tpope/vim-fugitive') 
         call minpac#add('tpope/vim-repeat') 
         call minpac#add('vim-scripts/DoxygenToolkit.vim')
-        call minpac#add('vimwiki/vimwiki') 
+        " call minpac#add('vimwiki/vimwiki') 
     endif
 
     command! PackUpdate packadd minpac | source $MYVIMRC | call minpac#update('', {'do': 'call minpac#status()'})
@@ -361,5 +361,8 @@ require('telescope').setup{
 --     find_command = { "ag", "--nogroup", "--column", "--color" }
 -- }
 
+-- require('finders')
 EOF
 
+ " nnoremap <leader>ff :lua require'finders'.fd_in_nvim()<cr> 
+ " nnoremap <leader>ff :lua require'finders'.fd()<cr>
