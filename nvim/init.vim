@@ -46,13 +46,14 @@
         call minpac#init()
         call minpac#add('adelarsq/vim-matchit')                  " may need support for 2008   see the ftplugins dir in the install dir
         call minpac#add('fidian/hexmode', {'type': 'opt'})       " better support for editing hexfiles
-        " call minpac#add('honza/vim-snippets')                    " library of snippets
+        call minpac#add('honza/vim-snippets')                    " library of snippets
         call minpac#add('itchyny/lightline.vim')                 " a statusline manager
         " call minpac#add('junegunn/fzf', { 'do': { -> fzf#install() } })
         " call minpac#add('junegunn/fzf.vim')
         call minpac#add('justinmk/vim-dirvish')                  " basic directory tree navigation plug in
         call minpac#add('k-takata/minpac', {'type': 'opt'})
         call minpac#add('Lokaltog/vim-monotone')
+        call minpac#add('ludovicchabant/vim-gutentags')
         call minpac#add('machakann/vim-sandwich')                " sa - add, sd - delete, sr - replace
         call minpac#add('michaeljsmith/vim-indent-object')       " ai - indent lvl and line above, ii - no line above, aI - line above and below
         call minpac#add('neomake/neomake')                       " async maker
@@ -63,9 +64,13 @@
         call minpac#add('nvim-lua/plenary.nvim')
         call minpac#add('nvim-lua/telescope.nvim')
 
-        " call minpac#add('seletskiy/vim-pythonx')                 " python lib used by ultisnips for autojumping
+        call minpac#add('rafcamlet/nvim-luapad')
+        call minpac#add('seletskiy/vim-pythonx')                 " python lib used by ultisnips for autojumping
         call minpac#add('simnalamburt/vim-mundo')                " Undo tree visualisation
-        " call minpac#add('SirVer/ultisnips')                      " expand code snippet
+        call minpac#add('SirVer/ultisnips')                      " expand code snippet
+        call minpac#add('tommcdo/vim-lion')                      " :h lion - glip: --spaces to left of align char, gL adds them to the right
+        " call minpac#add('nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'})
+
         call minpac#add('tpope/vim-commentary') 
         call minpac#add('tpope/vim-eunuch')                     " wrapper for cmds, Move, Renmae, Chmod, Cfind, Clocate, Sudowrite, Sudoedit
         call minpac#add('tommcdo/vim-lion')                      " :h lion - glip: --spaces to left of align char, gL adds them to the right
@@ -101,6 +106,7 @@
     endif
 
     
+    " set completeopt=menuone,noinsert   " Set completeopt to have a better completion experience
     set completeopt=menuone,noinsert,noselect   " Set completeopt to have a better completion experience
     set inccommand=nosplit                      " /nosplit/split : Also shows partial off-screen results in a preview window.
     set sessionoptions+=slash                   " covert all paths to use /
@@ -182,8 +188,7 @@
     " internal diff engine. Currently supported 
     " algorithms are:
     " myers      the default algorithm
-    " minimal    spend extra time to generate the
-    " smallest possible diff
+    " minimal    spend extra time to generate the smallest possible diff
     " patience   patience diff algorithm
     " histogram  histogram diff algorithm
 
@@ -268,6 +273,8 @@
     " see https://goo.gl/Wd8yZJ
     nnoremap <silent> \d :bprevious <bar> bdelete #<CR>
 
+    nnoremap <space>w :call my_utils#Trim_Whitespace()<CR>
+
 "" }}} Key Mappings "
 
 " Autocmd {{{ "
@@ -290,11 +297,13 @@
         autocmd FileType python nnoremap \f :0,$!yapf<Cr> :w<CR>
 
         " Jump to last know position in a file (if the '" is set)
-        autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute 'normal! g`"zvzz' | endif
+        autocmd BufReadPost * if (&filetype != 'gitcommit') && line("'\"") > 0 && line("'\"") <= line("$") | execute 'normal! g`"zvzz' | endif
 
         " source vimrc after you save it
         autocmd BufWritePost init.vim nested source $MYVIMRC 
         autocmd BufRead,BufNewFile *.inc set filetype=make
+
+        autocmd BufLeave *.vhd,*.vhdl, :set isfname-=.
 
         autocmd BufLeave * :set nocursorcolumn | set nocursorline
         autocmd BufEnter * :set cursorcolumn | set cursorline
@@ -334,3 +343,23 @@
 lua << EOF
 require('_lspconfig')
 EOF
+
+nnoremap <space>f <cmd>lua require('telescope.builtin').find_files()<cr>
+nnoremap <space>h <cmd>lua require('telescope.builtin').oldfiles()<cr>
+
+lua << EOF
+local actions = require('telescope.actions')
+require('telescope').setup{
+  defaults = {
+    mappings = {
+      i = {
+        ["<esc>"] = actions.close
+      },
+    },
+  }
+}
+
+EOF
+
+ " nnoremap <leader>ff :lua require'finders'.fd_in_nvim()<cr> 
+ " nnoremap <leader>ff :lua require'finders'.fd()<cr>

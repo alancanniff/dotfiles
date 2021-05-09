@@ -11,12 +11,12 @@ augroup END " }
 let g:fzf_layout = { 'down': '~40%' }
 
 " let g:fzf_preview_window = ''
-nnoremap  <SPACE>f :Files<CR>
-nnoremap  <SPACE>l :BLines<CR>
-nnoremap  <SPACE>L :Lines<CR>
-nnoremap  <SPACE>t :BTags<CR>
-nnoremap  <SPACE>h :History<CR>
-nnoremap  <SPACE>: :History:<CR>
-nnoremap  <SPACE>/ :History/<CR>
+nnoremap  <leader>f :Files<CR>
+nnoremap  <leader>l :BLines<CR>
+nnoremap  <leader>L :Lines<CR>
+nnoremap  <leader>t :BTags<CR>
+nnoremap  <leader>h :History<CR>
+nnoremap  <leader>: :History:<CR>
+nnoremap  <leader>/ :History/<CR>
 
 
