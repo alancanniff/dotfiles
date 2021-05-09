@@ -1,6 +1,6 @@
 # File containing my local mods...
 
-setxkbmap -option "caps:escape"
+# setxkbmap -option "caps:escape"
 
 alias rm="rm -f"
 # alias vim="nvim"
@@ -16,6 +16,7 @@ export PATH="$PATH:/home/$USER/source/rust_hdl/rust_hdl/target/release"
 export PATH="$PATH:/opt/Ozone_Linux_V320a_x86_64"
 export PATH="$PATH:/home/$USER/source/rust_hdl/target/release"
 export PATH="$PATH:/home/$USER/.local/bin"
+export PATH="$PATH:/home/alan/source/neovim/node_modules/.bin"
 
 export XDG_CONFIG_HOME="~/.config"
 

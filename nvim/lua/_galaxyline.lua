@@ -1,8 +1,87 @@
+local whitespace = require('galaxyline.provider_whitespace')
+local lspclient = require('galaxyline.provider_lsp')
+local vcs = require('galaxyline.provider_vcs')
+local condition = require('galaxyline.condition')
+
+local get_lsp_client = function(msg)
+    msg = msg or 'N/A'
+    local buf_ft = vim.api.nvim_buf_get_option(0,'filetype')
+    local clients = vim.lsp.get_active_clients()
+    if next(clients) == nil then
+        return nil
+    end
+
+    for _,client in ipairs(clients) do
+        local filetypes = client.config.filetypes
+        if filetypes and vim.fn.index(filetypes,buf_ft) ~= -1 then
+            return client.name
+        end
+    end
+    return nil
+end
+
+local buffer_not_empty = function()
+    if vim.fn.empty(vim.fn.expand('%:t')) ~= 1 then
+        return true
+    end
+    return false
+end
+
+DiffAdd = vcs.diff_add             -- support vim-gitgutter vim-signify gitsigns
+DiffModified = vcs.diff_modified   -- support vim-gitgutter vim-signify gitsigns
+DiffRemove = vcs.diff_remove       -- support vim-gitgutter vim-signify gitsigns
+
+
 
 local gl = require("galaxyline")
+
+-----------------------------------------------------------
+
+local icons  = {
+    sep = { left = "", right = ""},
+    subsep = { left = "", right = ""},
+    git = "",
+    readonly = '',
+}
+
+function icons:new (o)
+    o = o or {}   -- create object if user does not provide one
+    setmetatable(o, self)
+    self.__index = self
+    return o
+end
+
+function icons:get_func(first, second)
+    if second == nil then
+        return function () 
+            return self[first]
+        end
+    else
+        return function () 
+             return self[first][second]
+        end        
+    end
+end
+
+local detail = icons:new()
+
+-----------------------------------------------------------
+
 local gls = gl.section
+local Space = function() return ' ' end
+
+-- local checkwidth = function()
+--     if vim.fn.winwidth(0)/2 > 40 then
+--         return true
+--     end
+--     return false
+-- end
 
 gl.short_line_list = {" "} -- keeping this table { } as empty will show inactive statuslines
+
+local FileNameAbsolute = function() 
+    return vim.fn.expand("%:p")
+end
 
 local colors = {
     bg = "#282c34",
@@ -23,175 +102,219 @@ local colors = {
     greenYel = "#EBCB8B"
 }
 
-gls.left[1] = {
-    leftRounded = {
+-- gls.left[1] = {
+--     ViMode = {
+--         provider = function()
+--             local alias = {
+--                 n = "NORMAL",
+--                 i = "INSERT",
+--                 c = "COMMAND",
+--                 V = "VISUAL",
+--                 [""] = "VISUAL",
+--                 v = "VISUAL",
+--                 R = "REPLACE"
+--             }
+--             return alias[vim.fn.mode()]
+--         end,
+--         highlight = {colors.bg, colors.red}
+--     }
+-- }
+
+-- gls.left = {}
+
+local paste_mode = {
+    PasteMode = {
         provider = function()
-            return ""
+            return "set paste"
         end,
-        highlight = {colors.nord, colors.bg}
+        condition = function()
+            return vim.o.paste
+        end,
+        highlight = {colors.bg, colors.red},
+        event = "OptionSet"
+        -- event = "BufWritePost"
+        -- this needs an event
     }
 }
 
-gls.left[2] = {
-    statusIcon = {
-        provider = function()
-            return "   "
-        end,
-        highlight = {colors.bg, colors.nord},
-        separator = " ",
-        separator_highlight = {colors.lightbg, colors.lightbg}
-    }
+local paste_sep = {
+    PasteSep = {
+        provider = detail:get_func("sep", "left"),
+        highlight = {colors.red, colors.bg}
+    }          
 }
 
-gls.left[3] = {
-    FileIcon = {
-        provider = "FileIcon",
+local git_branch = {    
+    GitBranch = {
+        icon = detail.git,
+        provider = "GitBranch",
         condition = buffer_not_empty,
-        highlight = {require("galaxyline.provider_fileinfo").get_file_icon_color, colors.lightbg}
+        highlight = {colors.green, colors.line_bg}
+    }
+}
+local git_sep = {
+    GitSep = {
+        provider = detail:get_func("sep", "left"),
+        highlight = {colors.bg, colors.lightbg}
     }
 }
 
-gls.left[4] = {
+local filename = {
     FileName = {
-        provider = {"FileName", "FileSize"},
+        provider = FileNameAbsolute,
         condition = buffer_not_empty,
+        -- separator = " ",
+        -- separator_highlight = {colors.fg, colors.lightbg},
         highlight = {colors.fg, colors.lightbg}
     }
 }
 
-gls.left[5] = {
-    teech = {
-        provider = function()
-            return ""
+local readonly = {
+    ReadOnly = {
+        icon = " ",
+        provider = detail:get_func("readonly"),
+        condition = function ()
+            return vim.bo.readonly
         end,
+        separator_highlight = {colors.fg, colors.lightbg},
+        highlight = {colors.fg, colors.lightbg}
+    }
+}
+local end_sep = {
+    End = {
+        provider = detail:get_func("sep", "left"),
         separator = " ",
+        separator_highlight = {colors.line_bg, colors.line_bg},
         highlight = {colors.lightbg, colors.bg}
     }
 }
 
-local checkwidth = function()
-    local squeeze_width = vim.fn.winwidth(0) / 2
-    if squeeze_width > 40 then
-        return true
-    end
-    return false
-end
+table.insert(gls.left, paste_mode )
+table.insert(gls.left, left_sep )
+table.insert(gls.left, git_branch )
+table.insert(gls.left, git_sep )
 
-gls.left[6] = {
-    DiffAdd = {
-        provider = "DiffAdd",
-        condition = checkwidth,
-        icon = "   ",
-        highlight = {colors.greenYel, colors.line_bg}
-    }
-}
+-- gls.left[6] = {
+--     DiffAdd = {
+--         provider = DiffAdd,
+--         icon = " ",
+--         highlight = {colors.greenYel, colors.line_bg}
+--     }
+-- }
 
-gls.left[7] = {
-    DiffModified = {
-        provider = "DiffModified",
-        condition = checkwidth,
-        icon = " ",
-        highlight = {colors.orange, colors.line_bg}
-    }
-}
+-- gls.left[7] = {
+--     DiffModified = {
+--         provider = {Space, "DiffModified"},
+--         condition = function()
+--             return vcs.check_git_workspace
+--         end,         
+--         icon = " ",
+--         highlight = {colors.orange, colors.line_bg}
+--     }
+-- }
 
-gls.left[8] = {
-    DiffRemove = {
-        provider = "DiffRemove",
-        condition = checkwidth,
-        icon = " ",
-        highlight = {colors.red, colors.line_bg}
-    }
-}
+-- gls.left[8] = {
+--     DiffRemove = {
+--         provider = {Space, "DiffRemove"},
+--         condition = function()
+--             return vcs.check_git_workspace
+--         end,         
+--         icon = " ",
+--         highlight = {colors.red, colors.line_bg}
+--     }
+-- }
 
-gls.left[9] = {
-    LeftEnd = {
-        provider = function()
-            return " "
-        end,
-        separator = " ",
-        separator_highlight = {colors.line_bg, colors.line_bg},
-        highlight = {colors.line_bg, colors.line_bg}
-    }
-}
+-- gls.left[10] = {
+--     DiagnosticError = {
+--         provider = "DiagnosticError",
+--         icon = "  ",
+--         highlight = {colors.red, colors.bg}
+--     }
+-- }
 
-gls.left[10] = {
-    DiagnosticError = {
-        provider = "DiagnosticError",
-        icon = "  ",
-        highlight = {colors.red, colors.bg}
-    }
-}
+-- gls.left[11] = {
+--     Space = {
+--         provider = function()
+--             return " "
+--         end,
+--         highlight = {colors.line_bg, colors.line_bg}
+--     }
+-- }
 
-gls.left[11] = {
-    Space = {
-        provider = function()
-            return " "
-        end,
-        highlight = {colors.line_bg, colors.line_bg}
-    }
-}
+-- gls.left[12] = {
+--     DiagnosticWarn = {
+--         provider = "DiagnosticWarn",
+--         icon = "  ",
+--         highlight = {colors.blue, colors.bg}
+--     }
+-- }
 
-gls.left[12] = {
-    DiagnosticWarn = {
-        provider = "DiagnosticWarn",
-        icon = "  ",
-        highlight = {colors.blue, colors.bg}
-    }
-}
+
+-- TODO wrap this in a augroup
+vim.cmd('au OptionSet * lua require("galaxyline").load_galaxyline()')
+
+
+
+-- gls.right[4] = {
+--     ViMode = {
+--         provider = function()
+--             local alias = {
+--                 n = "NORMAL",
+--                 i = "INSERT",
+--                 c = "COMMAND",
+--                 V = "VISUAL",
+--                 [""] = "VISUAL",
+--                 v = "VISUAL",
+--                 R = "REPLACE"
+--             }
+--             return alias[vim.fn.mode()]
+--         end,
+--         highlight = {colors.bg, colors.red}
+--     }
+-- }
+
 
 gls.right[1] = {
-    GitIcon = {
-        provider = function()
-            return "   "
+    RightEnd = {
+        provider = function ()
+            return detail.sep.right
         end,
-        condition = require("galaxyline.provider_vcs").check_git_workspace,
-        highlight = {colors.green, colors.line_bg}
+        highlight = {require("galaxyline.provider_fileinfo").get_file_icon_color, colors.lightbg}
     }
 }
-
-gls.right[2] = {
-    GitBranch = {
-        provider = "GitBranch",
-        condition = require("galaxyline.provider_vcs").check_git_workspace,
-        highlight = {colors.green, colors.line_bg}
-    }
-}
-
 gls.right[3] = {
-    right_LeftRounded = {
-        provider = function()
-            return ""
+    FileType = {
+        provider = function ()
+            return vim.bo.filetype
         end,
-        separator = " ",
-        separator_highlight = {colors.bg, colors.bg},
-        highlight = {colors.red, colors.bg}
+        highlight = {require("galaxyline.provider_fileinfo").get_file_icon_color, colors.lightbg}
     }
 }
+-- gls.right[3] = {
+--     FileIcon = {
+--         provider = {"FileIcon"},
+--         condition = condition.buffer_not_empty,
+--         highlight = {require("galaxyline.provider_fileinfo").get_file_icon_color, colors.lightbg}
+--     }
+-- }
 
 gls.right[4] = {
-    ViMode = {
-        provider = function()
-            local alias = {
-                n = "NORMAL",
-                i = "INSERT",
-                c = "COMMAND",
-                V = "VISUAL",
-                [""] = "VISUAL",
-                v = "VISUAL",
-                R = "REPLACE"
-            }
-            return alias[vim.fn.mode()]
-        end,
-        highlight = {colors.bg, colors.red}
+    LspClient = {
+        provider = "GetLspClient",
+        -- condition = function() 
+        --     return get_lsp_client ~= nil
+        -- end,
+        separator = "|",
+        separator_highlight = {colors.bg, colors.fg},
+        highlight = {colors.bg, colors.fg}
     }
 }
-
 gls.right[5] = {
-    PerCent = {
-        provider = "LinePercent",
-        separator = " ",
-        separator_highlight = {colors.red, colors.red},
+    LineStats = {
+        provider = {"LineColumn", "LinePercent"},
+        -- separator = " ",
+        separator = "|",
+        separator_highlight = {colors.bg, colors.fg},
         highlight = {colors.bg, colors.fg}
     }
 }

@@ -44,14 +44,17 @@
 
     if exists('*minpac#init')
         call minpac#init()
-        call minpac#add('adelarsq/vim-matchit')                  " may need support for 2008   see the ftplugins dir in the install dir
+        " call minpac#add('adelarsq/vim-matchit')                  " may need support for 2008   see the ftplugins dir in the install dir
+        " call minpac#add('airblade/vim-gitgutter')
         call minpac#add('fidian/hexmode', {'type': 'opt'})       " better support for editing hexfiles
+        call minpac#add('folke/tokyonight.nvim')
         " call minpac#add('honza/vim-snippets')                    " library of snippets
         call minpac#add('itchyny/lightline.vim')                 " a statusline manager
         " call minpac#add('junegunn/fzf', { 'do': { -> fzf#install() } })
         " call minpac#add('junegunn/fzf.vim')
         call minpac#add('justinmk/vim-dirvish')                  " basic directory tree navigation plug in
-        call minpac#add('k-takata/minpac', {'type': 'opt'})
+        call minpac#add('k-takata/minpac')
+        call minpac#add('lewis6991/gitsigns.nvim')
         call minpac#add('Lokaltog/vim-monotone')
         call minpac#add('machakann/vim-sandwich')                " sa - add, sd - delete, sr - replace
         call minpac#add('michaeljsmith/vim-indent-object')       " ai - indent lvl and line above, ii - no line above, aI - line above and below
@@ -62,15 +65,23 @@
         call minpac#add('nvim-lua/popup.nvim')
         call minpac#add('nvim-lua/plenary.nvim')
         call minpac#add('nvim-lua/telescope.nvim')
+        call minpac#add('nvim-treesitter/nvim-treesitter')
+        call minpac#add('nvim-treesitter/playground')
+
+        " call minpac#add('glepnir/galaxyline.nvim', {'branch': 'main'})
+        call minpac#add('kyazdani42/nvim-web-devicons')
 
         " call minpac#add('seletskiy/vim-pythonx')                 " python lib used by ultisnips for autojumping
         call minpac#add('simnalamburt/vim-mundo')                " Undo tree visualisation
         " call minpac#add('SirVer/ultisnips')                      " expand code snippet
+        call minpac#add('tommcdo/vim-lion')                      " :h lion - glip: --spaces to left of align char, gL adds them to the right
         call minpac#add('tpope/vim-commentary') 
         call minpac#add('tpope/vim-eunuch')                     " wrapper for cmds, Move, Renmae, Chmod, Cfind, Clocate, Sudowrite, Sudoedit
-        call minpac#add('tommcdo/vim-lion')                      " :h lion - glip: --spaces to left of align char, gL adds them to the right
         call minpac#add('tpope/vim-fugitive') 
         call minpac#add('tpope/vim-repeat') 
+        call minpac#add('nvim-treesitter/nvim-treesitter') 
+
+
         call minpac#add('vim-scripts/DoxygenToolkit.vim')
         " call minpac#add('vimwiki/vimwiki') 
     endif
@@ -82,17 +93,10 @@
 " }}} Packages "
 
 " Settings {{{ "
-    set guioptions+=M                          " M = don't load menu. has to be run before other options which is why it's done here. See help
-    set encoding=utf-8
-
     filetype plugin indent on                   " this is also needed for UltiSnip
     syntax on                                   " turn on syntax highlighting
 
-    " If you have vim >=8.0 or Neovim >= 0.1.5
-    if (has("termguicolors"))
-        set termguicolors
-    endif
-
+    set termguicolors
     set wildoptions =pum
 
     if &wildoptions == "pum"
@@ -120,20 +124,12 @@
     set wildignore=*.swp,*.bak                  " ignore these file in the
     set title                                   " change the terminal's title
     set nowrap                                  " turn off line wrap
-    set mouse=a                                  " going to play with gvim. Turn off mouse. It's too tempting.
+    set mouse=a                                 " enable the mouse always
     set formatoptions-=c                        " Auto-wrap comments using textwidth, inserting the current comment leader automatically.
     set formatoptions-=r                        " Automatically insert the current comment leader after hitting <Enter> in Insert mode.
     set formatoptions-=o                        " Automatically insert the current comment leader after hitting 'o' or 'O' in Normal mode.
     set formatoptions+=j                        " Delete comment character when joining commented lines
 
-    set guioptions+=a                           " 'a'   autoselect
-    set guioptions+=!                           " '!'   External commands executed in a terminal window
-    set guioptions+=c                           " 'c'   Use console dialogs instead of popup dialogs for simple choices.
-    set guioptions-=e                           " 'e'   don't use the gui tabline.
-    set guioptions-=m                           " 'm'   Menu bar is present.
-    set guioptions-=T                           " 'T'   Include Toolbar.  Currently only in Win32, GTK+, Motif, Photon and Athena GUIs.
-    set guioptions-=r                           " 'r'   Right-hand scrollbar is always present.
-    set guioptions-=L                           " 'L'   Left-hand scrollbar is present when there is a vertically split window.
     set cursorline                              " highlight current line
     set cursorcolumn                            " highlight current col
 
@@ -333,4 +329,7 @@
 
 lua << EOF
 require('_lspconfig')
+-- require('_galaxyline')
+require('_tree-sitter')
 EOF
+" call GitGutterDisable
