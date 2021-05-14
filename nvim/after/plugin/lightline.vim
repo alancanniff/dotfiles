@@ -63,22 +63,6 @@ endif
         \   'unwantedtab': 'error',
         \   'whitespace': 'warning',
         \ },
-        \ 'tabline_separator': {
-        \   'left': '',
-        \   'right': '',
-        \ },
-        \ 'tabline_subseparator': {
-        \   'left': '',
-        \   'right': '',
-        \ }, 
-        \ 'separator': {
-        \   'left': '',
-        \   'right': '',
-        \ },
-        \ 'subseparator': {
-        \   'left': '',
-        \   'right': '',
-        \ },
         \ 'tabline': {
         \   'left': [  ['tabs'  ]],
         \   'right':  [ ['close' ]],
