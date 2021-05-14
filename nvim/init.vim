@@ -71,9 +71,9 @@
         " call minpac#add('glepnir/galaxyline.nvim', {'branch': 'main'})
         call minpac#add('kyazdani42/nvim-web-devicons')
 
-        " call minpac#add('seletskiy/vim-pythonx')                 " python lib used by ultisnips for autojumping
+        call minpac#add('seletskiy/vim-pythonx')                 " python lib used by ultisnips for autojumping
         call minpac#add('simnalamburt/vim-mundo')                " Undo tree visualisation
-        " call minpac#add('SirVer/ultisnips')                      " expand code snippet
+        call minpac#add('SirVer/ultisnips')                      " expand code snippet
         call minpac#add('tommcdo/vim-lion')                      " :h lion - glip: --spaces to left of align char, gL adds them to the right
         call minpac#add('tpope/vim-commentary') 
         call minpac#add('tpope/vim-eunuch')                     " wrapper for cmds, Move, Renmae, Chmod, Cfind, Clocate, Sudowrite, Sudoedit
