@@ -44,23 +44,22 @@
 
     if exists('*minpac#init')
         call minpac#init()
-        " call minpac#add('adelarsq/vim-matchit')                  " may need support for 2008   see the ftplugins dir in the install dir
         " call minpac#add('airblade/vim-gitgutter')
         call minpac#add('fidian/hexmode', {'type': 'opt'})       " better support for editing hexfiles
-        call minpac#add('folke/tokyonight.nvim')
-        " call minpac#add('honza/vim-snippets')                    " library of snippets
+        " call minpac#add('folke/tokyonight.nvim')
+        call minpac#add('honza/vim-snippets')                    " library of snippets
         call minpac#add('itchyny/lightline.vim')                 " a statusline manager
-        " call minpac#add('junegunn/fzf', { 'do': { -> fzf#install() } })
-        " call minpac#add('junegunn/fzf.vim')
+        call minpac#add('junegunn/fzf', { 'do': { -> fzf#install() } })
+        call minpac#add('junegunn/fzf.vim')
         call minpac#add('justinmk/vim-dirvish')                  " basic directory tree navigation plug in
         call minpac#add('k-takata/minpac')
-        call minpac#add('lewis6991/gitsigns.nvim')
+        call minpac#add('kyazdani42/nvim-web-devicons')
+        " call minpac#add('lewis6991/gitsigns.nvim')
         call minpac#add('Lokaltog/vim-monotone')
         call minpac#add('ludovicchabant/vim-gutentags')
         call minpac#add('machakann/vim-sandwich')                " sa - add, sd - delete, sr - replace
         call minpac#add('michaeljsmith/vim-indent-object')       " ai - indent lvl and line above, ii - no line above, aI - line above and below
         call minpac#add('neomake/neomake')                       " async maker
-
         call minpac#add('neovim/nvim-lspconfig')
         call minpac#add('nvim-lua/completion-nvim')              " a completion framework
         call minpac#add('nvim-lua/popup.nvim')
@@ -69,19 +68,15 @@
         call minpac#add('nvim-treesitter/nvim-treesitter')
         call minpac#add('nvim-treesitter/playground')
         " call minpac#add('glepnir/galaxyline.nvim', {'branch': 'main'})
-        call minpac#add('kyazdani42/nvim-web-devicons')
         call minpac#add('seletskiy/vim-pythonx')                 " python lib used by ultisnips for autojumping
         call minpac#add('simnalamburt/vim-mundo')                " Undo tree visualisation
         call minpac#add('SirVer/ultisnips')                      " expand code snippet
         call minpac#add('tommcdo/vim-lion')                      " :h lion - glip: --spaces to left of align char, gL adds them to the right
-        " call minpac#add('nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'})
 
         call minpac#add('tpope/vim-commentary') 
         call minpac#add('tpope/vim-eunuch')                     " wrapper for cmds, Move, Renmae, Chmod, Cfind, Clocate, Sudowrite, Sudoedit
         call minpac#add('tpope/vim-fugitive') 
         call minpac#add('tpope/vim-repeat') 
-        call minpac#add('nvim-treesitter/nvim-treesitter') 
-
 
         call minpac#add('vim-scripts/DoxygenToolkit.vim')
         " call minpac#add('vimwiki/vimwiki') 
@@ -334,27 +329,6 @@
 
 lua << EOF
 require('_lspconfig')
--- require('_galaxyline')
+require('_telescope')
 require('_tree-sitter')
 EOF
-" call GitGutterDisable
-
-nnoremap <space>f <cmd>lua require('telescope.builtin').find_files()<cr>
-nnoremap <space>h <cmd>lua require('telescope.builtin').oldfiles()<cr>
-
-lua << EOF
-local actions = require('telescope.actions')
-require('telescope').setup{
-  defaults = {
-    mappings = {
-      i = {
-        ["<esc>"] = actions.close
-      },
-    },
-  }
-}
-
-EOF
-
- " nnoremap <leader>ff :lua require'finders'.fd_in_nvim()<cr> 
- " nnoremap <leader>ff :lua require'finders'.fd()<cr>
