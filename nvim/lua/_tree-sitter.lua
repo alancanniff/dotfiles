@@ -1,4 +1,5 @@
 local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+
 parser_config.vhdl = {
     install_info = {
         url = "~/source/tree-sitter-vhdl", -- local path or git repo
@@ -16,10 +17,21 @@ parser_config.vhdl = {
 
 require'nvim-treesitter.configs'.setup {
     -- Modules and its options go here
-    highlight = { enable = true },
-    incremental_selection = { enable = true },
-    textobjects = { enable = true },
-    indent = { enable = true }
+    highlight = { 
+        enable = true,
+        disable = {"vhdl"}
+    },
+    incremental_selection = { 
+        enable = true,
+        disable = {"vhdl"}
+    },
+    textobjects = { 
+        enable = true,
+        disable = {"vhdl"}
+    },
+    indent = { 
+        enable = true,
+    },
 }
 
 require "nvim-treesitter.configs".setup {
