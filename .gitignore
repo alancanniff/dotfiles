@@ -62,4 +62,4 @@ totem/
 unity/
 user-dirs.dirs
 user-dirs.locale
-
+nvim\plugin\packer_compiled.lua

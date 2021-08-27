@@ -9,15 +9,15 @@
     " stdpath('cache')
 
     let g:is_windows = has('win32') || has('win64')
-    if g:is_windows
-        " be expicit about this on windows as cygwin + quartus sets this to bash
-        set shell=cmd.exe
-    endif
+    " if g:is_windows
+    "     " be expicit about this on windows as cygwin + quartus sets this to bash
+    "     set shell=cmd.exe
+    " endif
 
     if has('nvim')
         if g:is_windows
-            let g:python_host_prog = 'c:/Tools/Python2/python.exe'
-            let g:python3_host_prog = 'c:/Python38/python.exe'
+            " let g:python_host_prog = 'c:/Tools/Python2/python.exe'
+            let g:python3_host_prog = 'c:/Windows/py.exe'
             " let g:python3_host_prog = 'C:/Tools/Python/3.7.1/python.exe'
         endif
     endif
@@ -38,55 +38,11 @@
 
 " Packges {{{ "
 
-    if empty(glob(substitute(&packpath, ",.*", "/pack/minpac/opt/minpac", "")))
-        call system("git clone --depth=1 https://github.com/k-takata/minpac ".substitute(&packpath, ",.*", "/pack/minpac/opt/minpac", ""))
-    endif
+lua << EOF
+require('_packer')
+EOF
 
-    if exists('*minpac#init')
-        call minpac#init()
-        " call minpac#add('airblade/vim-gitgutter')
-        call minpac#add('fidian/hexmode', {'type': 'opt'})       " better support for editing hexfiles
-        " call minpac#add('folke/tokyonight.nvim')
-        call minpac#add('honza/vim-snippets')                    " library of snippets
-        call minpac#add('itchyny/lightline.vim')                 " a statusline manager
-        call minpac#add('junegunn/fzf', { 'do': { -> fzf#install() } })
-        call minpac#add('junegunn/fzf.vim')
-        call minpac#add('justinmk/vim-dirvish')                  " basic directory tree navigation plug in
-        call minpac#add('k-takata/minpac')
-        call minpac#add('kyazdani42/nvim-web-devicons')
-        " call minpac#add('lewis6991/gitsigns.nvim')
-        call minpac#add('Lokaltog/vim-monotone')
-        call minpac#add('ludovicchabant/vim-gutentags')
-        call minpac#add('machakann/vim-sandwich')                " sa - add, sd - delete, sr - replace
-        call minpac#add('michaeljsmith/vim-indent-object')       " ai - indent lvl and line above, ii - no line above, aI - line above and below
-        call minpac#add('neomake/neomake')                       " async maker
-        call minpac#add('neovim/nvim-lspconfig')
-        call minpac#add('nvim-lua/completion-nvim')              " a completion framework
-        call minpac#add('nvim-lua/popup.nvim')
-        call minpac#add('nvim-lua/plenary.nvim')
-        call minpac#add('nvim-lua/telescope.nvim')
-        call minpac#add('nvim-treesitter/nvim-treesitter')
-        call minpac#add('nvim-treesitter/playground')
-        " call minpac#add('glepnir/galaxyline.nvim', {'branch': 'main'})
-        call minpac#add('seletskiy/vim-pythonx')                 " python lib used by ultisnips for autojumping
-        call minpac#add('simnalamburt/vim-mundo')                " Undo tree visualisation
-        call minpac#add('SirVer/ultisnips')                      " expand code snippet
-        call minpac#add('tommcdo/vim-lion')                      " :h lion - glip: --spaces to left of align char, gL adds them to the right
-
-        call minpac#add('tpope/vim-commentary') 
-        call minpac#add('tpope/vim-eunuch')                     " wrapper for cmds, Move, Renmae, Chmod, Cfind, Clocate, Sudowrite, Sudoedit
-        call minpac#add('tpope/vim-fugitive') 
-        call minpac#add('tpope/vim-repeat') 
-
-        call minpac#add('vim-scripts/DoxygenToolkit.vim')
-        " call minpac#add('vimwiki/vimwiki') 
-    endif
-
-    command! PackUpdate packadd minpac | source $MYVIMRC | call minpac#update('', {'do': 'call minpac#status()'})
-    command! PackClean  packadd minpac | source $MYVIMRC | call minpac#clean()
-    command! PackStatus packadd minpac | source $MYVIMRC | call minpac#status()
-
-" }}} Packages "
+" " }}} Packages "
 
 " Settings {{{ "
     filetype plugin indent on                   " this is also needed for UltiSnip
@@ -327,8 +283,8 @@
 
 " }}} " commands
 
-lua << EOF
-require('_lspconfig')
-require('_telescope')
-require('_tree-sitter')
-EOF
+"lua << EOF
+"require('_lspconfig')
+" require('_telescope')
+" require('_tree-sitter')
+"EOF
