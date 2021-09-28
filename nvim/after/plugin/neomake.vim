@@ -9,9 +9,12 @@ endif
     let g:neomake_logfile = stdpath('cache').'/neomake.log'
 
     " the default is to disable because of lsp
-    NeomakeDisable
     
     " Neomake - VHDL {{{ "
+    augroup noevim " {
+        autocmd!
+        autocmd VimEnter * NeomakeDisable
+    augroup END " }
  
         " ../../compiler/rsim.vim 
         " ../../compiler/vcom.vim 

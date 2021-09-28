@@ -12,11 +12,12 @@ let g:fzf_layout = { 'down': '~40%' }
 
 " let g:fzf_preview_window = ''
 nnoremap  <space>f :Files<CR>
-nnoremap  <space>l :BLines<CR>
+nnoremap  <space>b :Buffers<CR>
 nnoremap  <space>L :Lines<CR>
 nnoremap  <space>t :BTags<CR>
 nnoremap  <space>h :History<CR>
 nnoremap  <space>: :History:<CR>
 nnoremap  <space>/ :History/<CR>
 
+nnoremap  gb :Buffers<CR>
 

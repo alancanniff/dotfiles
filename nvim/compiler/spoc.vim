@@ -27,15 +27,15 @@ endfor
 execute 'CompilerSet makeprg=' . escape(b:context_makeprg, ' ')
 
 let b:context_errorformat = ''
-                    \ . '** %tRROR: %f(%l): %m,'
-                    \ . '** %tRROR: %m,'
-                    \ . '** %tARNING: %f(%l): %m,'
-                    \ . '** %tARNING: %m,'
-                    \ . '** %tOTE: %m,'
-                    \ . '%tRROR: %f(%l): %m,'
-                    \ . '%tARNING[%*[0-9]]: %f(%l): %m,'
-                    \ . '%tRROR: %m,'
-                    \ . '%tARNING[%*[0-9]]: %m'
+                    \ . '# ** %trror: %f(%l): %m,'
+                    \ . '# ** %trror: %m,'
+                    \ . '# ** %tarning: %f(%l): %m,'
+                    \ . '# ** %tarning: %m,'
+                    \ . '# ** %tote: %m,'
+                    \ . '%trror: %f(%l): %m,'
+                    \ . '%tarning[%*[0-9]]: %f(%l): %m,'
+                    \ . '%trror: %m,'
+                    \ . '%tarning[%*[0-9]]: %m'
 execute 'CompilerSet errorformat=' . escape(b:context_errorformat, ' ')
 
 if g:loaded_neomake

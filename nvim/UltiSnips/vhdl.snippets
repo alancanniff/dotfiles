@@ -411,3 +411,12 @@ begin
 	${5}
 end architecture $1;
 endsnippet
+
+snippet pkg
+package ${1:`!p snip.rv=snip.basename`} is
+	$0
+end package $1;
+
+package body $1 is
+end package body $1;
+endsnippet

@@ -9,15 +9,15 @@
     " stdpath('cache')
 
     let g:is_windows = has('win32') || has('win64')
-    if g:is_windows
-        " be expicit about this on windows as cygwin + quartus sets this to bash
-        set shell=cmd.exe
-    endif
+    " if g:is_windows
+    "     " be expicit about this on windows as cygwin + quartus sets this to bash
+    "     set shell=cmd.exe
+    " endif
 
     if has('nvim')
         if g:is_windows
-            let g:python_host_prog = 'c:/Tools/Python2/python.exe'
-            let g:python3_host_prog = 'c:/Python38/python.exe'
+            " let g:python_host_prog = 'c:/Tools/Python2/python.exe'
+            let g:python3_host_prog = 'c:/Windows/py.exe'
             " let g:python3_host_prog = 'C:/Tools/Python/3.7.1/python.exe'
         endif
     endif
@@ -38,55 +38,11 @@
 
 " Packges {{{ "
 
-    if empty(glob(substitute(&packpath, ",.*", "/pack/minpac/opt/minpac", "")))
-        call system("git clone --depth=1 https://github.com/k-takata/minpac ".substitute(&packpath, ",.*", "/pack/minpac/opt/minpac", ""))
-    endif
+lua << EOF
+require('_packer')
+EOF
 
-    if exists('*minpac#init')
-        call minpac#init()
-        " call minpac#add('airblade/vim-gitgutter')
-        call minpac#add('fidian/hexmode', {'type': 'opt'})       " better support for editing hexfiles
-        " call minpac#add('folke/tokyonight.nvim')
-        call minpac#add('honza/vim-snippets')                    " library of snippets
-        call minpac#add('itchyny/lightline.vim')                 " a statusline manager
-        call minpac#add('junegunn/fzf', { 'do': { -> fzf#install() } })
-        call minpac#add('junegunn/fzf.vim')
-        call minpac#add('justinmk/vim-dirvish')                  " basic directory tree navigation plug in
-        call minpac#add('k-takata/minpac')
-        call minpac#add('kyazdani42/nvim-web-devicons')
-        " call minpac#add('lewis6991/gitsigns.nvim')
-        call minpac#add('Lokaltog/vim-monotone')
-        call minpac#add('ludovicchabant/vim-gutentags')
-        call minpac#add('machakann/vim-sandwich')                " sa - add, sd - delete, sr - replace
-        call minpac#add('michaeljsmith/vim-indent-object')       " ai - indent lvl and line above, ii - no line above, aI - line above and below
-        call minpac#add('neomake/neomake')                       " async maker
-        call minpac#add('neovim/nvim-lspconfig')
-        call minpac#add('nvim-lua/completion-nvim')              " a completion framework
-        call minpac#add('nvim-lua/popup.nvim')
-        call minpac#add('nvim-lua/plenary.nvim')
-        call minpac#add('nvim-lua/telescope.nvim')
-        call minpac#add('nvim-treesitter/nvim-treesitter')
-        call minpac#add('nvim-treesitter/playground')
-        " call minpac#add('glepnir/galaxyline.nvim', {'branch': 'main'})
-        call minpac#add('seletskiy/vim-pythonx')                 " python lib used by ultisnips for autojumping
-        call minpac#add('simnalamburt/vim-mundo')                " Undo tree visualisation
-        call minpac#add('SirVer/ultisnips')                      " expand code snippet
-        call minpac#add('tommcdo/vim-lion')                      " :h lion - glip: --spaces to left of align char, gL adds them to the right
-
-        call minpac#add('tpope/vim-commentary') 
-        call minpac#add('tpope/vim-eunuch')                     " wrapper for cmds, Move, Renmae, Chmod, Cfind, Clocate, Sudowrite, Sudoedit
-        call minpac#add('tpope/vim-fugitive') 
-        call minpac#add('tpope/vim-repeat') 
-
-        call minpac#add('vim-scripts/DoxygenToolkit.vim')
-        " call minpac#add('vimwiki/vimwiki') 
-    endif
-
-    command! PackUpdate packadd minpac | source $MYVIMRC | call minpac#update('', {'do': 'call minpac#status()'})
-    command! PackClean  packadd minpac | source $MYVIMRC | call minpac#clean()
-    command! PackStatus packadd minpac | source $MYVIMRC | call minpac#status()
-
-" }}} Packages "
+" " }}} Packages "
 
 " Settings {{{ "
     filetype plugin indent on                   " this is also needed for UltiSnip
@@ -188,9 +144,9 @@
     nnoremap <silent> \/ :let tmp=@/<Bar>s:\\:/:ge<Bar>let @/=tmp<Bar>noh<CR>
     nnoremap <silent> \\ :let tmp=@/<Bar>s:/:\\:ge<Bar>let @/=tmp<Bar>noh<CR>
 
-    " mapping for FZF, Files, lines in buffer, lines in all buffers, History, cmd hist, search hist
-    nnoremap  gb  :ls<CR>:b<Space>
-    nnoremap  gB  :ls<CR>:vb<Space>
+    " " mapping for FZF, Files, lines in buffer, lines in all buffers, History, cmd hist, search hist
+    " nnoremap  gb  :ls<CR>:b<Space>
+    " nnoremap  gB  :ls<CR>:vb<Space>
 
     " copy some of the mappings from unimpared.
     nnoremap  [B :bfirst<CR>
@@ -216,7 +172,7 @@
     nnoremap  <SPACE>o moo<ESC>`o
     nnoremap  <SPACE>O moO<ESC>`o
 
-
+    nnoremap  <expr> <space>Ag ':Ag ' . expand('<cword>') . '<CR>'
     nnoremap <C-]> g<C-]>
 
     " change the behaviour of jump to last mark so ' gets me to the exact positio, and not just the line
@@ -281,7 +237,7 @@
 
         " Remove trailing white spaces. This is dangerous for some filetypes - like this one!
         autocmd BufWritePre *.md,*.yaml,*.tcl,*.bash,*.sh,*.vhd, silent! :call my_utils#Trim_Whitespace()<CR>
-        autocmd FileType python nnoremap \f :0,$!yapf<Cr> :w<CR>
+        " autocmd FileType python nnoremap \f :0,$!yapf<Cr> :w<CR>
 
         " Jump to last know position in a file (if the '" is set)
         autocmd BufReadPost * if (&filetype != 'gitcommit') && line("'\"") > 0 && line("'\"") <= line("$") | execute 'normal! g`"zvzz' | endif
@@ -290,7 +246,7 @@
         autocmd BufWritePost init.vim nested source $MYVIMRC 
         autocmd BufRead,BufNewFile *.inc set filetype=make
 
-        autocmd BufLeave *.vhd,*.vhdl, :set isfname-=.
+        autocmd BufLeave *.vhd,*.vhdl, :setlocal isfname+=.
 
         autocmd BufLeave * :set nocursorcolumn | set nocursorline
         autocmd BufEnter * :set cursorcolumn | set cursorline
@@ -321,14 +277,24 @@
     silent! colorscheme monotone
 " }}} " colorscheme
 
-" commands {{{ "
-
-    command! -nargs=1 Copy call my_utils#Copy_Generic(<f-args>)
-
-" }}} " commands
-
+command! Make silent lua require'_my_runner'.make()
+command! Spectrum silent lua require'_my_runner'.Spectrum()
 lua << EOF
 require('_lspconfig')
 require('_telescope')
 require('_tree-sitter')
+-- require('_git-worktree')
 EOF
+
+" Using Lua functions
+nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
+nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
+nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
+nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
+
+noremap <silent><f5> :AsyncTask file-run<cr>
+noremap <silent><f9> :AsyncTask file-build<cr>
+let g:asyncrun_open = 5
+let g:asynctasks_term_pos = 'bottom'
+let g:asynctasks_term_reuse = 1
+let g:asynctasks_extra_config = ['~/.config/nvim/asynctasks.ini']
