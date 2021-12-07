@@ -58,10 +58,8 @@ EOF
 
     
     " set completeopt=menuone,noinsert   " Set completeopt to have a better completion experience
-    set completeopt=menuone,noinsert,noselect   " Set completeopt to have a better completion experience
-    set inccommand=nosplit                      " /nosplit/split : Also shows partial off-screen results in a preview window.
-    set sessionoptions+=slash                   " covert all paths to use /
-    " set backspace=indent,eol,start              " let the backspace key work normally - now the default...
+    " set completeopt=menuone,noinsert,noselect   " Set completeopt to have a better completion experience
+    set completeopt=menu,menuone,noselect       " from nvim-cmp
     set hidden                                  " hide unsaved buffers
     set autoread                                " auto read file when changed outside of buffer
     set laststatus=2                            " always show the statusline in the last (bottom) window
@@ -144,31 +142,6 @@ EOF
     nnoremap <silent> \/ :let tmp=@/<Bar>s:\\:/:ge<Bar>let @/=tmp<Bar>noh<CR>
     nnoremap <silent> \\ :let tmp=@/<Bar>s:/:\\:ge<Bar>let @/=tmp<Bar>noh<CR>
 
-    " " mapping for FZF, Files, lines in buffer, lines in all buffers, History, cmd hist, search hist
-    " nnoremap  gb  :ls<CR>:b<Space>
-    " nnoremap  gB  :ls<CR>:vb<Space>
-
-    " copy some of the mappings from unimpared.
-    nnoremap  [B :bfirst<CR>
-    nnoremap  [b :bprevious<CR>
-    nnoremap  ]b :bnext<CR>
-    nnoremap  ]B :blast<CR>
-
-    nnoremap  [T :tfirst<CR>
-    nnoremap  [t :tprevious<CR>
-    nnoremap  ]t :tnext<CR>
-    nnoremap  ]T :tlast<CR>
-
-    nnoremap  [Q :cfirst<CR>
-    nnoremap  [q :cprevious<CR>
-    nnoremap  ]q :cnext<CR>
-    nnoremap  ]Q :clast<CR>
-
-    nnoremap  [L :lfirst<CR>
-    nnoremap  [l :lprevious<CR>
-    nnoremap  ]l :lnext<CR>
-    nnoremap  ]L :llast<CR>
-
     nnoremap  <SPACE>o moo<ESC>`o
     nnoremap  <SPACE>O moO<ESC>`o
 
@@ -181,25 +154,16 @@ EOF
 
     nnoremap  \cd :cd %:p:h<CR>|:pwd
 
-    " remove last search highlighting -- taken from tpopes vim-sensible
-    if maparg('<C-L>', 'n') ==# ''
-        nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
-    endif
-
-    " Y yanks to end of line, line D and C (not like yy)
-    map Y y$
-
-
     if has('nvim')
 
         " this might cause issues in fzf...
         tnoremap <ESC> <C-\><C-n>
         tnoremap <C-w> <C-\><C-n><C-w>
 
-        if g:is_windows
-            "automatically yank mouse selections to the system clipboard
-            noremap <LeftRelease> <LeftRelease>"*y
-        endif
+        "if g:is_windows
+        "    "automatically yank mouse selections to the system clipboard
+        "    noremap <LeftRelease> <LeftRelease>"*y
+        "endif
     endif   
 
     " CTRL-U in insert mode deletes a lot.  break the undo sequnce of better undo
@@ -236,7 +200,7 @@ EOF
         autocmd FileChangedShellPost * echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
 
         " Remove trailing white spaces. This is dangerous for some filetypes - like this one!
-        autocmd BufWritePre *.md,*.yaml,*.tcl,*.bash,*.sh,*.vhd, silent! :call my_utils#Trim_Whitespace()<CR>
+        autocmd BufWritePre *.v,*.sv,*.md,*.yaml,*.tcl,*.bash,*.sh,*.vhd, silent! :call my_utils#Trim_Whitespace()<CR>
         " autocmd FileType python nnoremap \f :0,$!yapf<Cr> :w<CR>
 
         " Jump to last know position in a file (if the '" is set)
@@ -250,8 +214,6 @@ EOF
 
         autocmd BufLeave * :set nocursorcolumn | set nocursorline
         autocmd BufEnter * :set cursorcolumn | set cursorline
-
-        autocmd BufNewFile * :set fileformat=unix
 
         "delete netrw buffers when they become hidden
         autocmd FileType netrw setl bufhidden=delete
@@ -277,12 +239,12 @@ EOF
     silent! colorscheme monotone
 " }}} " colorscheme
 
-command! Make silent lua require'_my_runner'.make()
-command! Spectrum silent lua require'_my_runner'.Spectrum()
+" command! Make silent lua require'_my_runner'.make()
+" command! Spectrum silent lua require'_my_runner'.Spectrum()
 lua << EOF
-require('_lspconfig')
-require('_telescope')
-require('_tree-sitter')
+-- require('_lspconfig')
+-- require('_telescope')
+-- require('_tree-sitter')
 -- require('_git-worktree')
 EOF
 

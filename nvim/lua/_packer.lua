@@ -19,22 +19,34 @@ return require('packer').startup(function()
     use { 'junegunn/fzf', run = function() vim.fn['fzf#install()'](0) end }
     use 'junegunn/fzf.vim'
     use 'justinmk/vim-dirvish'
-    use 'k-takata/minpac'
-    use 'kyazdani42/nvim-web-devicons'
     use 'Lokaltog/vim-monotone'
     if print(vim.fn.executable('ctags')) then
         use 'ludovicchabant/vim-gutentags'
     end
     use 'machakann/vim-sandwich'
     use 'michaeljsmith/vim-indent-object'
-    use 'neomake/neomake'
-    use 'neovim/nvim-lspconfig'
-    use 'nvim-lua/completion-nvim'
+    use({
+        'neovim/nvim-lspconfig',
+        config = function()
+            require('_lspconfig')
+        end,
+    })
+    
     use 'nvim-lua/popup.nvim'
     use 'nvim-lua/plenary.nvim'
-    use 'nvim-lua/telescope.nvim'
-    use 'nvim-treesitter/nvim-treesitter'
-    use 'nvim-treesitter/playground'
+    use({
+        'nvim-lua/telescope.nvim', 
+        cofig = function()
+            require('_telescope')
+        end,
+    })
+    use({
+        'nvim-treesitter/nvim-treesitter',
+        config = function()
+            require('_tree-sitter')
+        end,
+    })
+
     use 'seletskiy/vim-pythonx'
     use 'simnalamburt/vim-mundo'
     use 'SirVer/ultisnips'
@@ -45,4 +57,16 @@ return require('packer').startup(function()
     use 'tpope/vim-fugitive'
     use 'tpope/vim-repeat'
     use 'vim-scripts/DoxygenToolkit.vim'
+    -- use({'hrsh7th/nvim-cmp', 
+    --     requires = { 
+    --         'hrsh7th/cmp-nvim-lsp',
+    --         'hrsh7th/cmp-buffer',
+    --         'hrsh7th/cmp-path',
+    --         'hrsh7th/cmp-cmdline',
+    --         'quangnguyen30192/cmp-nvim-ultisnips'
+    --     },
+    --     -- config = function()
+    --     --     require('_nvim-cmp')
+    --     -- end,
+    -- })
 end)

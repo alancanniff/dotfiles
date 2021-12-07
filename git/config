@@ -1,0 +1,12 @@
+[user]
+    name = Alan Canniff
+    email = alan.canniff@virscient.com
+
+[merge]
+    tool = vimdiff
+
+[mergetool]
+    keepBackup = false
+
+[mergetool "vimdiff"]
+    cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'

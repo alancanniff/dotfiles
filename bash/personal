@@ -24,7 +24,7 @@ export PATH="$PATH:/opt/Altera/16.0/quartus/bin"
 export XDG_CONFIG_HOME="$(realpath ~)/.config"
 export LM_LICENSE_FILE=1800@papclic01
 
-# source /tools/Xilinx/Vivado/2020.2/settings64.sh
+source ~/tools/Xilinx/Vivado/2021.2/settings64.sh
 
 hg () { history | grep -iE --color "$1" ; }
 
