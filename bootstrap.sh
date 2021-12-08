@@ -9,7 +9,7 @@ sudo mv bazel.gpg /etc/apt/trusted.gpg.d/
 echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
 
 sudo apt update
-sudo apt upgrade
+sudo apt upgrade -y
 sudo apt install -y \
     ranger \
     ripgrep \
@@ -25,7 +25,7 @@ sudo apt install -y \
     shellcheck
 
 curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -
-sudo apt-get install -y nodejs
+sudo apt install -y nodejs
 
 sudo snap install clangd --classic
 sudo snap install shfmt
@@ -43,6 +43,7 @@ cd ~
 mkdir projects
 pushd projects
 git clone git@github.com:neovim/neovim.git
+cd neovim
 make CMAKE_BUILD_TYPE=RelWithDebInfo
 sudo make install
 popd

@@ -27,20 +27,20 @@ return require('packer').startup(function()
 
     use 'machakann/vim-sandwich'
 
-    use({
-        'jose-elias-alvarez/null-ls.nvim',
-        config = function()
-            require("null-ls").config({
-                -- you must define at least one source for the plugin to work
-                sources = { require("null-ls").builtins.formatting.shfmt }
-            })
-            require("lspconfig")["null-ls"].setup({ })
-        end,
-        requires = { 
-            'neovim/nvim-lspconfig',
-            'nvim-lua/plenary.nvim'
-        },
-    })
+    -- use({
+    --     'jose-elias-alvarez/null-ls.nvim',
+    --     -- config = function()
+    --     --     require("null-ls").config({
+    --     --         -- you must define at least one source for the plugin to work
+    --     --         sources = { require("null-ls").builtins.formatting.shfmt }
+    --     --     })
+    --     --     require("lspconfig")["null-ls"].setup({ })
+    --     -- end,
+    --     -- requires = { 
+    --     --     'neovim/nvim-lspconfig',
+    --     --     'nvim-lua/plenary.nvim'
+    --     -- },
+    -- })
 
     use 'michaeljsmith/vim-indent-object'
     use({
