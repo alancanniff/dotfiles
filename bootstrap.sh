@@ -21,12 +21,14 @@ sudo apt install -y \
     tmux \
     fzf \
     python3-pip \
-    bazel
+    bazel \
+    shellcheck
 
 curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -
 sudo apt-get install -y nodejs
 
 sudo snap install clangd --classic
+sudo snap install shfmt
 
 sudo npm i -g bash-language-server
 

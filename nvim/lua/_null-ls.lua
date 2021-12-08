@@ -1,28 +1,20 @@
--- LSP settings
-local nvim_lsp = require('lspconfig')
+local null_ls = require("null-ls")
 
-local configs = require 'lspconfig.configs'
-local util = require 'lspconfig.util'
-local server_name = "vhdl_ls"
-
-configs[server_name] ={
-    default_config = {
-        cmd = {"vhdl_ls"};
-        filetypes = {"vhdl", "vhd"};
-        root_dir = util.root_pattern("vhdl_ls.toml");
-        docs = {
-            description = [[
-            https://github.com/kraigher/rust_hdl
-
-            language server for vhdl
-
-            ]];
-            default_config = {
-                root_dir = [[util.root_pattern("vhdl_ls.toml");]]
-            };
-        }
-    }
+-- register any number of sources simultaneously
+local sources = {
+    -- null_ls.builtins.formatting.prettier,
+    -- null_ls.builtins.diagnostics.write_good,
+    -- null_ls.builtins.code_actions.gitsigns,
+    -- null_ls.builtins.formattingiiAkjkjkjj.stylua,
+    null_ls.builtins.completion.spell,
+    null_ls.builtins.code_actions.shellcheck,
+    null_ls.builtins.diagnosticiis.shellcheck,
+    null_ls.builtins.format.shfmt,
 }
+
+null_ls.config({ sources = sources })
+
+local nvim_lsp = require('lspconfig')
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
@@ -58,17 +50,10 @@ local on_attach = function(client, bufnr)
 end
 
 -- local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-local servers = { 'clangd', 'vhdl_ls', 'pylsp', 'bashls'}
 
-for _, lsp in ipairs(servers) do
-    nvim_lsp[lsp].setup {
-        on_attach = on_attach,
-        flags = {
-            debounce_text_changes = 150,
-        },
-        -- capabilities = capabilities
-    }
-end
-
--- " command! Format lua vim.lsp.buf.formatting()<CR>
--- " nnoremap <silent> \f    :Format<CR>
+nvim_lsp['null-ls'].setup {
+    on_attach = on_attach,
+    flags = {
+        debounce_text_changes = 150,
+    },
+}
