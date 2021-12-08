@@ -15,14 +15,15 @@ sudo apt install -y \
     ripgrep \
     npm \
     minicom \
-    clangd \
     mlocate \
     locales \
     tmux \
     fzf \
     python3-pip \
     bazel \
-    shellcheck
+    shellcheck \
+    snapd \
+    cargo
 
 curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -
 sudo apt install -y nodejs
