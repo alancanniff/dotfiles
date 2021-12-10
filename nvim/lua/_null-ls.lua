@@ -25,7 +25,8 @@ require("null-ls").config({
         null_ls.builtins.formatting.shfmt,
         null_ls.builtins.code_actions.shellcheck,
         null_ls.builtins.diagnostics.shellcheck,
-    }
+    },
+    debug = true
 })
 
 local verilog_lint = {
@@ -35,9 +36,12 @@ local verilog_lint = {
     -- that spawns the command with the given arguments and options
     generator = null_ls.generator({
         command = "verible-verilog-lint",
-        args = { "-" },
+        args = { 
+            "--rules_config_search",
+            "-",
+        },
         to_stdin = true,
-        from_stderr = true,
+        -- from_stderr = true,
         -- choose an output format (raw, json, or line)
         format = "line",
         check_exit_code = function(code)
@@ -47,7 +51,11 @@ local verilog_lint = {
         -- or parse it manually with a function
         on_output = helpers.diagnostics.from_patterns({
             {
-                pattern = [[%w:(%d+):(%d+): (.*)]],
+                pattern = [[-:(%d+):(%d+): (.*)]],
+                groups = { "row", "col", "message" },
+            },
+            {
+                pattern = [[%w+:(%d+):(%d+): (.*)]],
                 groups = { "row", "col", "message" },
             },
         }),

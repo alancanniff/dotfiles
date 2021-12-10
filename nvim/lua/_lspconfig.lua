@@ -58,7 +58,7 @@ local on_attach = function(client, bufnr)
 end
 
 -- local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-local servers = { 'clangd', 'vhdl_ls', 'pylsp', 'svls'}
+local servers = { 'clangd', 'vhdl_ls', 'pylsp'}
 
 for _, lsp in ipairs(servers) do
     nvim_lsp[lsp].setup {
