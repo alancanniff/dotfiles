@@ -26,21 +26,18 @@ return require('packer').startup(function()
     end
 
     use 'machakann/vim-sandwich'
+    -- use { 'alexghergh/nvim-tmux-navigation'}
 
-    -- use({
-    --     'jose-elias-alvarez/null-ls.nvim',
-    --     -- config = function()
-    --     --     require("null-ls").config({
-    --     --         -- you must define at least one source for the plugin to work
-    --     --         sources = { require("null-ls").builtins.formatting.shfmt }
-    --     --     })
-    --     --     require("lspconfig")["null-ls"].setup({ })
-    --     -- end,
-    --     -- requires = { 
-    --     --     'neovim/nvim-lspconfig',
-    --     --     'nvim-lua/plenary.nvim'
-    --     -- },
-    -- })
+    use({
+        'jose-elias-alvarez/null-ls.nvim',
+        config = function()
+            require("_null-ls")
+        end,
+        requires = { 
+            'neovim/nvim-lspconfig',
+            'nvim-lua/plenary.nvim'
+        },
+    })
 
     use 'michaeljsmith/vim-indent-object'
     use({

@@ -1,21 +1,19 @@
 local null_ls = require("null-ls")
 
--- register any number of sources simultaneously
-local sources = {
-    -- null_ls.builtins.formatting.prettier,
-    -- null_ls.builtins.diagnostics.write_good,
-    -- null_ls.builtins.code_actions.gitsigns,
-    -- null_ls.builtins.formattingiiAkjkjkjj.stylua,
-    -- null_ls.builtins.completion.spell,
-    null_ls.builtins.code_actions.shellcheck,
-    null_ls.builtins.diagnosticiis.shellcheck,
-    null_ls.builtins.formatting.shfmt,
-}
-
-nvim_lsp
-
-require("lspconfig")['null-ls'].setup({
-    on_attach = function()
-        vim.cmd([[command! Formatn execute 'lua vim.lsp.buf.formatting()' ]])
-    end
+require("null-ls").config({
+    -- you must define at least one source for the plugin to work
+    sources = { 
+        null_ls.builtins.formatting.shfmt,
+        null_ls.builtins.code_actions.shellcheck,
+        null_ls.builtins.diagnostics.shellcheck,
+    }
 })
+
+require("lspconfig")["null-ls"].setup({
+    on_attach = function()
+        vim.cmd([[ command! Format execute 'lua vim.lsp.buf.formatting()' ]])
+    end,
+})
+
+
+

@@ -1,4 +1,4 @@
-" Assorted Setup and configuration {{{ "
+"' Assorted Setup and configuration {{{ "
 
     " K over keyword to goto help for it
     " :h keyword <c-d> brings up list of matching entries
@@ -260,3 +260,4 @@ let g:asyncrun_open = 5
 let g:asynctasks_term_pos = 'bottom'
 let g:asynctasks_term_reuse = 1
 let g:asynctasks_extra_config = ['~/.config/nvim/asynctasks.ini']
+

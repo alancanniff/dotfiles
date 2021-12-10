@@ -17,13 +17,17 @@ sudo apt install -y \
     minicom \
     mlocate \
     locales \
-    tmux \
     fzf \
     python3-pip \
     bazel \
     shellcheck \
     snapd \
-    cargo
+    cargo \
+    libevent-dev \
+    ncurses-dev \
+    build-essential \
+    bison \
+    pkg-config
 
 curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -
 sudo apt install -y nodejs
@@ -40,14 +44,31 @@ python3 -m pip install \
 sudo locale-gen en_US.UTF-8
 sudo dpkg-reconfigure locales
 
+
 cd ~
 mkdir projects
+#########################################################
+## neovim
 pushd projects
 git clone git@github.com:neovim/neovim.git
 cd neovim
 make CMAKE_BUILD_TYPE=RelWithDebInfo
 sudo make install
 popd
+
+#########################################################
+## tmux
+cd ~
+mkdir projects
+pushd projects
+git clone git@github.com:tmux/tmux.git
+cd tmux
+sh autogen.sh
+./configure && make
+sudo make install
+popd
+
+#########################################################
 
 ln -s $XDG_CONFIG_HOME/tmux/config .tmux.conf
 ln -s $XDG_CONFIG_HOME/git/config .gitconfig
