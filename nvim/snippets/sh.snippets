@@ -1,0 +1,56 @@
+snippet foreach
+	arr=($1)
+
+	for value in "\${arr[@]}"; do
+		$0
+	done
+snippet opt
+	function usage () {
+		echo "usage :  $${0:0} [options] [--]
+	options:
+	-h|--help		Display this message
+	-v|--version	Display script version
+
+	-o|--opt		An Option"
+	
+	}	 # ----------  end of function usage  ----------
+	 
+	while :; do
+		case \$1 in
+		     # Takes an option argument; ensure it has been specified.
+			-o|--opt)	 
+				if [ "\$2" ]; then
+				OPTION=\$2
+				shift
+				else
+				die 'ERROR: "--opt" requires a non-empty option argument.'
+				fi
+				;;
+			--opt=?*)
+				OPTION=\${1#*=} # Delete everything up to "=" and assign the remainder.
+				;;
+			# Handle the case of an empty --file=
+			--opt=)	 
+				echo 'ERROR: "--opt" requires a non-empty option argument.'
+				exit 1
+				;;
+	
+			-h|-\?|--help)
+				usage; exit 0;;	# Display a usage synopsis.
+			-v|--verbose)
+				verbose=\$((verbose + 1))  # Each -v adds 1 to verbosity.
+				;;
+			--)		 # End of all options.
+				shift
+				break
+				;;
+			-?*)
+				printf 'ERROR: Unknown option (ignored): %s\n' "\$1" >&2
+				exit 1
+				;;
+			*)		 # Default case: No more options, so break out of the loop.
+				break
+		esac
+	
+		shift
+	done

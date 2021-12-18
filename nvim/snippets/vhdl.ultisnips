@@ -373,8 +373,8 @@ endsnippet
 
 snippet header
 -------------------------------------------------------------------------------
--- Author     : Alan Canniff  <a.canniff@rocketlab.co.nz>
--- Company    : Rocket Lab
+-- Author     : Alan Canniff
+-- Company    : 
 -------------------------------------------------------------------------------
 -- DESCRIPTION:
 --

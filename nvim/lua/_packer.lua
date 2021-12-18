@@ -14,7 +14,6 @@ return require('packer').startup(function()
     use 'wbthomason/packer.nvim'
 
     use 'fidian/hexmode'
-    use 'honza/vim-snippets'
     use 'itchyny/lightline.vim'
     use { 'junegunn/fzf', run = function() vim.fn['fzf#install()'](0) end }
     use 'junegunn/fzf.vim'
@@ -62,9 +61,18 @@ return require('packer').startup(function()
         end,
     })
 
-    use 'seletskiy/vim-pythonx'
     use 'simnalamburt/vim-mundo'
-    use 'SirVer/ultisnips'
+
+    -- use {'SirVer/ultisnips', requires = {'seletskiy/vim-pythonx', 'honza/vim-snippets'}}
+
+    use({
+        'L3MON4D3/LuaSnip',
+        requires = {'honza/vim-snippets'},
+        config = function()
+            require('_LuaSnip')
+        end,
+    })
+
     use {'skywind3000/asynctasks.vim', requires = {'skywind3000/asyncrun.vim'}}
     use 'tommcdo/vim-lion'
     use 'tpope/vim-commentary'
