@@ -10,3 +10,11 @@
 
 [mergetool "vimdiff"]
     cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+
+[alias]
+    st = status
+    co = checkout
+    br = branch
+    ci = commit
+	unstage = reset HEAD --
+	hist = log --oneline --graph

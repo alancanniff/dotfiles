@@ -14,3 +14,7 @@ set-hook -g client-attached 'run-shell $XDG_CONFIG_HOME/bash/update_display_env.
 # bind-key -T copy-mode-vi 'C-j' select-pane -D
 # bind-key -T copy-mode-vi 'C-k' select-pane -U
 # bind-key -T copy-mode-vi 'C-l' select-pane -R
+#
+bind-key c new-window -c "#{pane_current_path}"
+bind-key '"' split-window -c "#{pane_current_path}"
+bind-key % split-window -h -c "#{pane_current_path}"
