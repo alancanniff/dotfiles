@@ -1,6 +1,15 @@
-echo "source ~/.config/bash/personal" >> ~/.bashrc
+#!/usr/bin/env bash
 
-. ~/.bashrc
+cd ~ || exit
+
+mybash=". ~/.config/bash/personal"
+# only append the lines if they don't already exists
+if ! grep -xq "${mybash}" ~/.bashrc; then
+    echo "${mybash}" >>~/.bashrc
+fi
+
+# shellcheck source=/home/ac00/.bashrc
+. "${HOME}/.bashrc"
 
 # the bazel repo
 sudo apt install -y apt-transport-https curl gnupg
@@ -27,7 +36,9 @@ sudo apt install -y \
     ncurses-dev \
     build-essential \
     bison \
-    pkg-config
+    pkg-config \
+    fd-find \
+    xclip
 
 curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -
 sudo apt install -y nodejs
@@ -35,7 +46,9 @@ sudo apt install -y nodejs
 sudo snap install clangd --classic
 sudo snap install shfmt
 
-sudo npm i -g bash-language-server
+sudo npm install -g \
+    neovim \
+    bash-language-server
 
 python3 -m pip install \
     pynvim \
@@ -45,33 +58,47 @@ sudo locale-gen en_US.UTF-8
 sudo dpkg-reconfigure locales
 
 
-cd ~
-mkdir projects
-#########################################################
-## neovim
-pushd projects
-git clone git@github.com:neovim/neovim.git
-cd neovim
-make CMAKE_BUILD_TYPE=RelWithDebInfo
-sudo make install
-popd
+cd ~ || exit
+if [[ ! -d projects ]]; then
+    mkdir projects
+fi
 
 #########################################################
+## build things from sourcw
+pushd projects || exit
+
+## neovim
+if [[ ! -d neovim ]]; then
+    git clone git@github.com:neovim/neovim.git
+fi
+
+pushd neovim || exit
+make CMAKE_BUILD_TYPE=RelWithDebInfo
+sudo make install
+popd || exit
+
 ## tmux
-cd ~
-mkdir projects
-pushd projects
-git clone git@github.com:tmux/tmux.git
-cd tmux
+if [[ ! -d tmux ]]; then
+    git clone git@github.com:tmux/tmux.git
+fi
+
+pushd tmux || exit
 sh autogen.sh
 ./configure && make
 sudo make install
-popd
+popd  || exit
+
+##
+popd || exit
 
 #########################################################
 
-ln -s $XDG_CONFIG_HOME/tmux/config .tmux.conf
-ln -s $XDG_CONFIG_HOME/git/config .gitconfig
+tmux_cfg="$XDG_CONFIG_HOME/tmux/config"
+if [[ ! -e ~/.tmux.conf ]]; then
+    ln -s "${tmux_cfg}" .tmux.conf
+fi
 
-
-
+git_cfg="$XDG_CONFIG_HOME/git/config"
+if [[ ! -e ~/.gitconfig ]]; then
+    ln -s "${git_cfg}" .gitconfig
+fi

@@ -19,7 +19,7 @@ local verilog_format = helpers.make_builtin({
 })
 null_ls.register(verilog_format)
 
-require("null-ls").config({
+require("null-ls").setup({
     -- you must define at least one source for the plugin to work
     sources = { 
         null_ls.builtins.formatting.shfmt,
