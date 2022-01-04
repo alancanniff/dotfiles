@@ -1,14 +1,18 @@
 # File containing my local mods...
 
+export HISTSIZE=999999
+export HISTFILESIZE=999999
+shopt -s histappend
+
 # setxkbmap -option "caps:escape"
 
+alias fd="fdfind"
 alias rm="rm -f"
 alias vim="nvim"
 alias untar="tar -zxvf"
 export EDITOR="nvim"
 export VISUAL="nvim"
 
-export HISTSIZE=999999
 export LESS="-FRX"
 export RANGER_LOAD_DEFAULT_RC=FALSE
 # export PATH="$PATH:/app/location/node_modules/.bin"

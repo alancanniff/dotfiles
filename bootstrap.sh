@@ -26,7 +26,6 @@ sudo apt install -y \
     minicom \
     mlocate \
     locales \
-    fzf \
     python3-pip \
     bazel \
     shellcheck \
@@ -38,13 +37,15 @@ sudo apt install -y \
     bison \
     pkg-config \
     fd-find \
+    universal-ctags \
     xclip
 
 curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -
 sudo apt install -y nodejs
 
 sudo snap install clangd --classic
-sudo snap install shfmt
+sudo snap install \
+    shfmt
 
 sudo npm install -g \
     neovim \
@@ -73,9 +74,12 @@ if [[ ! -d neovim ]]; then
 fi
 
 pushd neovim || exit
+git pull
 make CMAKE_BUILD_TYPE=RelWithDebInfo
 sudo make install
 popd || exit
+
+nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
 
 ## tmux
 if [[ ! -d tmux ]]; then
@@ -83,9 +87,20 @@ if [[ ! -d tmux ]]; then
 fi
 
 pushd tmux || exit
+git pull
 sh autogen.sh
 ./configure && make
 sudo make install
+popd  || exit
+
+## fzf
+if [[ ! -d fzf ]]; then
+    git clone git@github.com:junegunn/fzf.git fzf
+fi
+
+pushd fzf || exit
+git pull
+./install --all --xdg
 popd  || exit
 
 ##

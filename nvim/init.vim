@@ -145,7 +145,7 @@ EOF
     nnoremap  <SPACE>o moo<ESC>`o
     nnoremap  <SPACE>O moO<ESC>`o
 
-    nnoremap  <expr> <space>Ag ':Ag ' . expand('<cword>') . '<CR>'
+    nnoremap  <expr> <space>Rg ':Rg ' . expand('<cword>') . '<CR>'
     nnoremap <C-]> g<C-]>
 
     " change the behaviour of jump to last mark so ' gets me to the exact positio, and not just the line
@@ -239,15 +239,6 @@ EOF
     silent! colorscheme monotone
 " }}} " colorscheme
 
-" command! Make silent lua require'_my_runner'.make()
-" command! Spectrum silent lua require'_my_runner'.Spectrum()
-lua << EOF
--- require('_lspconfig')
--- require('_telescope')
--- require('_tree-sitter')
--- require('_git-worktree')
-EOF
-
 " Using Lua functions
 nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
 nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
@@ -261,12 +252,3 @@ let g:asynctasks_term_pos = 'bottom'
 let g:asynctasks_term_reuse = 1
 let g:asynctasks_extra_config = ['~/.config/nvim/asynctasks.ini']
 
-
-" imap <silent><expr> <Tab> luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<Tab>' 
-" inoremap <silent> <S-Tab> <cmd>lua require'luasnip'.jump(-1)<Cr>
-
-" snoremap <silent> <Tab> <cmd>lua require('luasnip').jump(1)<Cr>
-" snoremap <silent> <S-Tab> <cmd>lua require('luasnip').jump(-1)<Cr>
-
-" imap <silent><expr> <C-E> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-E>'
-" smap <silent><expr> <C-E> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-E>'
