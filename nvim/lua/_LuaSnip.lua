@@ -1,4 +1,8 @@
-local my = require('my_utils')
+local ok, _ = pcall(require, 'luasnip')
+if not ok then
+    return nil
+end
+
 local luasnip = require('luasnip')
 local snip = luasnip.snippet
 

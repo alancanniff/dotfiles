@@ -28,3 +28,7 @@ hg () { history | grep -iE --color "$1" ; }
 # -E        extended regular expression
 mygrep () { grep -rnIiE --color "$1" "${2:-.}"; }
 fzfco () { git checkout $(git branch -l | fzf); }
+
+if [[ -f "$XDG_CONFIG_HOME/bash/work" ]]; then
+    source "$XDG_CONFIG_HOME/bash/work"
+fi
