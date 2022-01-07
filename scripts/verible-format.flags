@@ -1,0 +1,13 @@
+--assignment_statement_alignment=flush-left
+--case_items_alignment=flush-left
+--class_member_variable_alignment=flush-left
+--distribution_items_alignment=flush-left
+--enum_assignment_statement_alignment=flush-left
+--formal_parameters_alignment=flush-left
+--module_net_variable_alignment=flush-left
+--named_parameter_alignment=flush-left
+--named_port_alignment=flush-left
+--port_declarations_alignment=flush-left
+--struct_union_members_alignment=flush-left
+--indentation_spaces=4
+--inplace
