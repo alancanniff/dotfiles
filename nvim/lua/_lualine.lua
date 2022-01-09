@@ -50,16 +50,16 @@ custom_auto_theme.normal.a.fg = colors.black
 custom_auto_theme.normal.a.bg = colors.green
 
 custom_auto_theme.insert.a.fg = colors.black
-custom_auto_theme.insert.a.bg = colors.blue
+custom_auto_theme.insert.a.bg = colors.green
 
 custom_auto_theme.visual.a.fg = colors.black
-custom_auto_theme.visual.a.bg = colors.cyan
+custom_auto_theme.visual.a.bg = colors.green
 
 custom_auto_theme.replace.a.fg = colors.black
-custom_auto_theme.replace.a.bg = colors.red
+custom_auto_theme.replace.a.bg = colors.green
 
 custom_auto_theme.command.a.fg = colors.black
-custom_auto_theme.command.a.bg = colors.violet
+custom_auto_theme.command.a.bg = colors.green
 
 -- custom_auto_theme.inactive.a.fg = colors.white
 -- custom_auto_theme.inactive.a.bg = colors.black
@@ -124,8 +124,14 @@ local RELATIVE_PATH = 1
 lualine.setup {
     options = {
         theme = custom_auto_theme,
-        component_separators = { left = '', right = ''},
-        section_separators = { left = '', right = '' },
+        -- component_separators = { left = '', right = ''},
+        -- section_separators = { left = '', right = '' },
+        -- component_separators = { left = '', right = ''},
+        -- section_separators = { left = '', right = '' },
+        component_separators = { left = '', right = ''},
+        section_separators = { left = '', right = '' },
+
+        icons_enabled = false,
     },
     sections = {
         lualine_a = {{'mode', fmt = function(str) return str:sub(1,1) end } },
@@ -144,7 +150,7 @@ lualine.setup {
         },
         lualine_x = {
             {'fileformat', icons_enabled = false, fmt = trunc(nil, nil, 120)},
-            {'filetype', icons_enabled = false, fmt = trunc(nil, nil, 120)},
+            {'filetype', icons_enabled = false, fmt = trunc(nil, nil, 100)},
         },
     },
     inactive_sections = {
