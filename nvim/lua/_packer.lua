@@ -14,7 +14,6 @@ return require('packer').startup(function()
     use 'wbthomason/packer.nvim'
 
     use 'fidian/hexmode'
-    use 'itchyny/lightline.vim'
     use 'junegunn/fzf'
     use 'junegunn/fzf.vim'
     use 'justinmk/vim-dirvish'
@@ -68,6 +67,13 @@ return require('packer').startup(function()
         end,
     })
 
+    use {
+        'nvim-lualine/lualine.nvim',
+        requires = { 'kyazdani42/nvim-web-devicons', opt = true },
+        config = function()
+            require('_lualine')
+        end,
+    }
     use 'rktjmp/lush.nvim'
     use 'simnalamburt/vim-mundo'
 

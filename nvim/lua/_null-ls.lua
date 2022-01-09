@@ -64,9 +64,9 @@ local verilog_lint = {
 
 null_ls.register(verilog_lint)
 
-require("lspconfig")["null-ls"].setup({
-    on_attach = function()
-        vim.cmd([[ command! Format execute 'lua vim.lsp.buf.formatting()' ]])
-    end,
-})
+-- require("lspconfig")["null-ls"].setup({
+--     on_attach = function()
+--         vim.cmd([[ command! Format execute 'lua vim.lsp.buf.formatting()' ]])
+--     end,
+-- })
 

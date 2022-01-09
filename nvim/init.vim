@@ -56,7 +56,7 @@ EOF
         cnoremap <down> <c-n>
     endif
 
-    
+
     " set completeopt=menuone,noinsert   " Set completeopt to have a better completion experience
     " set completeopt=menuone,noinsert,noselect   " Set completeopt to have a better completion experience
     set completeopt=menu,menuone,noselect       " from nvim-cmp
@@ -108,7 +108,7 @@ EOF
     set noshowmode                              " don't show the mode in the command line as it's in airline
     set foldenable                              " enable folding
     set foldmethod=marker                       " enable folding at option - markers
-    set foldmarker={{{,}}} 
+    set foldmarker={{{,}}}
     set foldnestmax=1
     set foldopen=block,hor,jump,mark,quickfix,search,tag " what movements open folds - hor is horizontal
     set lazyredraw                              " Don't redraw while executing macros (good performance config) 
