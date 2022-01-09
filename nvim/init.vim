@@ -212,8 +212,8 @@ EOF
 
         autocmd BufLeave *.vhd,*.vhdl, :setlocal isfname+=.
 
-        autocmd BufLeave * :set nocursorcolumn | set nocursorline
-        autocmd BufEnter * :set cursorcolumn | set cursorline
+        autocmd BufLeave * :set nocursorcolumn | set nocursorline | set norelativenumber | set number
+        autocmd BufEnter * :set cursorcolumn | set cursorline | set relativenumber | set nonumber
 
         "delete netrw buffers when they become hidden
         autocmd FileType netrw setl bufhidden=delete
