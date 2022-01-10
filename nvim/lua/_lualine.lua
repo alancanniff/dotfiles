@@ -136,7 +136,7 @@ lualine.setup {
     sections = {
         lualine_a = {{'mode', fmt = function(str) return str:sub(1,1) end } },
         lualine_b = {
-            'branch',
+            {'branch', fmt = trunc(120, 20, 60)},
             {'diff', fmt = trunc(nil, nil, 80)},
         },
         lualine_c = {
