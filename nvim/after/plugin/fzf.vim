@@ -12,6 +12,7 @@ let g:fzf_layout = { 'down': '~40%' }
 
 " let g:fzf_preview_window = ''
 nnoremap  <space>f :Files<CR>
+nnoremap  <space>r :Rg<CR>
 nnoremap  <space>b :Buffers<CR>
 nnoremap  <space>L :Lines<CR>
 nnoremap  <space>t :BTags<CR>
@@ -19,7 +20,10 @@ nnoremap  <space>h :History<CR>
 nnoremap  <space>: :History:<CR>
 nnoremap  <space>/ :History/<CR>
 
-nnoremap  gb :Buffers<CR>
+command! -bang -nargs=* FzfRgNoIgnore call fzf#vim#grep("rg --no-ignore --column --line-number --no-heading --color=always --smart-case -- ".shellescape(<q-args>), 1, fzf#vim#with_preview(), <bang>0)
+command! -bang FzfConfig  call fzf#vim#files("~/.config", fzf#vim#with_preview(), <bang>0)
+command! -bang -nargs=* FzfConfigRg call fzf#vim#grep("rg --no-ignore --column --line-number --no-heading --color=always --smart-case -- ".shellescape(<q-args>)." ". stdpath('config'), 1, fzf#vim#with_preview(), <bang>0)
 
-command! -bang -nargs=* FzfRg call fzf#vim#grep("rg --no-ignore --column --line-number --no-heading --color=always --smart-case -- ".shellescape(<q-args>), 1, fzf#vim#with_preview(), <bang>0)
-command! -bang -nargs=? -complete=dir FzfConfig call fzf#vim#files("~/.config", fzf#vim#with_preview(), <bang>0)
+nnoremap  <space>c :FzfConfig<CR>
+nnoremap  <space>C :FzfConfigRg<CR>
+nnoremap  <expr> <space>R ':Rg ' . expand('<cword>') . '<CR>'

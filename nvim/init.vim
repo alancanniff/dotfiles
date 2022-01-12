@@ -141,11 +141,10 @@ EOF
     " \\ \/ toggle forward and back slash on the current line
     nnoremap <silent> \/ :let tmp=@/<Bar>s:\\:/:ge<Bar>let @/=tmp<Bar>noh<CR>
     nnoremap <silent> \\ :let tmp=@/<Bar>s:/:\\:ge<Bar>let @/=tmp<Bar>noh<CR>
-
+                  
     nnoremap  <SPACE>o moo<ESC>`o
     nnoremap  <SPACE>O moO<ESC>`o
 
-    nnoremap  <expr> <space>Rg ':Rg ' . expand('<cword>') . '<CR>'
     nnoremap <C-]> g<C-]>
 
     " change the behaviour of jump to last mark so ' gets me to the exact positio, and not just the line
