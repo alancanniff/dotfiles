@@ -26,9 +26,11 @@ require("null-ls").setup({
         null_ls.builtins.code_actions.shellcheck,
         null_ls.builtins.diagnostics.shellcheck,
     },
+
     debug = true,
+
     on_attach = function(client)
-        -- vim.cmd([[ command! Format execute 'lua vim.lsp.buf.formatting()' ]])
+        -- vim.cmd([[command! Format execute 'lua vim.lsp.buf.formatting()' ]])
         if client.resolved_capabilities.document_formatting then
             vim.cmd([[
             augroup LspFormatting
@@ -50,8 +52,8 @@ local verilog_lint = {
         command = "verible-verilog-lint",
         args = { 
             "--rules_config_search",
-            "-",
             -- "$FILENAME",
+            "-",
         },
         to_stdin = true,
         from_stderr = true,

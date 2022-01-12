@@ -1,5 +1,4 @@
 # File containing my local mods...
-shopt -s histappend
 
 export HISTSIZE=999999
 export HISTFILESIZE=999999
