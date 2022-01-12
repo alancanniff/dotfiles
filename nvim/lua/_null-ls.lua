@@ -1,4 +1,3 @@
-local null_ls = require("null-ls")
 local helpers = require("null-ls.helpers")
 local methods = require("null-ls.methods")
 
@@ -40,6 +39,7 @@ require("null-ls").setup({
     end,
 })
 
+
 local verilog_lint = {
     method = null_ls.methods.DIAGNOSTICS,
     filetypes = { "systemverilog", "verilog" },
@@ -56,9 +56,6 @@ local verilog_lint = {
         from_stderr = true,
         -- choose an output format (raw, json, or line)
         format = "line",
-        -- check_exit_code = function(code)
-        --     return code <= 1
-        -- end,
         -- use helpers to parse the output from string matchers,
         -- or parse it manually with a function
         on_output = helpers.diagnostics.from_patterns({
