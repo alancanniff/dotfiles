@@ -74,6 +74,9 @@ local trailing_whitespace = function()
 end
 
 local mixed_indent = function()
+    if vim.bo.filetype == 'vim' or vim.bo.filetype == 'help' then
+        return ""
+    end
     local space_pat = [[\v^ +]]
     local tab_pat = [[\v^\t+]]
     local space_indent = vim.fn.search(space_pat, 'nwc')
@@ -128,7 +131,7 @@ lualine.setup {
         -- section_separators = { left = '', right = '' },
         -- component_separators = { left = '', right = ''},
         -- section_separators = { left = '', right = '' },
-        component_separators = { left = '', right = ''},
+        component_separators = { left = '|', right = '|'},
         section_separators = { left = '', right = '' },
 
         icons_enabled = false,
