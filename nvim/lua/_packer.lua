@@ -23,7 +23,7 @@ return require('packer').startup(function()
         use 'ludovicchabant/vim-gutentags'
     end
 
-    -- use 'machakann/vim-sandwich'
+    use 'machakann/vim-sandwich'
 
     use({
         'jose-elias-alvarez/null-ls.nvim',
