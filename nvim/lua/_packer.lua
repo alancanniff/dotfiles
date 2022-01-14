@@ -79,6 +79,7 @@ return require('packer').startup(function()
     use 'simnalamburt/vim-mundo'
 
     use {'skywind3000/asynctasks.vim', requires = {'skywind3000/asyncrun.vim'}}
+    use 'ThePrimeagen/git-worktree.nvim'
     use 'tommcdo/vim-lion'
     use 'tpope/vim-commentary'
     use 'tpope/vim-eunuch'

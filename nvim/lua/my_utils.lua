@@ -1,7 +1,7 @@
 M = {}
 
-M.buf_map = function(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-M.buf_opt = function(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+M.map = function(...) vim.api.nvim_set_keymap(...) end
+M.opt = function(...) vim.api.nvim_set_option(...) end
 
 local uv = vim.loop
 
