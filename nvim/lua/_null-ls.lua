@@ -21,8 +21,10 @@ null_ls.register(verilog_format)
 
 require("null-ls").setup({
     -- you must define at least one source for the plugin to work
-    sources = { 
-        null_ls.builtins.formatting.shfmt,
+    sources = {
+        null_ls.builtins.formatting.shfmt.with({
+            extra_args = { "-i", "4", "-ci", "-bn" }
+        }),
         null_ls.builtins.code_actions.shellcheck,
         null_ls.builtins.diagnostics.shellcheck,
     },
@@ -31,14 +33,14 @@ require("null-ls").setup({
 
     on_attach = function(client)
         vim.cmd([[command! Format execute 'lua vim.lsp.buf.formatting()' ]])
-        -- if client.resolved_capabilities.document_formatting then
-        --     vim.cmd([[
-        --     augroup LspFormatting
-        --         autocmd! * <buffer>
-        --         autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
-        --     augroup END
-        --     ]])
-        -- end
+        if client.resolved_capabilities.document_formatting then
+            vim.cmd([[
+            augroup LspFormatting
+                autocmd! * <buffer>
+                autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
+            augroup END
+            ]])
+        end
     end,
 })
 
@@ -50,7 +52,7 @@ local verilog_lint = {
     -- that spawns the command with the given arguments and options
     generator = null_ls.generator({
         command = "verible-verilog-lint",
-        args = { 
+        args = {
             "--rules_config_search",
             -- "$FILENAME",
             "-",
