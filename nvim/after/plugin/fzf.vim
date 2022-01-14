@@ -15,7 +15,6 @@ nnoremap  <space>f :Files<CR>
 nnoremap  <space>r :Rg<CR>
 nnoremap  <space>b :Buffers<CR>
 nnoremap  <space>L :Lines<CR>
-nnoremap  <space>t :BTags<CR>
 nnoremap  <space>h :History<CR>
 nnoremap  <space>: :History:<CR>
 nnoremap  <space>/ :History/<CR>

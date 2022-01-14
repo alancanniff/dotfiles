@@ -56,7 +56,7 @@ return require('packer').startup(function()
     use 'nvim-lua/plenary.nvim'
     use({
         'nvim-lua/telescope.nvim', 
-        cofig = function()
+        config = function()
             require('_telescope')
         end,
     })
@@ -75,11 +75,17 @@ return require('packer').startup(function()
         end,
     }
     use 'rafcamlet/nvim-luapad'
-    use 'rktjmp/lush.nvim'
+    -- use 'rktjmp/lush.nvim'
     use 'simnalamburt/vim-mundo'
 
     use {'skywind3000/asynctasks.vim', requires = {'skywind3000/asyncrun.vim'}}
-    use 'ThePrimeagen/git-worktree.nvim'
+    use {
+        'ThePrimeagen/git-worktree.nvim',
+
+        config = function()
+            require('_git-worktree')
+        end,
+    }
     use 'tommcdo/vim-lion'
     use 'tpope/vim-commentary'
     use 'tpope/vim-eunuch'

@@ -53,10 +53,10 @@ custom_auto_theme.insert.a.fg = colors.black
 custom_auto_theme.insert.a.bg = colors.green
 
 custom_auto_theme.visual.a.fg = colors.black
-custom_auto_theme.visual.a.bg = colors.green
+custom_auto_theme.visual.a.bg = colors.cyan
 
 custom_auto_theme.replace.a.fg = colors.black
-custom_auto_theme.replace.a.bg = colors.green
+custom_auto_theme.replace.a.bg = colors.red
 
 custom_auto_theme.command.a.fg = colors.black
 custom_auto_theme.command.a.bg = colors.green
@@ -74,7 +74,7 @@ local trailing_whitespace = function()
 end
 
 local mixed_indent = function()
-    if vim.bo.filetype == 'vim' or vim.bo.filetype == 'help' then
+    if vim.bo.filetype == 'help' then
         return ""
     end
     local space_pat = [[\v^ +]]

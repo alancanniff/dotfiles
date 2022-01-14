@@ -1,4 +1,7 @@
- -- in lua/finders.lua
+local ok, _ = pcall(require, 'telescope')
+if not ok then 
+    return 
+end
 
 local actions = require('telescope.actions')
 
@@ -12,8 +15,16 @@ require('telescope').setup{
   }
 }
 
-local finders = {}
 
+local opts = { noremap=true, silent=true }
+
+local my = require('my')
+my.map('n', '<space>tf', [[<cmd>lua require('telescope.builtin').find_files()<cr>]], opts)
+my.map('n', '<space>tg', [[<cmd>lua require('telescope.builtin').live_grep()<cr>]], opts)
+my.map('n', '<space>tb', [[<cmd>lua require('telescope.builtin').buffers()<cr>]], opts)
+my.map('n', '<space>th', [[<cmd>lua require('telescope.builtin').help_tags()<cr>]], opts)
+
+-- local finders = {}
 --  -- Dropdown list theme using a builtin theme definitions :
 --  local center_list = require'telescope.themes'.get_dropdown({
 --      winblend = 10,
