@@ -28,7 +28,7 @@ return require('packer').startup(function()
     use({
         'jose-elias-alvarez/null-ls.nvim',
         config = function()
-            require("_null-ls")
+            require("plugin.null-ls")
         end,
         requires = { 
             'neovim/nvim-lspconfig',
@@ -40,7 +40,7 @@ return require('packer').startup(function()
         'L3MON4D3/LuaSnip',
         requires = {'honza/vim-snippets'},
         config = function()
-            require('_LuaSnip')
+            require('plugin.luasnip')
         end,
     })
 
@@ -48,7 +48,7 @@ return require('packer').startup(function()
     use({
         'neovim/nvim-lspconfig',
         config = function()
-            require('_lspconfig')
+            require('plugin.lspconfig')
         end,
     })
     
@@ -57,13 +57,13 @@ return require('packer').startup(function()
     use({
         'nvim-lua/telescope.nvim', 
         config = function()
-            require('_telescope')
+            require('plugin.telescope')
         end,
     })
     use({
         'nvim-treesitter/nvim-treesitter',
         config = function()
-            require('_tree-sitter')
+            require('plugin.tree-sitter')
         end,
     })
 
@@ -71,7 +71,7 @@ return require('packer').startup(function()
         'nvim-lualine/lualine.nvim',
         requires = { 'kyazdani42/nvim-web-devicons', opt = true },
         config = function()
-            require('_lualine')
+            require('plugin.lualine')
         end,
     }
     use 'rafcamlet/nvim-luapad'
@@ -83,7 +83,7 @@ return require('packer').startup(function()
         'ThePrimeagen/git-worktree.nvim',
 
         config = function()
-            require('_git-worktree')
+            require('plugin.git-worktree')
         end,
     }
     use 'tommcdo/vim-lion'
@@ -97,3 +97,4 @@ return require('packer').startup(function()
         require('packer').sync()
     end
 end)
+

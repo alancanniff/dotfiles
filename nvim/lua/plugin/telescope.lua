@@ -16,13 +16,11 @@ require('telescope').setup{
 }
 
 
-local opts = { noremap=true, silent=true }
-
-local my = require('my')
-my.map('n', '<space>tf', [[<cmd>lua require('telescope.builtin').find_files()<cr>]], opts)
-my.map('n', '<space>tg', [[<cmd>lua require('telescope.builtin').live_grep()<cr>]], opts)
-my.map('n', '<space>tb', [[<cmd>lua require('telescope.builtin').buffers()<cr>]], opts)
-my.map('n', '<space>th', [[<cmd>lua require('telescope.builtin').help_tags()<cr>]], opts)
+local map = require('my').map
+map('n', '<space>tf', [[<cmd>lua require('telescope.builtin').find_files()<cr>]])
+map('n', '<space>tg', [[<cmd>lua require('telescope.builtin').live_grep()<cr>]])
+map('n', '<space>tb', [[<cmd>lua require('telescope.builtin').buffers()<cr>]])
+map('n', '<space>th', [[<cmd>lua require('telescope.builtin').help_tags()<cr>]])
 
 -- local finders = {}
 --  -- Dropdown list theme using a builtin theme definitions :

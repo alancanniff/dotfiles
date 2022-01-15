@@ -8,10 +8,9 @@ if not ok then
     return 
 end
 
-local my = require('my')
-local opts = { noremap=true, silent=true }
-my.map('n', '<Space>wc', [[:lua require('telescope').extensions.git_worktree.git_worktrees()<Cr>]], opts)      
-my.map('n', '<Space>ws', [[:lua require('telescope').extensions.git_worktree.create_git_worktree()<Cr>]>]], opts)
+local map = require('my').map
+map('n', '<Space>wc', [[:lua require('telescope').extensions.git_worktree.git_worktrees()<Cr>]])      
+map('n', '<Space>ws', [[:lua require('telescope').extensions.git_worktree.create_git_worktree()<Cr>]>]])
 
 ---- "" Example of custom completion function
 ---- " :com -complete=custom,ListUsers -nargs=1 Finger !finger <args>

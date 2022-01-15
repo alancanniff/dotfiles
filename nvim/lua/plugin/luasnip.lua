@@ -28,14 +28,14 @@ require("luasnip.loaders.from_snipmate").load()
 -- vim.api.nvim_set_keymap("i", "<C-E>", "<Plug>luasnip-next-choice", {})
 -- vim.api.nvim_set_keymap("s", "<C-E>", "<Plug>luasnip-next-choice", {})
 
-local noremap = { noremap=true, silent=true }
+local map = require('my').map
 local remap = { noremap=false, silent=true, expr=true }
 
-vim.api.nvim_set_keymap('i', '<Tab>', [[luasnip#expandable() ? '<Plug>luasnip-expand-snippet' : '<Tab>']], remap)
-vim.api.nvim_set_keymap('i', '<C-j>', [[<cmd>lua require('luasnip').jump(1)<Cr>]], noremap)
-vim.api.nvim_set_keymap('i', '<C-k>', [[<cmd>lua require'luasnip'.jump(-1)<Cr>]], noremap)
-vim.api.nvim_set_keymap('s', '<C-j>', [[<cmd>lua require('luasnip').jump(1)<Cr>]], noremap)
-vim.api.nvim_set_keymap('s', '<C-k>', [[<cmd>lua require('luasnip').jump(-1)<Cr>]], noremap)
+map('i', '<Tab>', [[luasnip#expandable() ? '<Plug>luasnip-expand-snippet' : '<Tab>']], remap)
+map('i', '<C-j>', [[<cmd>lua require('luasnip').jump(1)<Cr>]])
+map('i', '<C-k>', [[<cmd>lua require'luasnip'.jump(-1)<Cr>]])
+map('s', '<C-j>', [[<cmd>lua require('luasnip').jump(1)<Cr>]])
+map('s', '<C-k>', [[<cmd>lua require('luasnip').jump(-1)<Cr>]])
 
 -- imap <silent><expr> <C-E> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-E>'
 -- smap <silent><expr> <C-E> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-E>'
