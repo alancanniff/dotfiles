@@ -1,4 +1,4 @@
-local ok, _ = pcall(require, 'lualine')
+local ok, lualine = pcall(require, 'lualine')
 if not ok then
     return nil
 end
@@ -118,8 +118,6 @@ local function trunc(trunc_width, trunc_len, hide_width, no_ellipsis)
     return str
   end
 end
-
-lualine = require('lualine')
 
 local ABSOLUTE_PATH = 2
 local RELATIVE_PATH = 1

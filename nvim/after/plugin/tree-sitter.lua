@@ -1,3 +1,9 @@
+local ok, tree_sitter = pcall(require, 'nvim-treesitter')
+if not ok then 
+    return 
+end
+
+
 local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
 
 parser_config.vhdl = {

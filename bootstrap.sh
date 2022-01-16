@@ -13,7 +13,7 @@ fi
 
 # the bazel repo
 sudo apt install -y apt-transp ort-https curl gnupg
-curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor > bazel.gpg
+curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor >bazel.gpg
 sudo mv bazel.gpg /etc/apt/trusted.gpg.d/
 echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
 
@@ -58,7 +58,6 @@ python3 -m pip install \
 sudo locale-gen en_US.UTF-8
 sudo dpkg-reconfigure locales
 
-
 cd ~ || exit
 if [[ ! -d projects ]]; then
     mkdir projects
@@ -91,7 +90,7 @@ git pull
 sh autogen.sh
 ./configure && make
 sudo make install
-popd  || exit
+popd || exit
 
 ## fzf
 if [[ ! -d fzf ]]; then
@@ -101,7 +100,7 @@ fi
 pushd fzf || exit
 git pull
 ./install --all --xdg
-popd  || exit
+popd || exit
 
 ##
 popd || exit

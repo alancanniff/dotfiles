@@ -1,4 +1,9 @@
 -- Setup nvim-cmp.
+local ok, cmp = pcall(require, 'cmp')
+if not ok then
+    return nil
+end
+
 local cmp = require'cmp'
 
 cmp.setup({

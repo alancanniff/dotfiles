@@ -1,6 +1,11 @@
-local null_ls = require("null-ls")
-local helpers = require("null-ls.helpers")
-local methods = require("null-ls.methods")
+local ok, null_ls = pcall(require, 'null-ls')
+if not ok then
+    return nil
+end
+
+
+local helpers = require('null-ls.helpers')
+local methods = require('null-ls.methods')
 
 local FORMATTING = methods.internal.FORMATTING
 
@@ -19,7 +24,7 @@ local verilog_format = helpers.make_builtin({
 })
 null_ls.register(verilog_format)
 
-require("null-ls").setup({
+null_ls.setup({
     -- you must define at least one source for the plugin to work
     sources = {
         null_ls.builtins.formatting.shfmt.with({

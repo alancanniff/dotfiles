@@ -1,9 +1,8 @@
-local ok, _ = pcall(require, 'luasnip')
+local ok, luasnip = pcall(require, 'luasnip')
 if not ok then
     return nil
 end
 
-local luasnip = require('luasnip')
 local snip = luasnip.snippet
 
 -- local sn = ls.snippet_node

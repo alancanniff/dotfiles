@@ -1,9 +1,9 @@
-local ok, _ = pcall(require, 'git-worktree')
+local ok, worktree = pcall(require, 'git-worktree')
 if not ok then 
     return 
 end
 
-local ok, _ = pcall(require, 'telescope')
+local ok, telescope = pcall(require, 'telescope')
 if not ok then 
     return 
 end
