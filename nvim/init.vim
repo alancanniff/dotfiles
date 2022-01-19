@@ -42,7 +42,7 @@ lua << EOF
 require('_packer')
 EOF
 
-" " }}} Packages "
+" }}} Packages
 
 " Settings {{{ "
     filetype plugin indent on                   " this is also needed for UltiSnip
@@ -57,9 +57,10 @@ EOF
     endif
 
 
+    " set completeopt=menu,preview
     " set completeopt=menuone,noinsert   " Set completeopt to have a better completion experience
     " set completeopt=menuone,noinsert,noselect   " Set completeopt to have a better completion experience
-    set completeopt=menu,menuone,noselect       " from nvim-cmp
+    " set completeopt=menu,menuone,noselect       " from nvim-cmp
     set hidden                                  " hide unsaved buffers
     set autoread                                " auto read file when changed outside of buffer
     set laststatus=2                            " always show the statusline in the last (bottom) window
@@ -76,10 +77,6 @@ EOF
     set title                                   " change the terminal's title
     set nowrap                                  " turn off line wrap
     set mouse=a                                 " enable the mouse always
-    set formatoptions-=c                        " Auto-wrap comments using textwidth, inserting the current comment leader automatically.
-    set formatoptions-=r                        " Automatically insert the current comment leader after hitting <Enter> in Insert mode.
-    set formatoptions-=o                        " Automatically insert the current comment leader after hitting 'o' or 'O' in Normal mode.
-    set formatoptions+=j                        " Delete comment character when joining commented lines
 
     set cursorline                              " highlight current line
     set cursorcolumn                            " highlight current col
@@ -124,7 +121,7 @@ EOF
     " set mousemodel=popup
 
     "set diffopt-=internal
-    set diffopt+=algorithm:patience
+    " set diffopt+=algorithm:patience
     " algorithm:{text} Use the specified diff algorithm with the
     " internal diff engine. Currently supported 
     " algorithms are:
@@ -155,14 +152,9 @@ EOF
 
     if has('nvim')
 
-        " this might cause issues in fzf...
         tnoremap <ESC> <C-\><C-n>
         tnoremap <C-w> <C-\><C-n><C-w>
 
-        "if g:is_windows
-        "    "automatically yank mouse selections to the system clipboard
-        "    noremap <LeftRelease> <LeftRelease>"*y
-        "endif
     endif   
 
     " CTRL-U in insert mode deletes a lot.  break the undo sequnce of better undo
@@ -190,7 +182,7 @@ EOF
         autocmd!
 
         " set the format options I want. always.
-        "autocmd FileType * setlocal formatoptions+=j formatoptions-=c formatoptions-=r formatoptions-=o
+        autocmd FileType * setlocal formatoptions+=j formatoptions-=c formatoptions-=r formatoptions-=o
         "autocmd FileType erf :Hexmode
 
         " auto reload files with a warning message
