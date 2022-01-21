@@ -229,5 +229,3 @@ EOF
     " make sure the autocmd is set before configuring the colorscheme
     silent! colorscheme monotone
 " }}} " colorscheme
-
-

@@ -8,7 +8,7 @@ if ! grep -xq "${mybash}" ~/.bashrc; then
     echo "${mybash}" >>~/.bashrc
 fi
 
-# shellcheck source=/home/$USER/.bashrc
+# shellcheck source=/home/ac00/.bashrc
 . "${HOME}/.bashrc"
 
 # the bazel repo
@@ -47,13 +47,24 @@ sudo snap install clangd --classic
 sudo snap install \
     shfmt
 
+#########################################################
 sudo npm install -g \
     neovim \
-    bash-language-server
+    bash-language-server \
+    markdownlint-cli
 
+#########################################################
 python3 -m pip install \
     pynvim \
     python-lsp-server[all]
+
+#########################################################
+rustup install stable
+rustup default stable
+
+cargo install stylua
+
+#########################################################
 
 sudo locale-gen en_US.UTF-8
 sudo dpkg-reconfigure locales
@@ -109,10 +120,12 @@ popd || exit
 
 tmux_cfg="$XDG_CONFIG_HOME/tmux/config"
 if [[ ! -e ~/.tmux.conf ]]; then
+    echo ln -s "${tmux_cfg}" .tmux.conf
     ln -s "${tmux_cfg}" .tmux.conf
 fi
 
 git_cfg="$XDG_CONFIG_HOME/git/config"
 if [[ ! -e ~/.gitconfig ]]; then
+    echo ln -s "${git_cfg}" .gitconfig
     ln -s "${git_cfg}" .gitconfig
 fi

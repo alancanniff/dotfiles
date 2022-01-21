@@ -9,8 +9,9 @@ if not ok then
 end
 
 local map = require('my').map
-map('n', '<Space>wc', [[:lua require('telescope').extensions.git_worktree.git_worktrees()<Cr>]])      
-map('n', '<Space>ws', [[:lua require('telescope').extensions.git_worktree.create_git_worktree()<Cr>]>]])
+require("telescope").load_extension("git_worktree")
+map('n', '<Space>ws', [[:lua require('telescope').extensions.git_worktree.git_worktrees()<Cr>]])      
+map('n', '<Space>wc', [[:lua require('telescope').extensions.git_worktree.create_git_worktree()<Cr>]])
 
 ---- "" Example of custom completion function
 ---- " :com -complete=custom,ListUsers -nargs=1 Finger !finger <args>
@@ -30,7 +31,6 @@ map('n', '<Space>ws', [[:lua require('telescope').extensions.git_worktree.create
 ---- " lua require("git-worktree").create_worktree("feature/150-update_petalinux_cache_settings", "feature/150-update_petalinux_cache_settings", "origin")
 ---- " lua require("git-worktree").switch_worktree("feature/150-update_petalinux_cache_settings", "feature/150-update_petalinux_cache_settings", "origin")
 ---- " lua require("git-worktree").delete_worktree("feature/150-update_petalinux_cache_settings", "feature/150-update_petalinux_cache_settings", "origin")
----- " lua require("telescope").load_extension("git_worktree")
 ---- nnoremap <Space>wc :lua require('telescope').extensions.git_worktree.git_worktrees()<Cr>
 ---- nnoremap <Space>ws :lua require('telescope').extensions.git_worktree.create_git_worktree()<Cr>
 ---- 

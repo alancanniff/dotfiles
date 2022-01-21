@@ -17,6 +17,7 @@ export LESS="-FRX"
 export RANGER_LOAD_DEFAULT_RC=FALSE
 # export PATH="$PATH:/app/location/node_modules/.bin"
 export PATH="$PATH:/home/$USER/.local/bin"
+export PATH="$PATH:/home/$USER/.cargo/bin"
 
 export XDG_CONFIG_HOME="$(realpath ~)/.config"
 
