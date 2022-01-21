@@ -4,12 +4,12 @@ cd ~ || exit
 
 mybash=". ~/.config/bash/personal"
 # only append the lines if they don't already exists
-if ! grep -xq "${mybash}" ~/.bashrc; then
-    echo "${mybash}" >>~/.bashrc
+if ! grep -xq "$mybash" ~/.bashrc; then
+    echo "$mybash" >>~/.bashrc
 fi
 
 # shellcheck source=/home/ac00/.bashrc
-. "${HOME}/.bashrc"
+. "$HOME/.bashrc"
 
 # the bazel repo
 sudo apt install -y apt-transp ort-https curl gnupg
@@ -62,7 +62,9 @@ python3 -m pip install \
 rustup install stable
 rustup default stable
 
-cargo install stylua
+cargo install \
+    stylua \
+    shellharden
 
 #########################################################
 
@@ -120,12 +122,12 @@ popd || exit
 
 tmux_cfg="$XDG_CONFIG_HOME/tmux/config"
 if [[ ! -e ~/.tmux.conf ]]; then
-    echo ln -s "${tmux_cfg}" .tmux.conf
-    ln -s "${tmux_cfg}" .tmux.conf
+    echo ln -s "$tmux_cfg" .tmux.conf
+    ln -s "$tmux_cfg" .tmux.conf
 fi
 
 git_cfg="$XDG_CONFIG_HOME/git/config"
 if [[ ! -e ~/.gitconfig ]]; then
-    echo ln -s "${git_cfg}" .gitconfig
-    ln -s "${git_cfg}" .gitconfig
+    echo ln -s "$git_cfg" .gitconfig
+    ln -s "$git_cfg" .gitconfig
 fi

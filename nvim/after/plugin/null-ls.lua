@@ -41,6 +41,7 @@ null_ls.setup({
 		null_ls.builtins.formatting.shfmt.with({
 			extra_args = { "-i", "4", "-ci", "-bn" },
 		}),
+		null_ls.builtins.formatting.shellharden,
 		null_ls.builtins.formatting.stylua,
 
 		null_ls.builtins.code_actions.shellcheck,
