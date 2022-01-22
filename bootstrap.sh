@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-cd ~ || exit
+set -e
+
+cd ~
 
 mybash=". ~/.config/bash/personal"
 # only append the lines if they don't already exists
@@ -8,11 +10,11 @@ if ! grep -xq "$mybash" ~/.bashrc; then
     echo "$mybash" >>~/.bashrc
 fi
 
-# shellcheck source=/home/ac00/.bashrc
+# shellcheck source=/home/acanniff/.bashrc
 . "$HOME/.bashrc"
 
 # the bazel repo
-sudo apt install -y apt-transp ort-https curl gnupg
+sudo apt install -y apt-transport-https curl gnupg
 curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor >bazel.gpg
 sudo mv bazel.gpg /etc/apt/trusted.gpg.d/
 echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
@@ -22,7 +24,6 @@ sudo apt upgrade -y
 sudo apt install -y \
     ranger \
     ripgrep \
-    npm \
     minicom \
     mlocate \
     locales \
@@ -40,12 +41,17 @@ sudo apt install -y \
     universal-ctags \
     xclip
 
-curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -
-sudo apt install -y nodejs
+# curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -
+curl -fsSL https://deb.nodesource.com/setup_17.x | sudo -E bash -
+sudo apt install -y -f nodejs
 
-sudo snap install clangd --classic
-sudo snap install \
-    shfmt
+
+if [[ -z $WSLENV ]]; then
+
+    sudo snap install clangd --classic
+    sudo snap install \
+        shfmt
+fi
 
 #########################################################
 sudo npm install -g \
@@ -59,8 +65,10 @@ python3 -m pip install \
     python-lsp-server[all]
 
 #########################################################
-rustup install stable
-rustup default stable
+if [[ -z $WSLENV ]]; then
+    rustup install stable
+    rustup default stable
+fi
 
 cargo install \
     stylua \
@@ -68,8 +76,10 @@ cargo install \
 
 #########################################################
 
-sudo locale-gen en_US.UTF-8
-sudo dpkg-reconfigure locales
+sudo locale-gen --purge en_US.UTF-8
+echo -e 'LANG=en_NZ.UTF-8' > sudo tee -a  /etc/default/locale
+
+#########################################################
 
 cd ~ || exit
 if [[ ! -d projects ]]; then
