@@ -125,6 +125,25 @@ git pull
 ./install --all --xdg
 popd || exit
 
+## lua-language-server
+if [[ ! -d lua-language-server ]]; then
+    git clone https://github.com/sumneko/lua-language-server
+fi
+pushd lua-language-server || exit
+git submodule update --init --recursive
+cd 3rd/luamake || exit
+./compile/install.sh
+cd ../.. || exit
+./3rd/luamake/luamake rebuild
+
+lua_lsp="./bin/lua-language-server"
+if [[ ! -e ~/.local/bin/lua-language-server ]]; then
+    echo ln -s "$lua_lsp" ~/.local/bin/lua-language-server
+    ln -s "$lua_lsp" ~/.local/bin/lua-language-server
+fi
+
+popd || exit
+
 ##
 popd || exit
 
@@ -134,10 +153,14 @@ tmux_cfg="$XDG_CONFIG_HOME/tmux/config"
 if [[ ! -e ~/.tmux.conf ]]; then
     echo ln -s "$tmux_cfg" .tmux.conf
     ln -s "$tmux_cfg" .tmux.conf
+else
+    echo .tmux.conf exists
 fi
 
 git_cfg="$XDG_CONFIG_HOME/git/config"
 if [[ ! -e ~/.gitconfig ]]; then
     echo ln -s "$git_cfg" .gitconfig
     ln -s "$git_cfg" .gitconfig
+else
+    echo .gitconfig exists
 fi
