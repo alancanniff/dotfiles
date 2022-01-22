@@ -154,6 +154,7 @@ EOF
 
         tnoremap <ESC> <C-\><C-n>
         tnoremap <C-w> <C-\><C-n><C-w>
+        tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
 
     endif   
 
@@ -209,6 +210,10 @@ EOF
         "delete netrw buffers when they become hidden
         autocmd FileType netrw setl bufhidden=delete
         autocmd FileType dirvish setl bufhidden=delete
+
+        " autocmd BufHidden * if &buftype ==# 'terminal'
+        " autocmd TermClose * if !v:event.status | exe 'bdelete! '..expand('<abuf>') | endif
+        " let running = jobwait([&channel], 0)[0] == -1
 
     augroup END " }
 

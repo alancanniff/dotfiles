@@ -8,6 +8,11 @@ let g:asyncrun_open = 6
 let g:asynctasks_term_pos = 'bottom'
 let g:asynctasks_term_reuse = 1
 let g:asynctasks_extra_config = [stdpath('config').'/.asynctask']
+if g:is_windows
+    let g:asynctasks_system = 'windows'
+else
+    let g:asynctasks_system = 'linux'
+endif
 
 if !exists("g:loaded_fzf") | finish | endif
 

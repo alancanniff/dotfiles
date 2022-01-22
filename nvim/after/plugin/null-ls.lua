@@ -8,6 +8,37 @@ local methods = require("null-ls.methods")
 
 local FORMATTING = methods.internal.FORMATTING
 
+null_ls.setup({
+	-- you must define at least one source for the plugin to work
+	sources = {
+		null_ls.builtins.formatting.markdownlint,
+		null_ls.builtins.formatting.shfmt.with({
+			extra_args = { "-i", "4", "-ci", "-bn" },
+		}),
+		null_ls.builtins.formatting.shellharden,
+		null_ls.builtins.formatting.stylua,
+
+		null_ls.builtins.code_actions.shellcheck,
+
+		null_ls.builtins.diagnostics.markdownlint,
+		null_ls.builtins.diagnostics.shellcheck,
+	},
+
+	debug = true,
+
+	on_attach = function(client)
+		if client.resolved_capabilities.document_formatting then
+			vim.cmd([[command! Format execute 'lua vim.lsp.buf.formatting()' ]])
+			vim.cmd([[
+            augroup LspFormatting
+                autocmd! * <buffer>
+                autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
+            augroup END
+            ]])
+		end
+	end,
+})
+
 local verilog_format = helpers.make_builtin({
 	method = FORMATTING,
 	filetypes = { "systemverilog", "verilog" },
@@ -31,38 +62,6 @@ local verilog_format = helpers.make_builtin({
 		to_stdin = true,
 	},
 	factory = helpers.formatter_factory,
-})
-null_ls.register(verilog_format)
-
-null_ls.setup({
-	-- you must define at least one source for the plugin to work
-	sources = {
-		null_ls.builtins.formatting.markdownlint,
-		null_ls.builtins.formatting.shfmt.with({
-			extra_args = { "-i", "4", "-ci", "-bn" },
-		}),
-		null_ls.builtins.formatting.shellharden,
-		null_ls.builtins.formatting.stylua,
-
-		null_ls.builtins.code_actions.shellcheck,
-
-		null_ls.builtins.diagnostics.markdownlint,
-		null_ls.builtins.diagnostics.shellcheck,
-	},
-
-	debug = true,
-
-	on_attach = function(client)
-		vim.cmd([[command! Format execute 'lua vim.lsp.buf.formatting()' ]])
-		if client.resolved_capabilities.document_formatting then
-			vim.cmd([[
-            augroup LspFormatting
-                autocmd! * <buffer>
-                autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
-            augroup END
-            ]])
-		end
-	end,
 })
 
 local verilog_lint = {
@@ -96,4 +95,5 @@ local verilog_lint = {
 	}),
 }
 
-null_ls.register(verilog_lint)
+-- null_ls.register(verilog_lint)
+-- null_ls.register(verilog_format)
