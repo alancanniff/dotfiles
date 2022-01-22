@@ -45,7 +45,6 @@ sudo apt install -y \
 curl -fsSL https://deb.nodesource.com/setup_17.x | sudo -E bash -
 sudo apt install -y -f nodejs
 
-
 if [[ -z $WSLENV ]]; then
 
     sudo snap install clangd --classic
@@ -77,7 +76,7 @@ cargo install \
 #########################################################
 
 sudo locale-gen --purge en_US.UTF-8
-echo -e 'LANG=en_NZ.UTF-8' > sudo tee -a  /etc/default/locale
+echo -e 'LANG=en_NZ.UTF-8' tee -a /etc/default/locale >sudo
 
 #########################################################
 
@@ -136,10 +135,10 @@ cd 3rd/luamake || exit
 cd ../.. || exit
 ./3rd/luamake/luamake rebuild
 
-lua_lsp="./bin/lua-language-server"
+lua_lsp=$(realpath "./bin/lua-language-server")
 if [[ ! -e ~/.local/bin/lua-language-server ]]; then
-    echo ln -s "$lua_lsp" ~/.local/bin/lua-language-server
-    ln -s "$lua_lsp" ~/.local/bin/lua-language-server
+    echo ln -s "$lua_lsp" "$(realpath ~/.local/bin/lua-language-server)"
+    ln -s "$lua_lsp" "$(realpath ~/.local/bin/lua-language-server)"
 fi
 
 popd || exit
