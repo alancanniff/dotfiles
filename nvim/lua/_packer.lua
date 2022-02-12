@@ -78,7 +78,7 @@ return require("packer").startup(function()
 		requires = { "kyazdani42/nvim-web-devicons", opt = true },
 	})
 	use({ "rafcamlet/nvim-luapad" })
-	-- use({ 'rktjmp/lush.nvim', })
+	use({ "rktjmp/lush.nvim" })
 	use({ "simnalamburt/vim-mundo" })
 
 	use({

@@ -12,8 +12,8 @@ if ! grep -xq "$mybash" ~/.bashrc; then
     echo "$mybash" >>~/.bashrc
 fi
 
-# shellcheck source=/home/acanniff/.bashrc
-. "$HOME/.bashrc"
+# shellcheck source=/home/acanniff/.config/bash/personal
+. "$HOME"/.config/bash/personal
 
 # the bazel repo
 sudo apt install -y apt-transport-https curl gnupg
@@ -172,4 +172,20 @@ if [[ -n $ALWAYS_FALSE ]]; then
     sudo apt-add-repository ppa:fish-shell/release-3
     sudo apt update
     sudo apt install fish
+fi
+
+########################################################
+# fish stuff
+
+if 0; then
+    # this wrapper starts the fish shell from bash so that it inherits its enviroment
+    fishwrapper="$XDG_CONFIG_HOME/fish/fishlogin"
+    fishlogin="/usr/local/bin/fishlogin"
+
+    if [[ ! -e "$fishlogin" ]]; then
+        sudo cp "$fishwrapper" "$fishlogin"
+        sudo chmod 755 "$fishlogin"
+        echo "$fishlogin" | sudo tee -a /etc/shells
+        sudo usermod -s "$fishlogin" "$USER"
+    fi
 fi

@@ -1,3 +1,4 @@
+setlocal comments=b:--
 setlocal commentstring=--%s
 setlocal tagcase=ignore
 setlocal colorcolumn=120
