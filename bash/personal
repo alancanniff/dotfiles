@@ -9,6 +9,7 @@ shopt -s histappend
 alias fd="fdfind"
 alias rm="rm -f"
 alias vim="nvim"
+alias minicom="minicom -c on"
 alias untar="tar -zxvf"
 export EDITOR="nvim"
 export VISUAL="nvim"

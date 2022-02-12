@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Boot strap scirpt for ubuntu 20.04
+
 set -e
 
 cd ~
@@ -56,7 +58,8 @@ fi
 sudo npm install -g \
     neovim \
     bash-language-server \
-    markdownlint-cli
+    markdownlint-cli \
+    cspell@latest
 
 #########################################################
 python3 -m pip install \
@@ -95,6 +98,7 @@ if [[ ! -d neovim ]]; then
 fi
 
 pushd neovim || exit
+sudo rm .deps/.ninja_log
 git pull
 make CMAKE_BUILD_TYPE=RelWithDebInfo
 sudo make install
@@ -162,4 +166,10 @@ if [[ ! -e ~/.gitconfig ]]; then
     ln -s "$git_cfg" .gitconfig
 else
     echo .gitconfig exists
+fi
+
+if [[ -n $ALWAYS_FALSE ]]; then
+    sudo apt-add-repository ppa:fish-shell/release-3
+    sudo apt update
+    sudo apt install fish
 fi

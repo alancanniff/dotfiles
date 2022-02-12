@@ -61,6 +61,7 @@ EOF
     " set completeopt=menuone,noinsert   " Set completeopt to have a better completion experience
     " set completeopt=menuone,noinsert,noselect   " Set completeopt to have a better completion experience
     " set completeopt=menu,menuone,noselect       " from nvim-cmp
+    " set spell
     set hidden                                  " hide unsaved buffers
     set autoread                                " auto read file when changed outside of buffer
     set laststatus=2                            " always show the statusline in the last (bottom) window
@@ -192,7 +193,7 @@ EOF
         autocmd FileChangedShellPost * echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
 
         " Remove trailing white spaces. This is dangerous for some filetypes - like this one!
-        autocmd BufWritePre *.v,*.sv,*.md,*.yaml,*.tcl,*.bash,*.sh,*.vhd, silent! :call my_utils#Trim_Whitespace()<CR>
+        autocmd BufWritePre *.v,*.sv,*.yaml,*.tcl,*.bash,*.sh,*.vhd, silent! :call my_utils#Trim_Whitespace()<CR>
         " autocmd FileType python nnoremap \f :0,$!yapf<Cr> :w<CR>
 
         " Jump to last know position in a file (if the '" is set)

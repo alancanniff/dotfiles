@@ -4,6 +4,14 @@ if not ok then
 	return
 end
 
+local capabilities = nil
+
+local ok, cmp = pcall(require, "cmp")
+if ok then
+	-- Setup lspconfig.
+	local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
+end
+
 local configs = require("lspconfig.configs")
 local util = require("lspconfig.util")
 local server_name = "vhdl_ls"
@@ -48,7 +56,7 @@ local on_attach = function(client, bufnr)
 	buf_set_keymap("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
 	buf_set_keymap("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
 	buf_set_keymap("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
-	buf_set_keymap("n", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
+	buf_set_keymap("n", "<C-s>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
 	buf_set_keymap("n", "<space>wa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>", opts)
 	buf_set_keymap("n", "<space>wr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>", opts)
 	buf_set_keymap("n", "<space>wl", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>", opts)
@@ -66,9 +74,15 @@ end
 -- local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 local servers = { "clangd", "vhdl_ls", "pylsp" }
 
+-- -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
+-- require("lspconfig")["<YOUR_LSP_SERVER>"].setup({
+-- 	capabilities = capabilities,
+-- })
+
 for _, lsp in ipairs(servers) do
 	nvim_lsp[lsp].setup({
 		on_attach = on_attach,
+		capabilities = capabilities,
 		flags = {
 			debounce_text_changes = 150,
 		},
@@ -79,6 +93,7 @@ local flagfile_path = "/home/ac00/.config/verible/.rules.verible_format"
 
 nvim_lsp["verible"].setup({
 	on_attach = on_attach,
+	capabilities = capabilities,
 	cmd = { "verible-verilog-ls", "--rules_config_search", "--flagfile", flagfile_path },
 	flags = {
 		debounce_text_changes = 150,
@@ -91,6 +106,7 @@ table.insert(runtime_path, "lua/?/init.lua")
 
 nvim_lsp["sumneko_lua"].setup({
 	on_attach = on_attach,
+	capabilities = capabilities,
 	flags = {
 		debounce_text_changes = 150,
 	},

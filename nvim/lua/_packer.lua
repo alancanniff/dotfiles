@@ -26,9 +26,23 @@ return require("packer").startup(function()
 	-- Packer can manage itself
 
 	use({ "fidian/hexmode" })
+
+	use({
+		"hrsh7th/nvim-cmp",
+		requires = {
+			"hrsh7th/cmp-nvim-lsp",
+			"saadparwaiz1/cmp_luasnip",
+			"neovim/nvim-lspconfig",
+			"hrsh7th/cmp-buffer",
+			"hrsh7th/cmp-path",
+			-- "hrsh7th/cmp-cmdline",
+		},
+	})
+
 	use({ "junegunn/fzf" })
 	use({ "junegunn/fzf.vim" })
 	use({ "justinmk/vim-dirvish" })
+
 	use({ "Lokaltog/vim-monotone" })
 
 	if vim.fn.executable("ctags") == 1 then

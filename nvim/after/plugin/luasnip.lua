@@ -1,6 +1,6 @@
-local ok, luasnip = pcall(require, 'luasnip')
+local ok, luasnip = pcall(require, "luasnip")
 if not ok then
-    return nil
+	return nil
 end
 
 local snip = luasnip.snippet
@@ -19,22 +19,33 @@ luasnip.filetype_extend("all", { "_" })
 require("luasnip.loaders.from_snipmate").load()
 -- require("luasnip.loaders.from_snipmate").lazy_load() -- Lazy loading
 
+vim.keymap.set({ "i", "s" }, "<c-k>", function()
+	if luasnip.expand_or_jumpable() then
+		luasnip.expand_or_jump()
+	end
+end, { silent = true })
 
--- vim.api.nvim_set_keymap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
--- vim.api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
--- vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
--- vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
--- vim.api.nvim_set_keymap("i", "<C-E>", "<Plug>luasnip-next-choice", {})
--- vim.api.nvim_set_keymap("s", "<C-E>", "<Plug>luasnip-next-choice", {})
+vim.keymap.set({ "i", "s" }, "<c-j>", function()
+	if luasnip.jumpable(-1) then
+		luasnip.jump(-1)
+	end
+end, { silent = true })
 
-local map = require('my').map
-local remap = { noremap=false, silent=true, expr=true }
+-- vim.api.nvim_set_keymap("i", "<Tab>", "v:lua.tab_complete()", { expr = true })
+-- vim.api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()", { expr = true })
+-- -- vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
+-- -- vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
+-- -- vim.api.nvim_set_keymap("i", "<C-E>", "<Plug>luasnip-next-choice", {})
+-- -- vim.api.nvim_set_keymap("s", "<C-E>", "<Plug>luasnip-next-choice", {})
 
-map('i', '<Tab>', [[luasnip#expandable() ? '<Plug>luasnip-expand-snippet' : '<Tab>']], remap)
-map('i', '<C-j>', [[<cmd>lua require('luasnip').jump(1)<Cr>]])
-map('i', '<C-k>', [[<cmd>lua require'luasnip'.jump(-1)<Cr>]])
-map('s', '<C-j>', [[<cmd>lua require('luasnip').jump(1)<Cr>]])
-map('s', '<C-k>', [[<cmd>lua require('luasnip').jump(-1)<Cr>]])
+-- local map = require("my").map
+-- local remap = { noremap = false, silent = true, expr = true }
 
--- imap <silent><expr> <C-E> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-E>'
--- smap <silent><expr> <C-E> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-E>'
+-- map("i", "<Tab>", [[luasnip#expandable() ? '<Plug>luasnip-expand-snippet' : '<Tab>']], remap)
+-- map("i", "<C-j>", [[<cmd>lua require('luasnip').jump(1)<Cr>]])
+-- map("i", "<C-k>", [[<cmd>lua require'luasnip'.jump(-1)<Cr>]])
+-- map("s", "<C-j>", [[<cmd>lua require('luasnip').jump(1)<Cr>]])
+-- map("s", "<C-k>", [[<cmd>lua require('luasnip').jump(-1)<Cr>]])
+
+-- -- imap <silent><expr> <C-E> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-E>'
+-- -- smap <silent><expr> <C-E> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-E>'
