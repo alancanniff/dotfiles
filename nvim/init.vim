@@ -61,6 +61,7 @@ EOF
     " set completeopt=menuone,noinsert   " Set completeopt to have a better completion experience
     " set completeopt=menuone,noinsert,noselect   " Set completeopt to have a better completion experience
     " set completeopt=menu,menuone,noselect       " from nvim-cmp
+    set completeopt=menu,menuone
     " set spell
     set hidden                                  " hide unsaved buffers
     set autoread                                " auto read file when changed outside of buffer

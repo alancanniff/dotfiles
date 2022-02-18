@@ -1,0 +1,8 @@
+{
+    "guard": {
+        "prefix": ["guard", "pcall"],
+        "body": ["ok, $1 = pcall(require, \1", "if not ok then", "\treturn nil", "end"],
+        "description": "pcall guard"
+    }
+}
+
