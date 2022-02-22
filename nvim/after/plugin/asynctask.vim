@@ -1,8 +1,8 @@
 if !exists("g:asynctasks_system") | finish | endif
 
 noremap <silent><f5> :AsyncTask file-run<cr>
-noremap <silent><f6> :AsyncTask project-run<cr>
-noremap <silent><f7> :AsyncTask project-build<cr>
+noremap <silent><f6> :AsyncTask fpga-sim<cr>
+noremap <silent><f7> :AsyncTask fpga-build<cr>
 noremap <silent><f9> :AsyncTask file-build<cr>
 
 let g:asyncrun_open = 6

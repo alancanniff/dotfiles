@@ -176,6 +176,11 @@ EOF
 
     nnoremap \w :call my_utils#Trim_Whitespace()<CR>
 
+    nnoremap [q  :cprevious<Cr>
+    nnoremap ]q  :cnext<Cr>
+    nnoremap [Q  :cfirst<Cr>
+    nnoremap ]Q  :clast<Cr>
+
 "" }}} Key Mappings "
 
 " Autocmd {{{ "
