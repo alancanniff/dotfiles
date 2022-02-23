@@ -168,24 +168,24 @@ else
     echo .gitconfig exists
 fi
 
-if [[ -n $ALWAYS_FALSE ]]; then
-    sudo apt-add-repository ppa:fish-shell/release-3
-    sudo apt update
-    sudo apt install fish
-fi
+#if [[ -n $ALWAYS_FALSE ]]; then
+#    sudo apt-add-repository ppa:fish-shell/release-3
+#    sudo apt update
+#    sudo apt install fish
+#fi
 
-########################################################
-# fish stuff
+#########################################################
+## fish stuff
 
-if 0; then
-    # this wrapper starts the fish shell from bash so that it inherits its enviroment
-    fishwrapper="$XDG_CONFIG_HOME/fish/fishlogin"
-    fishlogin="/usr/local/bin/fishlogin"
+#if 0; then
+#    # this wrapper starts the fish shell from bash so that it inherits its enviroment
+#    fishwrapper="$XDG_CONFIG_HOME/fish/fishlogin"
+#    fishlogin="/usr/local/bin/fishlogin"
 
-    if [[ ! -e "$fishlogin" ]]; then
-        sudo cp "$fishwrapper" "$fishlogin"
-        sudo chmod 755 "$fishlogin"
-        echo "$fishlogin" | sudo tee -a /etc/shells
-        sudo usermod -s "$fishlogin" "$USER"
-    fi
-fi
+#    if [[ ! -e "$fishlogin" ]]; then
+#        sudo cp "$fishwrapper" "$fishlogin"
+#        sudo chmod 755 "$fishlogin"
+#        echo "$fishlogin" | sudo tee -a /etc/shells
+#        sudo usermod -s "$fishlogin" "$USER"
+#    fi
+#fi
