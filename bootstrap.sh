@@ -12,7 +12,7 @@ if ! grep -xq "$mybash" ~/.bashrc; then
     echo "$mybash" >>~/.bashrc
 fi
 
-# shellcheck source=/home/acanniff/.config/bash/personal
+# shellcheck source=/home/ac00/.bashrc
 . "$HOME"/.config/bash/personal
 
 # the bazel repo

@@ -36,12 +36,21 @@ ls.snippets = {
 		ls.parser.parse_snippet(
 			"mod",
 			[[/**
- *  $3
+ *  $1
  */
-module $1 #($2
-)($4
+module $TM_FILENAME_BASE #($2
+)($3
 );$0
 endmodule]]
+		),
+		ls.parser.parse_snippet(
+			"pkg",
+			[[/**
+ *  $1
+ */
+package $TM_FILENAME_BASE;
+    $0
+endpackage]]
 		),
 	},
 }

@@ -6,6 +6,7 @@ noremap <silent><f7> :AsyncTask fpga-build<cr>
 noremap <silent><f9> :AsyncTask file-build<cr>
 
 let g:asyncrun_open = 6
+let g:asynctasks_term_rows = 20
 let g:asynctasks_term_pos = 'bottom'
 let g:asynctasks_term_reuse = 1
 let g:asynctasks_extra_config = [stdpath('config').'/.asynctask']
