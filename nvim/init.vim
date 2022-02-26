@@ -150,6 +150,8 @@ EOF
     nnoremap  ' `
     nnoremap  ` '
 
+    nnoremap  <C-l> :set nohlsearch<Cr>
+
     nnoremap  \cd :cd %:p:h<CR>|:pwd
 
     if has('nvim')

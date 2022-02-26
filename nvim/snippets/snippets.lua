@@ -25,32 +25,9 @@ if not ok then
 end
 
 ls.snippets = {
-	all = {
-		ls.parser.parse_snippet("Alan", "$1 is ${2|hard,easy,challenging|}"),
-		ls.parser.parse_snippet("proc", "proc $1 {$2} {\n\t$0\n}"),
-	},
 	tcl = {
 		ls.parser.parse_snippet("dbg", [[puts "Debug: $1"$0]]),
-    },
-	systemverilog = {
-		ls.parser.parse_snippet(
-			"mod",
-			[[/**
- *  $1
- */
-module $TM_FILENAME_BASE #($2
-)($3
-);$0
-endmodule]]
-		),
-		ls.parser.parse_snippet(
-			"pkg",
-			[[/**
- *  $1
- */
-package $TM_FILENAME_BASE;
-    $0
-endpackage]]
-		),
-	},
+    }
 }
+
+

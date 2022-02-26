@@ -1,0 +1,22 @@
+{
+  "module": {
+    "prefix": "mod",
+    "body": ["$BLOCK_COMMENT_START*", " * $1", " $BLOCK_COMMENT_END", "module $TM_FILENAME_BASE #($2", ")($3", ");$0", "endmodule"],
+    "description": "module instance"
+  },
+  "package": {
+    "prefix": "pkg",
+    "body": ["$BLOCK_COMMENT_START*", " * $1", " $BLOCK_COMMENT_END", "package $TM_FILENAME_BASE;$0", "endpackage"],
+    "description": "package instance"
+  },
+  "typedef": {
+    "prefix": ["type", "td"],
+    "body": ["typedef struct {", "\t$0", "} ${name}_t"],
+    "description": "typedef"
+  },
+  "enum": {
+    "prefix": ["enum", "tde"],
+    "body": ["typedef enum ${2:logic[15:0]} {", "\t${3:REG = 16'h0000}", "} ${1:my_dest_t};"],
+    "description": "typedef enum"
+  }
+}

@@ -67,10 +67,6 @@ snippet alc
 		${0}
 	end
 # Module block
-snippet mod
-	module ${1:`vim_snippets#Filename('$1', 'name')`} (${2});
-		${0}
-	endmodule
 # For
 snippet for
 	for (int ${2:i} = 0; $2 < ${1:count}; $2${3:++}) begin
@@ -96,11 +92,6 @@ snippet ini
 	initial begin
 		${0}
 	end
-# typedef struct packed
-snippet tdsp
-	typedef struct packed {
-		int ${2:data};
-	} ${1:`vim_snippets#Filename('$1_t', 'name')`};
 # typedef eum
 snippet tde
 	typedef enum ${2:logic[15:0]}
