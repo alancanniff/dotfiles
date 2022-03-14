@@ -18,5 +18,16 @@
     "prefix": ["enum", "tde"],
     "body": ["typedef enum ${2:logic[15:0]} {", "\t${3:REG = 16'h0000}", "} ${1:my_dest_t};"],
     "description": "typedef enum"
+  },
+  "ifgenerate": {
+    "prefix": ["ifg", "genif"],
+    "body": [
+        "generate",
+        "\tif ($1) begin",
+        "\t\t$2",
+        "\tend",
+        "endgenerate"
+    ],
+    "description": "generate if"
   }
 }

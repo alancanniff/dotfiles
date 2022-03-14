@@ -95,4 +95,3 @@ set-window-option -g window-status-current-style fg=magenta
 
 # Allow the arrow key to be used immediately after changing windows
 set-option -g repeat-time 0
-

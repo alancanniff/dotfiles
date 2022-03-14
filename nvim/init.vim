@@ -150,8 +150,6 @@ EOF
     nnoremap  ' `
     nnoremap  ` '
 
-    nnoremap  <C-l> :set nohlsearch<Cr>
-
     nnoremap  \cd :cd %:p:h<CR>|:pwd
 
     if has('nvim')
@@ -168,20 +166,34 @@ EOF
     " this function has been moved to the plugins dir
     nmap \h <Plug>Highlight_SynStack
 
-    " Close location list or quickfix list if they are present,
-    " see https://goo.gl/uXncnS
-    nnoremap<silent> \x :windo lclose <bar> cclose<CR>
-
     " Close a buffer and switching to another buffer, do not close the window, 
     " see https://goo.gl/Wd8yZJ
     nnoremap <silent> \d :bprevious <bar> bdelete #<CR>
 
     nnoremap \w :call my_utils#Trim_Whitespace()<CR>
 
+    " Close location list or quickfix list if they are present,
+    " see https://goo.gl/uXncnS
+    nnoremap<silent> \x :windo lclose <bar> cclose<CR>
+
+
     nnoremap [q  :cprevious<Cr>
     nnoremap ]q  :cnext<Cr>
     nnoremap [Q  :cfirst<Cr>
     nnoremap ]Q  :clast<Cr>
+
+    " Change the behaviour of the mouse to line up with everythign else....
+    nnoremap <RightDrag> <Nop>
+    nnoremap <RightRelease> <MiddleRelease>
+    nnoremap <RightMouse> <MiddleMouse>
+
+    inoremap <RightDrag> <Nop>
+    inoremap <RightRelease> <MiddleRelease>
+    inoremap <RightMouse> <MiddleMouse>
+
+    map <LeftRelease> "*y
+
+
 
 "" }}} Key Mappings "
 

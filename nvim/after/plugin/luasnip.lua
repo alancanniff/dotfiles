@@ -14,10 +14,9 @@ end
 -- local r = ls.restore_node
 -- local events = require("luasnip.util.events")
 
-
-
 ls.filetype_extend("all", { "_" })
 require("luasnip.loaders.from_snipmate").load()
+require("luasnip.loaders.from_vscode").load({ paths = { vim.fn.stdpath("config") .. "/snippets" } })
 
 vim.keymap.set({ "i", "s" }, "<c-j>", function()
 	if ls.expand_or_jumpable() then
@@ -37,8 +36,5 @@ vim.keymap.set({ "i" }, "<c-h>", function()
 	end
 end, { silent = true })
 
-
-require("luasnip.loaders.from_vscode").load({ paths = { vim.fn.stdpath('config').."/snippets" } })
-
-vim.cmd("source ~/.config/nvim/snippets/snippets.lua")
-vim.keymap.set("n", "<Space><Space>s", "<cmd>source ~/.config/nvim/snippets/snippets.lua<CR>")
+-- vim.cmd("source ~/.config/nvim/snippets/snippets.lua")
+-- vim.keymap.set("n", "<Space><Space>s", "<cmd>source ~/.config/nvim/snippets/snippets.lua<CR>")

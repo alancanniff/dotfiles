@@ -41,6 +41,7 @@ sudo apt install -y \
     pkg-config \
     fd-find \
     universal-ctags \
+    clang-format \
     xclip
 
 # curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -
@@ -60,6 +61,8 @@ sudo npm install -g \
     bash-language-server \
     markdownlint-cli \
     cspell@latest
+
+sudo npm install -g --save-dev --save-exact prettier
 
 #########################################################
 python3 -m pip install \
