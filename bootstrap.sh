@@ -42,7 +42,8 @@ sudo apt install -y \
     fd-find \
     universal-ctags \
     clang-format \
-    xclip
+    xclip \
+    bear
 
 # curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -
 curl -fsSL https://deb.nodesource.com/setup_17.x | sudo -E bash -

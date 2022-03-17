@@ -1,12 +1,26 @@
 {
   "module": {
     "prefix": "mod",
-    "body": ["$BLOCK_COMMENT_START*", " * $1", " $BLOCK_COMMENT_END", "module $TM_FILENAME_BASE #($2", ")($3", ");$0", "endmodule"],
+    "body": [
+      "$BLOCK_COMMENT_START*",
+      " * $1",
+      " $BLOCK_COMMENT_END",
+      "module $TM_FILENAME_BASE #($2",
+      ")($3",
+      ");$0",
+      "endmodule"
+    ],
     "description": "module instance"
   },
   "package": {
     "prefix": "pkg",
-    "body": ["$BLOCK_COMMENT_START*", " * $1", " $BLOCK_COMMENT_END", "package $TM_FILENAME_BASE;$0", "endpackage"],
+    "body": [
+      "$BLOCK_COMMENT_START*",
+      " * $1",
+      " $BLOCK_COMMENT_END",
+      "package $TM_FILENAME_BASE;$0",
+      "endpackage"
+    ],
     "description": "package instance"
   },
   "typedef": {
@@ -16,18 +30,16 @@
   },
   "enum": {
     "prefix": ["enum", "tde"],
-    "body": ["typedef enum ${2:logic[15:0]} {", "\t${3:REG = 16'h0000}", "} ${1:my_dest_t};"],
+    "body": [
+      "typedef enum ${2:logic[15:0]} {",
+      "\t${3:REG = 16'h0000}",
+      "} ${1:my_dest_t};"
+    ],
     "description": "typedef enum"
   },
   "ifgenerate": {
     "prefix": ["ifg", "genif"],
-    "body": [
-        "generate",
-        "\tif ($1) begin",
-        "\t\t$2",
-        "\tend",
-        "endgenerate"
-    ],
+    "body": ["generate", "\tif ($1) begin", "\t\t$2", "\tend", "endgenerate"],
     "description": "generate if"
   }
 }
