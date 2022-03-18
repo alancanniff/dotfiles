@@ -74,11 +74,6 @@ end
 -- local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 local servers = { "clangd", "vhdl_ls", "pylsp" }
 
--- -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
--- require("lspconfig")["<YOUR_LSP_SERVER>"].setup({
--- 	capabilities = capabilities,
--- })
-
 for _, lsp in ipairs(servers) do
 	nvim_lsp[lsp].setup({
 		on_attach = on_attach,
@@ -89,7 +84,7 @@ for _, lsp in ipairs(servers) do
 	})
 end
 
-local flagfile_path = "/home/ac00/.config/verible/.rules.verible_format"
+local flagfile_path = os.getenv("XDG_CONFIG_HOME") .. "/verible/.rules.verible_format"
 
 nvim_lsp["verible"].setup({
 	on_attach = on_attach,
