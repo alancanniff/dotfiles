@@ -129,6 +129,12 @@ fi
 
 pushd fzf || exit
 git pull
+./make install
+fzf=$(realpath "./bin/fzf")
+if [[ ! -e ~/.local/bin/fzf ]]; then
+    echo ln -s "$fzf" "$(realpath ~/.local/bin/fzf)"
+    ln -s "$fzf" "$(realpath ~/.local/bin/fzf)"
+fi
 ./install --all --xdg
 popd || exit
 
