@@ -68,7 +68,19 @@ local on_attach = function(client, bufnr)
 	buf_set_keymap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>", opts)
 	buf_set_keymap("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<CR>", opts)
 	buf_set_keymap("n", "<space>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", opts)
-	buf_set_keymap("n", "\f", "<cmd>lua vim.lsp.buf.formatting_sync()<CR>", opts)
+	-- buf_set_keymap("n", "\f", "<cmd>lua vim.lsp.buf.formatting_sync()<CR>", opts)
+
+	-- print(client.name)
+
+	if client.resolved_capabilities.document_formatting then
+		vim.cmd([[command! -buffer Format execute 'lua vim.lsp.buf.formatting()' ]])
+		-- vim.cmd([[
+		-- augroup LspFormatting
+		-- autocmd! * <buffer>
+		-- autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
+		-- augroup END
+		-- ]])
+	end
 end
 
 -- local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
@@ -129,5 +141,11 @@ nvim_lsp["sumneko_lua"].setup({
 	},
 })
 
+vim.diagnostic.config({
+	virtual_text = false,
+})
+-- Show line diagnostics automatically in hover window
+vim.o.updatetime = 250
+vim.cmd([[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]])
 -- " command! Format lua vim.lsp.buf.formatting()<CR>
 -- " nnoremap <silent> \f    :Format<CR>

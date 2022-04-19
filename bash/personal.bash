@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # File containing my local mods...
 
 export HISTSIZE=999999
@@ -17,20 +19,22 @@ export VISUAL="nvim"
 export LESS="-FRX"
 export RANGER_LOAD_DEFAULT_RC=FALSE
 # export PATH="$PATH:/app/location/node_modules/.bin"
-export PATH="$PATH:/home/$USER/.local/bin"
-export PATH="$PATH:/home/$USER/.cargo/bin"
+export PATH="/home/$USER/.local/bin:$PATH"
+export PATH="/home/$USER/.cargo/bin:$PATH"
 
 export XDG_CONFIG_HOME="$(realpath ~)/.config"
 
-hg () { history | grep -iE --color "$1" ; }
+hg() { history | grep -iE --color "$1"; }
 # -i        ignore case
 # -r        recursive
 # -n        Prefix each line of output with the 1-based line number within its input file.
 # -I        ignore files which grep thinks are binary
 # -E        extended regular expression
-mygrep () { grep -rnIiE --color "$1" "${2:-.}"; }
-fzfco () { git checkout $(git branch -l | fzf); }
+mygrep() { grep -rnIiE --color "$1" "${2:-.}"; }
+fzfco() { git checkout "$(git branch -l | fzf)"; }
 
-if [[ -f "$XDG_CONFIG_HOME/bash/work" ]]; then
-    . "$XDG_CONFIG_HOME/bash/work"
+work="$XDG_CONFIG_HOME/bash/work.bash"
+if [[ -f $work ]]; then
+    # shellcheck source=/home/ac00/.config/bash/work.bash
+    . "$work"
 fi

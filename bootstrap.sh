@@ -6,20 +6,22 @@ set -e
 
 cd ~
 
-mybash=". ~/.config/bash/personal"
+mybash=". ~/.config/bash/personal.bash"
 # only append the lines if they don't already exists
 if ! grep -xq "$mybash" ~/.bashrc; then
     echo "$mybash" >>~/.bashrc
 fi
 
 # shellcheck source=/home/ac00/.bashrc
-. "$HOME"/.config/bash/personal
+. "$HOME"/.config/bash/personal.bash
 
 # the bazel repo
 sudo apt install -y apt-transport-https curl gnupg
 curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor >bazel.gpg
 sudo mv bazel.gpg /etc/apt/trusted.gpg.d/
 echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
+
+sudo add-apt-repository ppa:lazygit-team/release
 
 sudo apt update
 sudo apt upgrade -y
@@ -43,7 +45,8 @@ sudo apt install -y \
     universal-ctags \
     clang-format \
     xclip \
-    bear
+    bear \
+    lazygit
 
 # curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -
 curl -fsSL https://deb.nodesource.com/setup_17.x | sudo -E bash -
@@ -51,16 +54,24 @@ sudo apt install -y -f nodejs
 
 if [[ -z $WSLENV ]]; then
 
-    sudo snap install clangd --classic
     sudo snap install \
         shfmt
 fi
+
+#########################################################
+
+wget https://apt.llvm.org/llvm.sh
+chmod +x llvm.sh
+sudo ./llvm.sh 14
+rm llvm.sh
+ln -s /usr/lib/llvm-14/bin/clangd ~/.local/bin/clangd
 
 #########################################################
 sudo npm install -g \
     neovim \
     bash-language-server \
     markdownlint-cli \
+    yarn \
     cspell@latest
 
 sudo npm install -g --save-dev --save-exact prettier
@@ -96,16 +107,26 @@ fi
 ## build things from sourcw
 pushd projects || exit
 
+## cmake
+
+if [[ ! -d cmake ]]; then
+    git clone git@gitlab.kitware.com:cmake/cmake.git
+fi
+pushd cmake || exit
+
+./bootstrap && make && sudo make install
+popd || exit
+
 ## neovim
 if [[ ! -d neovim ]]; then
     git clone git@github.com:neovim/neovim.git
 fi
 
 pushd neovim || exit
-sudo rm .deps/.ninja_log
 git pull
-make CMAKE_BUILD_TYPE=RelWithDebInfo
-sudo make install
+git checkout v0.7.0
+make CMAKE_BUILD_TYPE=Release
+make CMAKE_INSTALL_PREFIX="$HOME"/.local/ CMAKE_BUILD_TYPE=Release install
 popd || exit
 
 nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'

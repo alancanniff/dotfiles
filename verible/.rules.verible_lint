@@ -1,1 +1,1 @@
-parameter-name-style=localparam_style:ALL_CAPS;parameter_style:ALL_CAPS
+parameter-name-style=localparam_style:ALL_CAPS;always-ff-non-blocking=waive_for_locals=true

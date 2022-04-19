@@ -5,31 +5,35 @@ if not ok then
 end
 
 cmp.setup({
-	-- completion = {
-	-- 	autocomplete = false,
-	-- },
+	completion = {
+		autocomplete = true,
+	},
 	snippet = {
 		expand = function(args)
 			require("luasnip").lsp_expand(args.body) -- For `luasnip` users.
 		end,
 	},
-	mapping = {
+	mapping = cmp.mapping.preset.insert({
+		["<C-Space>"] = cmp.mapping.complete(),
+	}),
+	-- {
 
-		["<C-d>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
-		["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
-		["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
-		["<C-e>"] = cmp.mapping({
-			i = cmp.mapping.abort(),
-			c = cmp.mapping.close(),
-		}),
-		-- Accept currently selected item. If none selected, `select` first item.
-		-- Set `select` to `false` to only confirm explicitly selected items.
-		["<CR>"] = cmp.mapping.confirm({ select = false }),
-	},
+	-- ["<C-n>"] = mapping(mapping.select_next_item({ behavior = types.cmp.SelectBehavior.Insert }), { "i", "c" }),
+	-- ["<C-p>"] = mapping(mapping.select_prev_item({ behavior = types.cmp.SelectBehavior.Insert }), { "i", "c" }),
+	-- ["<C-d>"] = mapping(mapping.scroll_docs(-4), { "i", "c" }),
+	-- ["<C-f>"] = mapping(mapping.scroll_docs(4), { "i", "c" }),
+	-- ["<C-Space>"] = mapping(mapping.complete(), { "i", "c" }),
+	-- ["<C-e>"] = mapping({
+	-- i = mapping.abort(),
+	-- c = mapping.close(),
+	-- }),
+	-- -- Accept currently selected item. If none selected, `select` first item.
+	-- -- Set `select` to `false` to only confirm explicitly selected items.
+	-- ["<CR>"] = mapping.confirm({ select = false }),
+	-- },
 	sources = cmp.config.sources({
 		{ name = "luasnip" },
 		{ name = "nvim_lsp" },
-		{ name = "path" },
 		{
 			name = "buffer",
 			option = {
@@ -38,6 +42,7 @@ cmp.setup({
 				end,
 			},
 		},
+		{ name = "path" },
 	}),
 })
 

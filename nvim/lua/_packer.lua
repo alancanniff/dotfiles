@@ -72,7 +72,11 @@ return require("packer").startup(function()
 	use({ "nvim-lua/popup.nvim" })
 	use({ "nvim-lua/plenary.nvim" })
 	use({ "nvim-lua/telescope.nvim" })
-	use({ "nvim-treesitter/nvim-treesitter" })
+	use({
+		"nvim-treesitter/nvim-treesitter",
+		requires = { "nvim-treesitter/nvim-treesitter-textobjects" },
+		run = ":TSUpdate",
+	})
 
 	use({
 		"nvim-lualine/lualine.nvim",
@@ -95,6 +99,8 @@ return require("packer").startup(function()
 	use({ "tpope/vim-repeat" })
 	use({ "vim-scripts/DoxygenToolkit.vim" })
 	use({ "wbthomason/packer.nvim" })
+
+    use '~/projects/playground/neovim/lush/twotone'
 
 	if packer_bootstrap then
 		require("packer").sync()
