@@ -1,26 +1,24 @@
-local ok, telescope = pcall(require, 'telescope')
-if not ok then 
-    return 
+local ok, telescope = pcall(require, "telescope")
+if not ok then
+	return
 end
 
-local actions = require('telescope.actions')
+local actions = require("telescope.actions")
 
-telescope.setup{
-  defaults = {
-    mappings = {
-      i = {
-        ["<esc>"] = actions.close
-      },
-    },
-  }
-}
+telescope.setup({
+	defaults = {
+		mappings = {
+			i = {
+				["<esc>"] = actions.close,
+			},
+		},
+	},
+})
 
-
-local map = require('my').map
-map('n', '<space>tf', [[<cmd>lua require('telescope.builtin').find_files()<cr>]])
-map('n', '<space>tg', [[<cmd>lua require('telescope.builtin').live_grep()<cr>]])
-map('n', '<space>tb', [[<cmd>lua require('telescope.builtin').buffers()<cr>]])
-map('n', '<space>th', [[<cmd>lua require('telescope.builtin').help_tags()<cr>]])
+vim.keymap.set("n", "<space>tf", require("telescope.builtin").find_files)
+vim.keymap.set("n", "<space>tg", require("telescope.builtin").live_grep)
+vim.keymap.set("n", "<space>tb", require("telescope.builtin").buffers)
+vim.keymap.set("n", "<space>th", require("telescope.builtin").help_tags)
 
 -- local finders = {}
 --  -- Dropdown list theme using a builtin theme definitions :
@@ -60,9 +58,9 @@ map('n', '<space>th', [[<cmd>lua require('telescope.builtin').help_tags()<cr>]])
 
 --  return finders
 
- -- make sure to map it:
- -- nnoremap <leader>ff :lua require'finders'.fd_in_nvim()<cr> 
- -- nnoremap <leader>ff :lua require'finders'.fd()<cr>
+-- make sure to map it:
+-- nnoremap <leader>ff :lua require'finders'.fd_in_nvim()<cr>
+-- nnoremap <leader>ff :lua require'finders'.fd()<cr>
 
 --local has_telescope, telescope = pcall(require, 'telescope')
 
@@ -99,6 +97,3 @@ map('n', '<space>th', [[<cmd>lua require('telescope.builtin').help_tags()<cr>]])
 --    finder    = test_grepper,
 --    previewer = previewers.vimgrep,
 --}):find()
-
-
-

@@ -14,12 +14,6 @@ parser_config.vhdl = {
 	used_by = { "vhdl", "vho" }, -- additional filetypes that use this parser
 }
 
--- require'nvim-treesitter.configs'.setup {
---     ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
---     highlight = { enable = true },
---     indent = { enable = true },
--- }
-
 require("nvim-treesitter.configs").setup({
 	playground = {
 		enable = true,

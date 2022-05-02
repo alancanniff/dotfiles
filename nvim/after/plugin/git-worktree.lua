@@ -8,10 +8,12 @@ if not ok then
 	return
 end
 
-local map = require("my").map
+-- local map = require("my").map
 require("telescope").load_extension("git_worktree")
-map("n", "<Space>ws", [[:lua require('telescope').extensions.git_worktree.git_worktrees()<Cr>]])
-map("n", "<Space>wc", [[:lua require('telescope').extensions.git_worktree.create_git_worktree()<Cr>]])
+vim.keymap.set("n", "<Space>ws", require("telescope").extensions.git_worktree.git_worktrees)
+vim.keymap.set("n", "<Space>wc", require("telescope").extensions.git_worktree.create_git_worktree)
+
+-- vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
 
 ---- "" Example of custom completion function
 ---- " :com -complete=custom,ListUsers -nargs=1 Finger !finger <args>

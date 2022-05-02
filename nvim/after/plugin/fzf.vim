@@ -21,6 +21,8 @@ nnoremap  <space>/ :History/<CR>
 
 command! -bang -nargs=* FzfRgNoIgnore call fzf#vim#grep("rg --no-ignore --column --line-number --no-heading --color=always --smart-case -- ".shellescape(<q-args>), 1, fzf#vim#with_preview(), <bang>0)
 command! -bang FzfConfig  call fzf#vim#files("~/.config", fzf#vim#with_preview(), <bang>0)
+
+command! -bang FzfBackup  call fzf#vim#files(&backupdir, fzf#vim#with_preview(), <bang>0)
 command! -bang -nargs=* FzfConfigRg call fzf#vim#grep("rg --no-ignore --column --line-number --no-heading --color=always --smart-case -- ".shellescape(<q-args>)." ". stdpath('config'), 1, fzf#vim#with_preview(), <bang>0)
 
 nnoremap  <space>c :FzfConfig<CR>
