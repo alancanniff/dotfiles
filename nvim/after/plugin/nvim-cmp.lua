@@ -5,14 +5,15 @@ if not ok then
 end
 
 cmp.setup({
-	completion = {
-		autocomplete = true,
-	},
+	-- completion = {
+	-- 	autocomplete = true,
+	-- },
 	snippet = {
 		expand = function(args)
 			require("luasnip").lsp_expand(args.body) -- For `luasnip` users.
 		end,
 	},
+
 	mapping = cmp.mapping.preset.insert({
 		["<C-Space>"] = cmp.mapping.complete(),
 	}),

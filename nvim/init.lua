@@ -292,14 +292,6 @@ vim.keymap.set("n", "]q", ":cnext<Cr>")
 vim.keymap.set("n", "[Q", ":cfirst<Cr>")
 vim.keymap.set("n", "]Q", ":clast<Cr>")
 
--- " ??if &wildoptions == "pum"
--- " ??    " cnoremap <up> <c-p>
--- " ??    " cnoremap <down> <c-n>
--- " ??    cnoremap <expr> <C-P> wildmenumode() ? "<C-P>" : "<Up>"
--- " ??    cnoremap <expr> <C-N> wildmenumode() ? "<C-N>" : "<Down>"
--- " ??endif
-
--- tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
 vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], { desc = "Enable Esc in terminal mode" })
 vim.keymap.set("t", "<C-w>", [[<C-\><C-n><C-w>]], { desc = "Enable <C-w> in terminal mode" })
 vim.keymap.set(
@@ -443,11 +435,6 @@ vim.api.nvim_create_autocmd("BufLeave", {
 	desc = "Set line number and disable cursorline / column",
 })
 
--- autocmd BufReadPost *
--- if (&filetype != 'gitcommit') && line("'\"") > 0 && line("'\"") <= line("$")
--- | execute
--- | endif
-
 vim.api.nvim_create_autocmd("BufReadPost", {
 	group = general_group,
 	pattern = "*",
@@ -478,6 +465,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	end,
 	group = highlight_group,
 	pattern = "*",
+	desc = "Highlight yanked text",
 })
 
 -- }}}
