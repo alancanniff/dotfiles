@@ -6,7 +6,7 @@ end
 vim.cmd("source ~/.config/nvim/snippets/snippets.lua")
 
 ls.filetype_extend("all", { "_" })
-require("luasnip.loaders.from_snipmate").load()
+require("luasnip.loaders.from_snipmate").lazy_load()
 
 vim.keymap.set({ "i", "s" }, "<c-j>", function()
 	if ls.expand_or_jumpable() then
