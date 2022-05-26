@@ -1,6 +1,17 @@
 -- vim help links
 -- luasnip-snippets
 
+--[[
+Basic snippet format!
+--]]
+-- s({
+--   trig = {},
+--   name = {},
+--   dscr = {}
+--   }, 
+--   fmt([[ {} ]], {})
+-- )
+
 local ok, ls = pcall(require, "luasnip")
 if not ok then
 	return nil

@@ -6,7 +6,8 @@ end
 
 local capabilities = nil
 
-local ok, cmp = pcall(require, "cmp")
+local _
+ok, _ = pcall(require, "cmp")
 if ok then
 	-- Setup lspconfig.
 	local capabilities = require("cmp_nvim_lsp").update_capabilities(
@@ -77,10 +78,11 @@ local on_attach = function(client, bufnr)
 	-- buf_set_keymap("n", "<space>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", opts)
 	-- buf_set_keymap("n", "\f", "<cmd>lua vim.lsp.buf.formatting_sync()<CR>", opts)
 
-	-- print(client.name)
-
-	if client.resolved_capabilities.document_formatting then
-		vim.cmd([[command! -buffer Format execute 'lua vim.lsp.buf.formatting()' ]])
+	if client.supports_method("textDocument/formatting") then
+		vim.api.nvim_create_user_command("Format", function()
+			vim.lsp.buf.format({ async = true })
+		end, { force = true, bang = true })
+		-- vim.cmd([[command! -buffer Format execute 'lua vim.lsp.buf.format()' ]])
 		-- vim.cmd([[
 		-- augroup LspFormatting
 		-- autocmd! * <buffer>

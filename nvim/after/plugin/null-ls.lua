@@ -5,8 +5,23 @@ end
 
 local helpers = require("null-ls.helpers")
 local methods = require("null-ls.methods")
+-- local client = require("null-ls.clients")
 
 local FORMATTING = methods.internal.FORMATTING
+
+local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+
+local formatting_filter = function(bufnr)
+	vim.lsp.buf.format({
+		-- filter = function(clients)
+		-- 	-- filter out clients that you don't want to use
+		-- 	return vim.tbl_filter(function(client)
+		-- 		return client.name ~= "clangd"
+		-- 	end, clients)
+		-- end,
+		-- bufnr = bufnr,
+	})
+end
 
 null_ls.setup({
 	-- you must define at least one source for the plugin to work
@@ -20,9 +35,17 @@ null_ls.setup({
 		null_ls.builtins.formatting.prettier.with({
 			filetypes = { "json", "yaml" },
 		}),
+		-- null_ls.builtins.formatting.uncrustify.with({
+		-- 	extra_args = {
+		-- 		"-c",
+		-- 		"/home/ac00/projects/playground/uncrustify/macaw/src/i2s/default.cfg",
+		-- 	},
+		-- }),
+
 		-- null_ls.builtins.formatting.clang_format,
 
 		null_ls.builtins.code_actions.shellcheck,
+		-- null_ls.builtins.code_actions.stylua,
 
 		null_ls.builtins.diagnostics.markdownlint,
 		null_ls.builtins.diagnostics.shellcheck,
@@ -31,15 +54,20 @@ null_ls.setup({
 
 	debug = true,
 
-	on_attach = function(client)
-		if client.resolved_capabilities.document_formatting then
-			vim.cmd([[command! Format execute 'lua vim.lsp.buf.formatting()' ]])
-			vim.cmd([[
-			augroup LspFormatting
-			autocmd! * <buffer>
-			autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
-			augroup END
-			]])
+	-- you can reuse a shared lspconfig on_attach callback here
+	on_attach = function(client, bufnr)
+		if client.supports_method("textDocument/formatting") then
+			vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+			vim.api.nvim_create_autocmd("BufWritePre", {
+				group = augroup,
+				buffer = bufnr,
+				callback = function()
+					formatting_filter(bufnr)
+				end,
+				-- callback = function()
+				-- 	vim.lsp.buf.format()
+				-- end,
+			})
 		end
 	end,
 })

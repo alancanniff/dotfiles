@@ -1,5 +1,5 @@
-require("impatient")
-require("impatient").enable_profile()
+-- require("impatient")
+-- require("impatient").enable_profile()
 
 -- Windows settings {{{
 local is_windows = vim.fn.has("win32") or vim.fn.has("win64")
@@ -440,7 +440,7 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 	pattern = "*",
 	callback = function()
 		local line = vim.fn.line
-		if vim.o.filetype ~= "gitcommit" and line("'\"") > 0 and line("'\"") <= line("$") then
+		if (vim.o.filetype ~= "gitcommit") and (line("'\"") > 0) and (line("'\"") <= line("$")) then
 			vim.cmd([[execute 'normal! g`"zvzz']])
 		end
 	end,
@@ -459,14 +459,14 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 -- Highlight on yank
 local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
 
-vim.api.nvim_create_autocmd("TextYankPost", {
-	callback = function()
-		vim.highlight.on_yank()
-	end,
-	group = highlight_group,
-	pattern = "*",
-	desc = "Highlight yanked text",
-})
+-- vim.api.nvim_create_autocmd("TextYankPost", {
+-- 	callback = function()
+-- 		vim.highlight.on_yank()
+-- 	end,
+-- 	group = highlight_group,
+-- 	pattern = "*",
+-- 	desc = "Highlight yanked text",
+-- })
 
 -- }}}
 
