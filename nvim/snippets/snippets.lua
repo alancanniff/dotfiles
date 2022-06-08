@@ -1,4 +1,3 @@
--- vim help links
 -- luasnip-snippets
 
 --[[
@@ -8,7 +7,7 @@ Basic snippet format!
 --   trig = {},
 --   name = {},
 --   dscr = {}
---   }, 
+--   },
 --   fmt([[ {} ]], {})
 -- )
 
@@ -33,6 +32,82 @@ local d = ls.dynamic_node
 -- local utils = require("luasnip_snippets.utils")
 local fmt = require("luasnip.extras.fmt").fmt
 
+local function filebase(_, snip)
+	return snip.env.TM_FILENAME_BASE
+end
+
+local function filename(_, snip)
+	return snip.env.tm_filename
+end
+
+local function get_node(args)
+	return args[1][1]
+end
+
+local function debug_args(args)
+	print(vim.inspect(args))
+	return args[1][1]
+end
+
+local recurring_optiong
+recurring_optiong = function()
+	return sn(nil, {
+		c(1, {
+			-- important!! Having the sn(...) as the first choice will cause infinite recursion.
+			t({ "" }),
+			-- The same dynamicNode as in the snippet (also note: self reference).
+			sn(
+				nil,
+				fmt(
+					[[
+--{})
+        {}=1
+        ;;
+    {}
+]],
+					{ i(1), f(get_node, 1), d(2, recurring_optiong) }
+				)
+			),
+			sn(
+				nil,
+				fmt(
+					[[
+--{})
+        if [ "$2" ]; then
+            {}=$2
+            shift
+        else
+            echo 'ERROR: "--{}" requires a non-empty option argument.'
+            exit 1
+        fi
+        ;;
+    --{}=?*)
+        # Delete everything up to "=" and assign the remainder.
+        {}=${{1#*=}}
+        ;;
+    # Handle the case of an empty --opt=
+    --{}=)
+        echo 'ERROR: "--{}" requires a non-empty option argument.'
+        exit 1
+        ;;
+    {}
+]],
+					{
+						i(1),
+						f(get_node, 1),
+						f(get_node, 1),
+						f(get_node, 1),
+						f(get_node, 1),
+						f(get_node, 1),
+						f(get_node, 1),
+						d(2, recurring_optiong),
+					}
+				)
+			),
+		}),
+	})
+end
+
 ls.add_snippets("all", {
 	s(
 		"fmt1",
@@ -44,39 +119,8 @@ ls.add_snippets("all", {
 	),
 })
 
-local function filebase(_, snip)
-	return snip.env.TM_FILENAME_BASE
-end
-
-local function filename(_, snip)
-	return snip.env.TM_FILENAME
-end
-
-local function option_text(args)
-	local opt_string = [[
-    --XYZ)
-    	if [ "\$2" ]; then
-    	XYZ=\$2
-    	shift
-    	else
-    	die 'ERROR: "--XYZ" requires a non-empty option argument.'
-    	fi
-    	;;
-    --XYZ=?*)
-    	XYZ=\${1#*=} # Delete everything up to "=" and assign the remainder.
-    	;;
-    # Handle the case of an empty --file=
-    --XYZ=)
-    	echo 'ERROR: "--XYZ" requires a non-empty option argument.'
-    	exit 1
-    	;;
-
-    ]]
-
-	return vim.split(opt_string:gsub("XYZ", args[1][1]), "\n")
-end
-
 ls.add_snippets("sh", {
+	---------------------------------------------------
 	s(
 		"foreach",
 		fmt(
@@ -90,30 +134,28 @@ ls.add_snippets("sh", {
 			{ i(1), i(0) }
 		)
 	),
+
+	---------------------------------------------------
 	s(
-		"topt",
+		"opt",
 		fmt(
 			[[
+
 function usage () {{
-echo "usage :  $${{0:0}} [options] [--]
-options:
--h|--help		Display this message
--v|--version	Display script version
+    echo "usage :  $(basename $0) [options] [--]
+    options:
+    -h|--help       Display this message
+    -v|--version    Display script version
+    {}
 
---{}			{}"
-
-}}	 # ----------  end of function usage  ----------
+}}   # ----------  end of function usage  ----------
 
 while :; do
-case \$1 in
-	 # Takes an option argument; ensure it has been specified.
-	{}
 
-	-h|-\?|--help)
-		usage; exit 0;;	# Display a usage synopsis.
-	-v|--verbose)
-		verbose=\$((verbose + 1))  # Each -v adds 1 to verbosity.
-		;;
+    case $1 in
+    {}
+	-h|--help)
+		usage; exit 0;;
 	--)		 # End of all options.
 		shift
 		break
@@ -124,12 +166,12 @@ case \$1 in
 		;;
 	*)		 # Default case: No more options, so break out of the loop.
 		break
-esac
-
-shift
+    esac
+    shift
 done
-]],
-			{ i(1), i(2), f(option_text, 1) }
+{}
+    ]],
+			{ i(2), d(1, recurring_optiong, {}), i(0) }
 		)
 	),
 })
@@ -141,7 +183,7 @@ ls.add_snippets("tcl", {
 ls.add_snippets("markdown", {
 	s("mailto", fmt("[{}](mailto:{}){}", { i(1, "text"), i(2, "email"), i(0) })),
 	s("url", fmt("[{}]({}){}", { i(1, "text"), i(2, "url"), i(0) })),
-	s("ttt", { t("```"), i(1), t({ "", "```" }), i(0) }),
+	s("codeblock", { t("```"), i(1), t({ "", "```" }), i(0) }),
 })
 
 ls.add_snippets("lua", {
@@ -201,3 +243,29 @@ ls.add_snippets("systemverilog", {
 		)
 	),
 })
+
+-- local function option_text(args)
+-- 	local opt_string = [[
+--     --XYZ)
+--     	if [ "$2" ]; then
+--     	XYZ=\$2
+--     	shift
+--     	else
+--     	die 'ERROR: "--XYZ" requires a non-empty option argument.'
+--     	fi
+--     	;;
+--     --XYZ=?*)
+--     	XYZ=\${1#*=} # Delete everything up to "=" and assign the remainder.
+--     	;;
+--     # Handle the case of an empty --file=
+--     --XYZ=)
+--     	echo 'ERROR: "--XYZ" requires a non-empty option argument.'
+--     	exit 1
+--     	;;
+--
+--     ]]
+--
+-- 	return vim.split(opt_string:gsub("XYZ", args[1][1]), "\n")
+-- end
+--
+-- -- echo "usage :  $${{0:0}} [options] [--]
