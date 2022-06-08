@@ -399,15 +399,6 @@ vim.api.nvim_create_autocmd("FileType", {
 	desc = "Set some global formatting options",
 })
 
-vim.api.nvim_create_autocmd("BufLeave", {
-	group = general_group,
-	pattern = { "*.vhd", "*.vhdl" },
-	callback = function()
-		vim.opt.isfname = vim.opt.isfname + { "." }
-	end,
-	desc = "Undo VHDL isfname characters. isfname += .",
-})
-
 vim.api.nvim_create_autocmd("BufEnter", {
 	group = general_group,
 	pattern = "*",
