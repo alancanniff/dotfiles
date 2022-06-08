@@ -104,7 +104,7 @@ require("packer").startup(function(use)
 	use({ "vim-scripts/DoxygenToolkit.vim" })
 	use({ "wbthomason/packer.nvim" })
 
-	use({ "~/projects/playground/neovim/lush/twotone" })
+	use({ "alancanniff/twotone" })
 end)
 
 --- }}}
@@ -435,7 +435,7 @@ vim.api.nvim_create_autocmd("BufLeave", {
 	desc = "Set line number and disable cursorline / column",
 })
 
-vim.api.nvim_create_autocmd("BufReadPost", {
+vim.api.nvim_create_autocmd("BufEnter", {
 	group = general_group,
 	pattern = "*",
 	callback = function()
@@ -457,7 +457,7 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 -- })
 
 -- Highlight on yank
-local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
+-- local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
 
 -- vim.api.nvim_create_autocmd("TextYankPost", {
 -- 	callback = function()

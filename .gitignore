@@ -9,7 +9,6 @@ plasma*
 
 bash/atom
 git/gitk
-SEGGER/
 Code/
 QtProject.conf
 SEGGER/
@@ -63,4 +62,19 @@ unity/
 user-dirs.dirs
 user-dirs.locale
 balena-etcher-electron
+Logic
+SEGGERJLink*
+VSCodium
+autostart
+configstore
+fzf
+goa*
+lazygit
+menus
+nrfconnect
+node_modules
+xfce4
+wireshark
+uncrustify
+tmux
 
