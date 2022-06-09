@@ -183,6 +183,14 @@ vim.opt.listchars = vim.opt.listchars + { tab = "▸ ", trail = "·" }
 vim.o.timeoutlen = 3000
 vim.o.lazyredraw = true
 
+-- disable some of the built in plugins
+vim.g.loaded_netrwPlugin = 1
+vim.g.loaded_netrw = 1
+vim.g.loaded_tarPlugin = 1
+vim.g.loaded_tar = 1
+vim.g.loaded_zipPlugin = 1
+vim.g.loaded_zip = 1
+
 -- }}}
 
 -- Commands  {{{
