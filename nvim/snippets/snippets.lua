@@ -3,6 +3,7 @@
 --[[
 Basic snippet format!
 --]]
+
 -- s({
 --   trig = {},
 --   name = {},
@@ -44,6 +45,10 @@ local function get_node(args)
 	return args[1][1]
 end
 
+local function get_variable_from_node(args)
+	return args[1][1]:gsub("-", "_")
+end
+
 local function debug_args(args)
 	print(vim.inspect(args))
 	return args[1][1]
@@ -65,7 +70,7 @@ recurring_optiong = function()
         ;;
     {}
 ]],
-					{ i(1), f(get_node, 1), d(2, recurring_optiong) }
+					{ i(1), f(get_variable_from_node, 1), d(2, recurring_optiong) }
 				)
 			),
 			sn(
@@ -78,6 +83,7 @@ recurring_optiong = function()
             shift
         else
             echo 'ERROR: "--{}" requires a non-empty option argument.'
+            usage
             exit 1
         fi
         ;;
@@ -88,16 +94,17 @@ recurring_optiong = function()
     # Handle the case of an empty --opt=
     --{}=)
         echo 'ERROR: "--{}" requires a non-empty option argument.'
+        usage
         exit 1
         ;;
     {}
 ]],
 					{
 						i(1),
+						f(get_variable_from_node, 1),
 						f(get_node, 1),
 						f(get_node, 1),
-						f(get_node, 1),
-						f(get_node, 1),
+						f(get_variable_from_node, 1),
 						f(get_node, 1),
 						f(get_node, 1),
 						d(2, recurring_optiong),
@@ -147,6 +154,7 @@ function usage () {{
     -h|--help       Display this message
     -v|--version    Display script version
     {}
+    "
 
 }}   # ----------  end of function usage  ----------
 
@@ -155,13 +163,16 @@ while :; do
     case $1 in
     {}
 	-h|--help)
-		usage; exit 0;;
+		usage; 
+        exit 0
+        ;;
 	--)		 # End of all options.
 		shift
 		break
 		;;
 	-?*)
-		printf 'ERROR: Unknown option (ignored): %s\n' "\$1" >&2
+		printf 'ERROR: Unknown option (ignored): %s\n' "$1" >&2
+        usage
 		exit 1
 		;;
 	*)		 # Default case: No more options, so break out of the loop.
