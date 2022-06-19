@@ -98,7 +98,10 @@ require("packer").startup(function(use)
 	use({ "ThePrimeagen/git-worktree.nvim" })
 	use({ "tommcdo/vim-lion" })
 	use({ "tpope/vim-eunuch" })
-	use({ "tpope/vim-fugitive" })
+	use({
+		"tpope/vim-fugitive",
+		requires = { "shumphrey/fugitive-gitlab.vim" },
+	})
 	use({ "tpope/vim-repeat" })
 	use({ "tpope/vim-commentary" })
 	use({ "vim-scripts/DoxygenToolkit.vim" })
@@ -184,8 +187,8 @@ vim.o.timeoutlen = 3000
 vim.o.lazyredraw = true
 
 -- disable some of the built in plugins
-vim.g.loaded_netrwPlugin = 1
-vim.g.loaded_netrw = 1
+-- vim.g.loaded_netrwPlugin = 1
+-- vim.g.loaded_netrw = 1
 vim.g.loaded_tarPlugin = 1
 vim.g.loaded_tar = 1
 vim.g.loaded_zipPlugin = 1
@@ -250,8 +253,9 @@ vim.api.nvim_create_user_command("Redir", function(opts)
 end, { force = true, nargs = 1, complete = "command", desc = "Redirect cmd output to buffer" })
 
 vim.api.nvim_create_user_command("Testing", function(opts)
-	print(vim.inspect(opts))
-end, { force = true, nargs = 1, bang = true })
+	local gitlab = require("gitlab")
+	gitlab.report_jobs()
+end, { force = true, nargs = 0, bang = true })
 -- }}}
 
 -- Keymaps {{{
