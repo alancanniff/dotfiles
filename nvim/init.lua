@@ -27,6 +27,10 @@ require("packer").startup(function(use)
 	-- use { 'alexghergh/nvim-tmux-navigation'}
 	-- Packer can manage itself
 
+	use({
+		"akinsho/toggleterm.nvim",
+		tag = "v1.*",
+	})
 	use({ "lewis6991/impatient.nvim" })
 
 	use({ "fidian/hexmode" })
@@ -256,6 +260,11 @@ vim.api.nvim_create_user_command("Testing", function(opts)
 	local gitlab = require("gitlab")
 	gitlab.report_jobs()
 end, { force = true, nargs = 0, bang = true })
+
+vim.api.nvim_create_user_command("Testing", function(opts)
+	-- local Terminal = require("toggleterm.terminal").Terminal
+	-- local lazygit = Terminal:new({ cmd = "lazygit", hidden = true })
+end, { force = true, nargs = 0, bang = true })
 -- }}}
 
 -- Keymaps {{{
@@ -442,10 +451,11 @@ vim.api.nvim_create_autocmd("BufEnter", {
 	group = general_group,
 	pattern = "*",
 	callback = function()
-		local line = vim.fn.line
-		if (vim.o.filetype ~= "gitcommit") and (line("'\"") > 0) and (line("'\"") <= line("$")) then
-			vim.cmd([[execute 'normal! g`"zvzz']])
-		end
+		return
+		-- local line = vim.fn.line
+		-- if (vim.o.filetype ~= "gitcommit") and (line("'\"") > 0) and (line("'\"") <= line("$")) then
+		-- 	vim.cmd([[execute 'normal! g`"zvzz']])
+		-- end
 	end,
 	desc = "Go to the last position in the file ",
 })
