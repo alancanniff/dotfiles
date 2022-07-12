@@ -27,12 +27,6 @@ require("packer").startup(function(use)
 	-- use { 'alexghergh/nvim-tmux-navigation'}
 	-- Packer can manage itself
 
-	use({
-		"akinsho/toggleterm.nvim",
-		tag = "v1.*",
-	})
-	use({ "lewis6991/impatient.nvim" })
-
 	use({ "fidian/hexmode" })
 
 	use({
