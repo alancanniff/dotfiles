@@ -8,6 +8,7 @@ gtk*
 plasma*
 
 bash/atom
+bash/work.bash
 git/gitk
 Code/
 QtProject.conf
