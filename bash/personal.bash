@@ -10,6 +10,7 @@ shopt -s histappend
 
 alias fd="fdfind"
 alias rm="rm -f"
+alias nvim="\$HOME/.local/bin/nvim"
 alias vim="nvim"
 alias minicom="minicom -c on"
 alias untar="tar -zxvf"
@@ -24,7 +25,6 @@ export PATH="/home/$USER/.cargo/bin:$PATH"
 
 export XDG_CONFIG_HOME="$(realpath ~)/.config"
 
-hg() { history | grep -iE --color "$1"; }
 # -i        ignore case
 # -r        recursive
 # -n        Prefix each line of output with the 1-based line number within its input file.
@@ -35,6 +35,6 @@ fzfco() { git checkout "$(git branch -l | fzf)"; }
 
 work="$XDG_CONFIG_HOME/bash/work.bash"
 if [[ -f $work ]]; then
-    # shellcheck source=/home/ac00/.config/bash/work.bash
+    # shellcheck source=/home/alan/.config/bash/work.bash
     . "$work"
 fi
