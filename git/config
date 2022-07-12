@@ -1,6 +1,6 @@
 [user]
     name = Alan Canniff
-    email = alan.canniff@virscient.com
+    email = alan.canniff@psonic.com.au
 
 [merge]
     tool = vimdiff
