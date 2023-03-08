@@ -6,9 +6,28 @@ export HISTSIZE=999999
 export HISTFILESIZE=999999
 shopt -s histappend
 
+is_fedora() {
+
+    var=$(cat /etc/*-release | grep ^NAME)
+    fedora="NAME=\"Fedora Linux\""
+
+    # Return values mimic command return value, not boolean
+    if [[ $var =~ $fedora ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 # setxkbmap -option "caps:escape"
 
-alias fd="fdfind"
+if ! is_fedora; then
+    alias fd="fdfind"
+fi
+
+alias fd="fd -H --no-ignore"
+
+alias lg="lazygit"
 alias rm="rm -f"
 alias nvim="\$HOME/.local/bin/nvim"
 alias vim="nvim"
@@ -23,7 +42,8 @@ export RANGER_LOAD_DEFAULT_RC=FALSE
 export PATH="/home/$USER/.local/bin:$PATH"
 export PATH="/home/$USER/.cargo/bin:$PATH"
 
-export XDG_CONFIG_HOME="$(realpath ~)/.config"
+xdg_config="$(realpath ~)/.config"
+export XDG_CONFIG_HOME="$xdg_config"
 
 # -i        ignore case
 # -r        recursive
@@ -37,4 +57,7 @@ work="$XDG_CONFIG_HOME/bash/work.bash"
 if [[ -f $work ]]; then
     # shellcheck source=/home/alan/.config/bash/work.bash
     . "$work"
+fi
+if command -v zoxide &>/dev/null; then
+    eval "$(zoxide init bash)"
 fi

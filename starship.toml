@@ -1,0 +1,49 @@
+format = '''
+$time$username$hostname$directory$git_branch$git_commit$git_state$git_metrics
+${custom.toolbox}$container\$ 
+'''
+
+[container]
+style = 'bold red dimmed'
+format = '[$symbol]($style) '
+
+[directory]
+style = '#cfc9c9'
+read_only_style = '#dbbdbd'
+truncation_length = 5
+truncate_to_repo = true
+home_symbol = '~'
+use_os_path_sep = false
+disabled = false
+
+[git_branch]
+format = '[$symbol$branch(:$remote_branch)]($style) '
+
+[git_metrics]
+disabled = true
+
+[hostname]
+style = '#cfc9c9'
+ssh_only = false
+format = '[$hostname]($style) '
+
+[time]
+style = '#cfc9c9'
+disabled = false
+format = '[\[$time\]]($style) '
+# time_format = '%Y/%M/%d %T'
+time_format = '%T'
+
+[username]
+style_user = '#cfc9c9'
+style_root = '#cfc9c9'
+format = '[$user@]($style)'
+disabled = false
+show_always = true
+
+[custom.toolbox]
+command = '$HOME/.config/scripts/starship.py --toolbox'
+when = '''test -e /run/.containerenv'''
+description = 'Print the toolbox container name'
+style = 'bold red dimmed'
+format = '[$output]($style) '

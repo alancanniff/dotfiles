@@ -1,0 +1,298 @@
+rule:
+  global:
+    indentSize: 4
+  group:
+    # Too many execption for alignment and blank line
+    alignment:
+      disable: True
+    blank_line:
+      disable: False
+
+    case:
+      disable: False
+    case::keyword:
+      case: 'lower'
+    case::label:
+      case: 'lower'
+    case::name:
+      case: 'lower'
+
+    length:
+      disable: False
+    indent:
+      disable: False
+
+    structure:
+      disable: False
+    structure::optional:
+      action: 'add'
+
+    whitespace:
+      disable: False
+
+
+  # line length
+  length_001:
+     length: 120
+  # process length
+  length_003:
+     length: 500
+
+  # Require 'after' in some places
+  after_001:
+    disable: True
+  after_002:
+    disable: True
+  after_003:
+    disable: True
+
+  # blank line above architecture
+  architecture_003:
+    disable: False
+
+  # remove name from architecture end
+  architecture_024:
+    disable: True
+
+ # blank line above and below block
+  block_200:
+    disable: False
+  block_205:
+    disable: False
+
+  # I don't want to enforce a block comment style
+  block_comment_001:
+    disable: True
+  block_comment_002:
+    disable: True
+  block_comment_003:
+    disable: True
+
+ # blank line above and below block
+  case_007:
+    disable: False
+  case_010:
+    disable: False
+
+  # Allow when statements on single line
+  case_012:
+    disable: True
+
+  # Allow case labels
+  case_019:
+    disable: True
+  case_020:
+    disable: True
+
+  # Remove entity simle name
+  entity_019:
+    disable: True
+
+  # Remove entity simle name
+  function_006:
+    stype: 'require_blank_line'
+
+  # Enclose if condition in ()
+  if_002:
+    disable: True
+
+  # blank line below
+  if_030:
+    disable: True
+
+  # blank line above
+  if_031:
+    disable: True
+
+  instantiation_034:
+    disable: True
+
+  # blank line above library
+  library_003:
+    disable: True
+
+  # indent use
+  library_008:
+    disable: True
+
+  loop_statement_200:
+    disable: True
+  loop_statement_201:
+    disable: True
+  loop_statement_202:
+    disable: True
+  loop_statement_203:
+    disable: True
+
+  # whitespace around in
+  port_007:
+    spaces_after: 1
+    spaces_before: 1
+
+  # whitespace around out
+  port_008:
+    spaces_after: 1
+    spaces_before: 1
+
+  # whitespace around inout
+  port_009:
+    spaces_after: 1
+    spaces_before: 1
+
+  # blank line below begin
+  process_022:
+    disable: True
+
+  # blank line avove end
+  process_023:
+    disable: True
+
+  # Don't use rising edge for clock
+  process_029:
+    disable: True
+    clock: "edge"
+
+
+  # No default assignments
+  signal_007:
+     disable: True
+
+  # below is
+  subprogram_body_201:
+     disable: True
+
+  # above begin
+  subprogram_body_202:
+     disable: True
+
+  # below begin
+  subprogram_body_203:
+     disable: True
+
+  # above end
+  subprogram_body_204:
+     disable: True
+
+  # above end
+  subprogram_body_205:
+    style:'rquire_blank_line'
+
+  # No default assignments
+  variable_007:
+     disable: True
+
+  # white space rules that conflict with no space before :
+  port_020:
+    disable: True
+  constant_006:
+    disable: True
+  signal_006:
+    disable: True
+  function_100:
+    disable: True
+  generic_014:
+    disable: True
+  variable_006:
+    disable: True
+  process_024:
+    disable: True
+  attribute_declaration_101:
+    disable: True
+  instantiation_003:
+    disable: True
+
+  # attribute specification
+  entity_specification_101:
+    disable: True
+
+  # allow default signal declarations on ports
+  port_012:
+    disable: True
+
+  # don't include blanks under generate or over end generate
+  generate_003:
+    disable: True
+  generate_004:
+    disable: True
+
+  # space after generate label
+  generate_002:
+    disable: True
+
+  # allow blanks lines under if
+  if_006:
+    disable: True
+
+  # allow blanks lines above if
+  if_008:
+    disable: True
+
+  # Allow more than one blank line
+  whitespace_012:
+    disable: True
+
+  whitespace_200:
+    disable: True
+
+  # allow blank lines under record
+  record_type_definition_200:
+    disable: True
+
+  # allow blank lines above end record
+  record_type_definition_201:
+    disable: True
+
+  generic_020:
+    disable: false
+    prefixes: ['g_']
+
+  constant_015:
+    disable: false
+    prefixes: ['c_']
+
+  process_036:
+    disable: false
+    prefixes: ['p_']
+
+  instantiation_601:
+    disable: True
+    prefixes: ['e_']
+
+  #don't require blank lines with case statements
+  case_200:
+    disable: True
+  case_201:
+    disable: True
+  case_009:
+    disable: True
+
+  loop_statement_103:
+    disable: True
+
+  constant_004:
+    case: 'upper'
+
+  generic_007:
+    case: 'upper'
+
+  # Don't break `<= when else` lines on else
+  concurrent_007:
+    disable: True
+
+  process_002:
+    disable: True
+    number_of_spaces: 1
+
+  process_026:
+    disable: True
+    number_of_spaces: 1
+
+  # don't insist on spaces below 'process' and above 'begin'
+  process_026:
+    disable: True
+  process_027:
+    disable: True
+
+  # Don't move constant brace to new line
+  constant_016:
+    disable: True

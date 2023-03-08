@@ -3,7 +3,6 @@
 --[[
 Basic snippet format!
 --]]
-
 -- s({
 --   trig = {},
 --   name = {},
@@ -33,6 +32,13 @@ local d = ls.dynamic_node
 -- local utils = require("luasnip_snippets.utils")
 local fmt = require("luasnip.extras.fmt").fmt
 
+local function get_architecture_name(_, snip)
+	if string.find(snip.env.TM_FILENAME_BASE, "_tb.vhd") then
+		return "sim"
+	end
+	return "rtl"
+end
+
 local function filebase(_, snip)
 	return snip.env.TM_FILENAME_BASE
 end
@@ -43,6 +49,10 @@ end
 
 local function get_node(args)
 	return args[1][1]
+end
+
+local function type_name_to_array(args)
+	return args[1][1]:gsub("_t$", "_a")
 end
 
 local function get_variable_from_node(args)
@@ -116,6 +126,7 @@ recurring_optiong = function()
 end
 
 ls.add_snippets("all", {
+	---------------------------------------------------------------------------
 	s(
 		"fmt1",
 		fmt("To {title} {} {}.", {
@@ -124,6 +135,7 @@ ls.add_snippets("all", {
 			title = c(1, { t("Mr."), t("Ms.") }),
 		})
 	),
+	---------------------------------------------------------------------------
 })
 
 ls.add_snippets("sh", {
@@ -134,7 +146,7 @@ ls.add_snippets("sh", {
 			[[
 	arr=({})
 
-	for value in "\${{arr[@]}}"; do
+	for value in "${{arr[@]}}"; do
 		{}
 	done
 	]],
@@ -163,7 +175,7 @@ while :; do
     case $1 in
     {}
 	-h|--help)
-		usage; 
+		usage;
         exit 0
         ;;
 	--)		 # End of all options.
@@ -185,19 +197,35 @@ done
 			{ i(2), d(1, recurring_optiong, {}), i(0) }
 		)
 	),
+	---------------------------------------------------------------------------
 })
 
 ls.add_snippets("tcl", {
-	ls.parser.parse_snippet("dbg", [[puts "Debug: $1"$0]]),
+	---------------------------------------------------------------------------
+	ls.parser.parse_snippet("dbg", [[puts "Debug: $1"$0]], {}),
+	---------------------------------------------------------------------------
+	ls.parser.parse_snippet(
+		"lsp",
+		[[
+source ~/.config/scripts/lsp.tcl
+lsp::create_config "../hdl-prj.json"
+    ]],
+		{}
+	),
 })
 
 ls.add_snippets("markdown", {
+	---------------------------------------------------------------------------
 	s("mailto", fmt("[{}](mailto:{}){}", { i(1, "text"), i(2, "email"), i(0) })),
+	---------------------------------------------------------------------------
 	s("url", fmt("[{}]({}){}", { i(1, "text"), i(2, "url"), i(0) })),
+	---------------------------------------------------------------------------
 	s("codeblock", { t("```"), i(1), t({ "", "```" }), i(0) }),
+	---------------------------------------------------------------------------
 })
 
 ls.add_snippets("lua", {
+	---------------------------------------------------------------------------
 	s(
 		"guard",
 		fmt(
@@ -216,9 +244,11 @@ ls.add_snippets("lua", {
 			}
 		)
 	),
+	---------------------------------------------------------------------------
 })
 
 ls.add_snippets("systemverilog", {
+	---------------------------------------------------------------------------
 	s(
 		"mod",
 		fmt(
@@ -240,6 +270,7 @@ ls.add_snippets("systemverilog", {
 			}
 		)
 	),
+	---------------------------------------------------------------------------
 	s(
 		"ifg",
 		fmt(
@@ -253,30 +284,216 @@ ls.add_snippets("systemverilog", {
 			{ i(1), i(2), i(0) }
 		)
 	),
+	---------------------------------------------------------------------------
 })
 
--- local function option_text(args)
--- 	local opt_string = [[
---     --XYZ)
---     	if [ "$2" ]; then
---     	XYZ=\$2
---     	shift
---     	else
---     	die 'ERROR: "--XYZ" requires a non-empty option argument.'
---     	fi
---     	;;
---     --XYZ=?*)
---     	XYZ=\${1#*=} # Delete everything up to "=" and assign the remainder.
---     	;;
---     # Handle the case of an empty --file=
---     --XYZ=)
---     	echo 'ERROR: "--XYZ" requires a non-empty option argument.'
---     	exit 1
---     	;;
+--[[
+]]
 --
---     ]]
---
--- 	return vim.split(opt_string:gsub("XYZ", args[1][1]), "\n")
--- end
---
--- -- echo "usage :  $${{0:0}} [options] [--]
+ls.add_snippets("vhdl", {
+	---------------------------------------------------------------------------
+	s(
+		"header",
+		fmt(
+			[[
+-------------------------------------------------------------------------------
+-- Title      : {}
+-------------------------------------------------------------------------------
+-- Copyright (c) 2022 Psonic.  All rights reserved.
+-------------------------------------------------------------------------------
+-- Description: {}
+-------------------------------------------------------------------------------
+{}
+]],
+			{
+				i(1),
+				i(2),
+				i(0),
+			}
+		)
+	),
+	---------------------------------------------------------------------------
+	s(
+		"ent",
+		fmt(
+			[[
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity {} is
+    generic (
+    );
+    port (
+    );
+end entity {};
+
+{}
+]],
+			{
+				f(filebase, {}),
+				f(filebase, {}),
+				i(0),
+			}
+		)
+	),
+	---------------------------------------------------------------------------
+	s(
+		"pkg",
+		fmt(
+			[[
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+package {} is
+{}
+end package {};
+
+package body {} is
+end package body {};
+]],
+			{
+				f(filebase, {}),
+				i(0),
+				f(filebase, {}),
+				f(filebase, {}),
+				f(filebase, {}),
+			}
+		)
+	),
+	---------------------------------------------------------------------------
+	s(
+		"arch",
+		fmt(
+			[[
+architecture {} of {} is
+begin
+{}
+end architecture {};
+]],
+			{
+				f(get_architecture_name, {}),
+				f(filebase, {}),
+				i(0),
+				f(get_architecture_name, {}),
+			}
+		)
+	),
+	---------------------------------------------------------------------------
+	s("ty", fmt("type {} is ({});{}", { i(1, "name"), i(2, "enum"), i(0) })),
+	---------------------------------------------------------------------------
+	s(
+		"tyr",
+		fmt(
+			[[
+    type {} is record
+        {}
+    end record {};{}
+    ]],
+			{
+				i(1, "name"),
+				i(2),
+				f(get_node, 1),
+				i(0),
+			}
+		)
+	),
+	---------------------------------------------------------------------------
+	s(
+		"select",
+		fmt(
+			[[
+    with {} select {} <=
+        {} when {},
+        {} when others; {}
+    ]],
+			{
+				i(1, "choice"),
+				i(2, "target"),
+				i(3, "target value"),
+				i(4, "choice value"),
+				i(5, "target value"),
+				i(0),
+			}
+		)
+	),
+	---------------------------------------------------------------------------
+	s(
+		"tya",
+		fmt("type {} is array ({}) of {};{}", {
+			i(1, "name"),
+			i(2, "integer range <>"),
+			f(type_name_to_array, 1),
+			i(0),
+		})
+	),
+	---------------------------------------------------------------------------
+	s(
+		"tys",
+		fmt(
+			[[
+type {} is ({});
+
+function "?="(L,R: {}) return std_ulogic is
+begin
+    if L = R then
+        return '1';
+    else
+        return '0';
+    end if;
+end function;
+
+signal state: {};
+signal next_state: {};
+
+{}
+]],
+			{
+				i(1, "state_t"),
+				i(2, ""),
+				f(get_node, 1),
+				f(get_node, 1),
+				f(get_node, 1),
+				i(0),
+			}
+		)
+	),
+	---------------------------------------------------------------------------
+	s(
+		"case",
+		fmt(
+			[[
+case {} is
+    when {} =>
+    when others =>
+end case; {}
+        ]],
+			{
+				i(1),
+				i(2),
+				i(0),
+			}
+		)
+	),
+
+	s(
+		"prc",
+		fmt(
+			[[
+    process ({})
+    begin
+        if rising_edge({}) then
+            {}
+        end if;
+    end process;
+        ]],
+			{
+				i(1, "clk"),
+				f(get_node, 1),
+				i(0),
+			}
+		)
+	),
+	---------------------------------------------------------------------------
+})

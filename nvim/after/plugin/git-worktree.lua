@@ -1,38 +1,35 @@
-local ok, worktree = pcall(require, "git-worktree")
+local ok, telescope, worktree
+
+ok, worktree = pcall(require, "git-worktree")
+
 if not ok then
 	return
 end
 
-local ok, telescope = pcall(require, "telescope")
+ok, telescope = pcall(require, "telescope")
 if not ok then
 	return
 end
 
 -- local map = require("my").map
-require("telescope").load_extension("git_worktree")
-vim.keymap.set("n", "<Space>ws", require("telescope").extensions.git_worktree.git_worktrees)
-vim.keymap.set("n", "<Space>wc", require("telescope").extensions.git_worktree.create_git_worktree)
+telescope.load_extension("git_worktree")
+vim.keymap.set("n", "<Space>ws", telescope.extensions.git_worktree.git_worktrees)
+vim.keymap.set("n", "<Space>wc", telescope.extensions.git_worktree.create_git_worktree)
 
--- vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
+-- op = Operations.Switch, Operations.Create, Operations.Delete
+-- metadata = table of useful values (structure dependent on op)
+--      Switch
+--          path = path you switched to
+--          prev_path = previous worktree path
+--      Create
+--          path = path where worktree created
+--          branch = branch name
+--          upstream = upstream remote name
+--      Delete
+--          path = path where worktree deleted
 
----- "" Example of custom completion function
----- " :com -complete=custom,ListUsers -nargs=1 Finger !finger <args>
----- " :fun ListUsers(A,L,P)
----- " :    return system("cut -d: -f1 /etc/passwd")
----- " :endfun
-----    " " Call a user function (example of <f-args>)
-----    " :com -nargs=* Mycmd call Myfunc(<f-args>)
-----
----- " When executed as: >
----- 	" :Mycmd arg1 arg2
----- " This will invoke: >
----- 	" :call Myfunc("arg1","arg2")
-----
----- " command! -bang -nargs=* FzfRgNoIgnore call fzf#vim#grep("rg --no-ignore --column --line-number --no-heading --color=always --smart-case -- ".shellescape(<q-args>), 1, fzf#vim#with_preview(), <bang>0)
----- " command! -bang -nargs=*
----- " lua require("git-worktree").create_worktree("feature/150-update_petalinux_cache_settings", "feature/150-update_petalinux_cache_settings", "origin")
----- " lua require("git-worktree").switch_worktree("feature/150-update_petalinux_cache_settings", "feature/150-update_petalinux_cache_settings", "origin")
----- " lua require("git-worktree").delete_worktree("feature/150-update_petalinux_cache_settings", "feature/150-update_petalinux_cache_settings", "origin")
----- nnoremap <Space>wc :lua require('telescope').extensions.git_worktree.git_worktrees()<Cr>
----- nnoremap <Space>ws :lua require('telescope').extensions.git_worktree.create_git_worktree()<Cr>
-----
+worktree.on_tree_change(function(op, metadata)
+	if op == worktree.Operations.Switch then
+		print("Switched from " .. metadata.prev_path .. " to " .. metadata.path)
+	end
+end)

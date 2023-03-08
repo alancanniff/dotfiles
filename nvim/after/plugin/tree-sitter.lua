@@ -3,16 +3,30 @@ if not ok then
 	return
 end
 
-local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+-- local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
 
+local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
 parser_config.vhdl = {
 	install_info = {
-		url = "~/source/tree-sitter-vhdl", -- local path or git repo
+		-- url = "~/projects/tree-sitter-zimbu", -- local path or git repo
+		url = "$HOME/Projects/tree-sitter-vhdl", -- local path or git repo
 		files = { "src/parser.c" },
+		-- optional entries:
+		branch = "main", -- default branch in case of git repo if different from master
+		generate_requires_npm = false, -- if stand-alone parser without npm dependencies
+		requires_generate_from_grammar = false, -- if folder contains pre-generated src/parser.c
 	},
-	filetype = "vhd", -- if filetype does not agrees with parser name
-	used_by = { "vhdl", "vho" }, -- additional filetypes that use this parser
+	filetype = "vhdl", -- if filetype does not match the parser name
 }
+
+-- parser_config.vhdl = {
+-- 	install_info = {
+-- 		url = "$HOME/Projects/tree-sitter-vhdl", -- local path or git repo
+-- 		files = { "src/parser.c" },
+-- 	},
+-- 	filetype = "vhd", -- if filetype does not agrees with parser name
+-- 	used_by = { "vhdl", "vho" }, -- additional filetypes that use this parser
+-- }
 
 require("nvim-treesitter.configs").setup({
 	playground = {

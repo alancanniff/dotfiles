@@ -24,7 +24,6 @@ vim.api.nvim_create_autocmd(
 )
 
 require("packer").startup(function(use)
-	-- use { 'alexghergh/nvim-tmux-navigation'}
 	-- Packer can manage itself
 
 	use({ "fidian/hexmode" })
@@ -40,6 +39,12 @@ require("packer").startup(function(use)
 			"saadparwaiz1/cmp_luasnip",
 			-- "hrsh7th/cmp-cmdline",
 		},
+	})
+
+	use({
+		"williamboman/mason.nvim",
+		"williamboman/mason-lspconfig.nvim",
+		require = { "neovim/nvim-lspconfig" },
 	})
 
 	use({ "junegunn/fzf" })
@@ -75,7 +80,10 @@ require("packer").startup(function(use)
 	use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
 	use({
 		"nvim-treesitter/nvim-treesitter",
-		requires = { "nvim-treesitter/nvim-treesitter-textobjects" },
+		requires = {
+			"nvim-treesitter/nvim-treesitter-textobjects",
+			"nvim-treesitter/playground",
+		},
 		run = ":TSUpdate",
 	})
 
@@ -154,7 +162,7 @@ vim.o.hlsearch = true
 vim.wo.number = true
 
 --Enable mouse mode
-vim.o.mouse = "a"
+vim.o.mouse = "nv"
 
 --Enable break indent
 vim.o.breakindent = true
@@ -286,7 +294,7 @@ vim.keymap.set("i", "<RightDrag>", "<Nop>")
 vim.keymap.set("i", "<RightRelease>", "<MiddleRelease>")
 vim.keymap.set("i", "<RightMouse>", "<MiddleMouse>")
 
-vim.keymap.set({ "n", "i", "x", "c", "t" }, "<LeftRelease>", '"*y')
+vim.keymap.set({ "n", "i", "x", "c", "t" }, "<LeftRelease>", '"+y')
 
 vim.keymap.set("n", "'", "`", { desc = "Make ' go to exact postition" })
 vim.keymap.set("n", "`", "'", { desc = "make ` go to begining of line" })
@@ -294,6 +302,9 @@ vim.keymap.set("n", "`", "'", { desc = "make ` go to begining of line" })
 --Remap for dealing with word wrap
 vim.keymap.set("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+
+-- Diagnostic keymaps
+vim.keymap.set("n", "S", ":%s/<C-r><C-w>//g<left><left>")
 
 -- Diagnostic keymaps
 vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float)
@@ -324,66 +335,18 @@ vim.keymap.set("c", "<C-n>", function()
 end, { expr = true })
 -- }}}
 
--- Treesitter {{{
-
--- Treesitter configuration
--- Parsers must be installed manually via :TSInstall
-require("nvim-treesitter.configs").setup({
-	highlight = {
-		enable = true, -- false will disable the whole extension
-	},
-	incremental_selection = {
-		enable = true,
-		keymaps = {
-			init_selection = "gnn",
-			node_incremental = "grn",
-			scope_incremental = "grc",
-			node_decremental = "grm",
-		},
-	},
-	indent = {
-		enable = true,
-	},
-	textobjects = {
-		select = {
-			enable = true,
-			lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
-			keymaps = {
-				-- You can use the capture groups defined in textobjects.scm
-				["af"] = "@function.outer",
-				["if"] = "@function.inner",
-				["ac"] = "@class.outer",
-				["ic"] = "@class.inner",
-			},
-		},
-		move = {
-			enable = true,
-			set_jumps = true, -- whether to set jumps in the jumplist
-			goto_next_start = {
-				["]m"] = "@function.outer",
-				["]]"] = "@class.outer",
-			},
-			goto_next_end = {
-				["]M"] = "@function.outer",
-				["]["] = "@class.outer",
-			},
-			goto_previous_start = {
-				["[m"] = "@function.outer",
-				["[["] = "@class.outer",
-			},
-			goto_previous_end = {
-				["[M"] = "@function.outer",
-				["[]"] = "@class.outer",
-			},
-		},
-	},
-})
-
--- }}}
-
 -- {{{ My Autocmds
 
 local general_group = vim.api.nvim_create_augroup("general", { clear = true })
+
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+	group = general_group,
+	pattern = "Jenkinsfile*",
+	callback = function()
+		vim.opt.filetype = "groovy"
+	end,
+	desc = "Set line number and disable cursorline / column",
+})
 
 vim.api.nvim_create_autocmd("ColorScheme", {
 	group = general_group,

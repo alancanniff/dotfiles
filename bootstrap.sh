@@ -183,14 +183,6 @@ popd || exit
 
 #########################################################
 
-tmux_cfg="$XDG_CONFIG_HOME/tmux/config"
-if [[ ! -e ~/.tmux.conf ]]; then
-    echo ln -s "$tmux_cfg" .tmux.conf
-    ln -s "$tmux_cfg" .tmux.conf
-else
-    echo .tmux.conf exists
-fi
-
 git_cfg="$XDG_CONFIG_HOME/git/config"
 if [[ ! -e ~/.gitconfig ]]; then
     echo ln -s "$git_cfg" .gitconfig

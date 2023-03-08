@@ -1,4 +1,12 @@
 -- LSP settings
+
+local ok, mason_lsp = pcall(require, "mason-lspconfig")
+if ok then
+	mason_lsp.setup({
+		automatic_installation = true, -- automatically detect which servers to install (based on which servers are set up via lspconfig)
+	})
+end
+
 local ok, nvim_lsp = pcall(require, "lspconfig")
 if not ok then
 	return
@@ -10,31 +18,40 @@ local _
 ok, _ = pcall(require, "cmp")
 if ok then
 	-- Setup lspconfig.
-	local capabilities = require("cmp_nvim_lsp").update_capabilities(
-		vim.lsp.protocol.make_client_capabilities()
-	)
+	local capabilities =
+		require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 end
 
 local configs = require("lspconfig.configs")
 local util = require("lspconfig.util")
-local server_name = "vhdl_ls"
+-- local server_name = "vhdl_ls"
 
-configs[server_name] = {
+-- configs[server_name] = {
+-- 	default_config = {
+-- 		cmd = { "vhdl_ls" },
+-- 		filetypes = { "vhdl", "vhd" },
+-- 		root_dir = util.root_pattern("vhdl_ls.toml"),
+-- 		docs = {
+-- 			description = [[
+--             https://github.com/kraigher/rust_hdl
+
+--             language server for vhdl
+
+--             ]],
+-- 			default_config = {
+-- 				root_dir = [[util.root_pattern("vhdl_ls.toml");]],
+-- 			},
+-- 		},
+-- 	},
+-- }
+
+local ghdl_ls = "ghdl_ls"
+
+configs[ghdl_ls] = {
 	default_config = {
-		cmd = { "vhdl_ls" },
+		cmd = { "ghdl-ls", "--log-file", vim.fn.stdpath("cache") .. "/ghdl-ls.log" },
 		filetypes = { "vhdl", "vhd" },
-		root_dir = util.root_pattern("vhdl_ls.toml"),
-		docs = {
-			description = [[
-            https://github.com/kraigher/rust_hdl
-
-            language server for vhdl
-
-            ]],
-			default_config = {
-				root_dir = [[util.root_pattern("vhdl_ls.toml");]],
-			},
-		},
+		root_dir = util.root_pattern("hdl-prj.json"),
 	},
 }
 
@@ -44,6 +61,7 @@ local on_attach = function(client, bufnr)
 	local function buf_set_keymap(...)
 		vim.api.nvim_buf_set_keymap(bufnr, ...)
 	end
+
 	local function buf_set_option(...)
 		vim.api.nvim_buf_set_option(bufnr, ...)
 	end
@@ -93,7 +111,7 @@ local on_attach = function(client, bufnr)
 end
 
 -- local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-local servers = { "clangd", "vhdl_ls", "pylsp" }
+local servers = { "clangd", "ghdl_ls", "pylsp", "groovyls" }
 
 for _, lsp in ipairs(servers) do
 	nvim_lsp[lsp].setup({
@@ -120,7 +138,7 @@ local runtime_path = vim.split(package.path, ";")
 table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
 
-nvim_lsp["sumneko_lua"].setup({
+nvim_lsp["lua_ls"].setup({
 	on_attach = on_attach,
 	capabilities = capabilities,
 	flags = {
