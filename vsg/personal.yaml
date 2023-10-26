@@ -223,9 +223,22 @@ rule:
   if_006:
     disable: True
 
+  # allow blanks lines before elif
+  if_007:
+    disable: False
+
   # allow blanks lines above if
   if_008:
     disable: True
+
+  # allow blanks lines before else
+  if_010:
+    disable: False
+
+  # allow blanks lines before else
+  if_011:
+    disable: False
+
 
   # Allow more than one blank line
   whitespace_012:
@@ -273,6 +286,9 @@ rule:
     case: 'upper'
 
   generic_007:
+    case: 'upper'
+
+  generic_map_002:
     case: 'upper'
 
   # Don't break `<= when else` lines on else

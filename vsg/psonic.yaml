@@ -34,9 +34,9 @@ rule:
   # line length
   length_001:
      length: 120
-  # process length 
+  # process length
   length_003:
-     length: 500 
+     length: 500
 
   # Require 'after' in some places
   after_001:
@@ -178,53 +178,53 @@ rule:
 
   # No default assignments
   variable_007:
-     disable: True 
+     disable: True
 
   # white space rules that conflict with no space before :
   port_020:
-    disable: True 
+    disable: True
   constant_006:
-    disable: True 
+    disable: True
   signal_006:
-    disable: True 
+    disable: True
   function_100:
-    disable: True 
+    disable: True
   generic_014:
-    disable: True 
+    disable: True
   variable_006:
-    disable: True 
+    disable: True
   process_024:
-    disable: True 
+    disable: True
   attribute_declaration_101:
-    disable: True 
+    disable: True
   instantiation_003:
-    disable: True 
+    disable: True
 
   # attribute specification
   entity_specification_101:
-    disable: True 
+    disable: True
 
-  # allow default signal declarations on ports  
+  # allow default signal declarations on ports
   port_012:
-    disable: True 
+    disable: True
 
   # don't include blanks under generate or over end generate
   generate_003:
-    disable: True 
+    disable: True
   generate_004:
-    disable: True 
+    disable: True
 
   # space after generate label
   generate_002:
-    disable: True 
+    disable: True
 
   # allow blanks lines under if
   if_006:
-    disable: True 
+    disable: True
 
   # allow blanks lines above if
   if_008:
-    disable: True 
+    disable: True
 
   # Allow more than one blank line
   whitespace_012:
@@ -233,7 +233,7 @@ rule:
   whitespace_200:
     disable: True
 
-  # allow blank lines under record 
+  # allow blank lines under record
   record_type_definition_200:
     disable: True
 
