@@ -1,11 +1,37 @@
 -- LSP settings
 
-local ok, mason_lsp = pcall(require, "mason-lspconfig")
+local ok, mason = pcall(require, "mason")
+if not ok then
+	return nil
+end
+
+mason.setup()
+
+local mason_lspconfig
+
+-- require("mason-lspconfig").setup_handlers {
+--     -- The first entry (without a key) will be the default handler
+--     -- and will be called for each installed server that doesn't have
+--     -- a dedicated handler.
+--     function (server_name) -- default handler (optional)
+--         require("lspconfig")[server_name].setup {}
+--     end,
+--     -- Next, you can provide a dedicated handler for specific servers.
+--     -- For example, a handler override for the `rust_analyzer`:
+--     ["rust_analyzer"] = function ()
+--         require("rust-tools").setup {}
+--     end
+-- }
+ok, mason_lspconfig = pcall(require, "mason-lspconfig")
 if ok then
-	mason_lsp.setup({
+	mason_lspconfig.setup({
 		automatic_installation = true, -- automatically detect which servers to install (based on which servers are set up via lspconfig)
 	})
+else
+	return
 end
+
+mason_lspconfig.setup()
 
 local ok, nvim_lsp = pcall(require, "lspconfig")
 if not ok then

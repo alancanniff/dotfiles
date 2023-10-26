@@ -51,8 +51,6 @@ require("packer").startup(function(use)
 	use({ "junegunn/fzf.vim" })
 	use({ "justinmk/vim-dirvish" })
 
-	use({ "Lokaltog/vim-monotone" })
-
 	if vim.fn.executable("ctags") == 1 then
 		use({ "ludovicchabant/vim-gutentags" })
 	end
@@ -74,7 +72,6 @@ require("packer").startup(function(use)
 
 	use({ "michaeljsmith/vim-indent-object" })
 	use({ "neovim/nvim-lspconfig" })
-	use({ "nvim-lua/popup.nvim" })
 	use({ "nvim-lua/plenary.nvim" })
 	use({ "nvim-lua/telescope.nvim" })
 	use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
@@ -92,7 +89,6 @@ require("packer").startup(function(use)
 		requires = { "kyazdani42/nvim-web-devicons", opt = true },
 	})
 	use({ "rafcamlet/nvim-luapad" })
-	use({ "rcarriga/nvim-notify" })
 	use({ "rktjmp/lush.nvim" })
 	use({ "sbulav/nredir.nvim", opt = true })
 	use({ "simnalamburt/vim-mundo" })
