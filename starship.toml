@@ -1,7 +1,11 @@
 format = '''
-$time$username$hostname$directory$git_branch$git_commit$git_state$git_metrics
-${custom.toolbox}$container\$ 
+$time$python$username$hostname$directory$git_branch$git_commit$git_state$git_metrics
+${custom.toolbox}\$ 
 '''
+
+[python]
+format = '[(\($virtualenv\) )]($style)'
+version_format = 'v${major}.${minor}'
 
 [container]
 style = 'bold red dimmed'
