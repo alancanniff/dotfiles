@@ -79,7 +79,6 @@ require("packer").startup(function(use)
 		"nvim-treesitter/nvim-treesitter",
 		requires = {
 			"nvim-treesitter/nvim-treesitter-textobjects",
-			"nvim-treesitter/playground",
 		},
 		run = ":TSUpdate",
 	})
@@ -110,11 +109,25 @@ require("packer").startup(function(use)
 	use({ "wbthomason/packer.nvim" })
 
 	use({ "alancanniff/twotone" })
+
+	use({
+		"jackMort/ChatGPT.nvim",
+		config = function()
+			require("chatgpt").setup()
+		end,
+		requires = {
+			"MunifTanjim/nui.nvim",
+			"nvim-lua/plenary.nvim",
+			"nvim-telescope/telescope.nvim",
+		},
+	})
 end)
 
 --- }}}
 
 -- Options {{{
+
+vim.g.python3_host_prog = vim.fn.stdpath("config") .. "/venv/bin/python"
 
 vim.o.shortmess = "caAOstT"
 vim.o.cursorline = true
@@ -182,7 +195,8 @@ vim.o.completeopt = "menuone,noselect"
 
 -- set listchars=tab:▸\ ,trail:·,extends:>,precedes:<,nbsp:+
 vim.o.list = true
-vim.opt.listchars = vim.opt.listchars + { tab = "▸ ", trail = "·" }
+-- vim.opt.listchars = vim.opt.listchars + { tab = "▸ ", trail = "·" }
+vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 
 vim.o.timeoutlen = 3000
 vim.o.lazyredraw = true
@@ -194,6 +208,9 @@ vim.g.loaded_tarPlugin = 1
 vim.g.loaded_tar = 1
 vim.g.loaded_zipPlugin = 1
 vim.g.loaded_zip = 1
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_node_provider = 0
+vim.g.loaded_ruby_provider = 0
 
 -- }}}
 
