@@ -27,7 +27,7 @@ fi
 
 alias fd="fd -H --no-ignore"
 
-alias lg="lazygit"
+alias l="lazygit"
 alias rm="rm -f"
 alias nvim="\$HOME/.local/bin/nvim"
 alias vim="nvim"

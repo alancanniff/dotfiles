@@ -3,6 +3,9 @@ if not ok then
 	return nil
 end
 
+if not ls then
+	return nil
+end
 vim.cmd("source ~/.config/nvim/snippets/snippets.lua")
 
 ls.filetype_extend("all", { "_" })

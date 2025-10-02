@@ -8,7 +8,5 @@ class rule_002(remove_spaces_before_token_rule):
     """
 
     def __init__(self):
-        remove_spaces_before_token_rule.__init__(
-            self, "localized", "002", token.signal_declaration.colon
-        )
+        super().__init__(token.signal_declaration.colon)
         self.solution = "Ensure no space exists between signal declaration and :"

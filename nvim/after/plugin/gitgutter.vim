@@ -1,5 +1,5 @@
-if !exists("g:loaded_gitgutter")
-    finish
-endif
+" if !exists("g:loaded_gitgutter")
+"     finish
+" endif
 
-GitGutterDisable
+" GitGutterDisable

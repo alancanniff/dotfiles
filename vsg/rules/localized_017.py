@@ -8,9 +8,7 @@ class rule_017(remove_spaces_before_token_rule):
     """
 
     def __init__(self):
-        remove_spaces_before_token_rule.__init__(
-            self, "localized", "017", token.entity_specification.colon
-        )
+        super().__init__(token.entity_specification.colon)
         self.solution = (
             "Ensure no space exists between entity specification (attribute) and :"
         )

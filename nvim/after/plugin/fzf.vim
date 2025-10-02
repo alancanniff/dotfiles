@@ -5,7 +5,6 @@ if !exists("g:loaded_fzf") | finish | endif
 augroup aug_fzf
     autocmd!
     autocmd  FileType fzf set laststatus=0 noshowmode noruler | autocmd BufLeave <buffer> set laststatus=2 showmode ruler
-    autocmd  FileType fzf tnoremap <buffer> <ESC> <ESC>
 augroup END " }
 
 let g:fzf_layout = { 'down': '~40%' }

@@ -4,6 +4,8 @@ if not ok then
 	return nil
 end
 
+-- unlclear if any of this config is still required
+return 
 cmp.setup({
 	-- completion = {
 	-- 	autocomplete = true,

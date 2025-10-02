@@ -8,12 +8,7 @@ class rule_016(remove_spaces_before_token_rule):
     """
 
     def __init__(self):
-        remove_spaces_before_token_rule.__init__(
-            self,
-            "localized",
-            "016",
-            token.component_instantiation_statement.label_colon,
-        )
+        super().__init__(token.component_instantiation_statement.label_colon)
         self.solution = (
             "Ensure no space exists betwen the label and entity / compoent declaraion: "
         )
